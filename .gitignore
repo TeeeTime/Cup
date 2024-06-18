@@ -1,0 +1,7 @@
+.project
+config.txt
+Database.db
+.classpath
+target
+bin
+.settings
