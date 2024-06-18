@@ -23,6 +23,7 @@ public class WalletCommand implements Command{
 			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.usageEmbed(this).build()).queue();
 			return;
 		}
+		
 		User user;
 		if(args.length == 1) {
 			 user = event.getAuthor();
