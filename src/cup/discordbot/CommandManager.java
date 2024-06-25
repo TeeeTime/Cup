@@ -25,6 +25,7 @@ private HashMap<String, Command> commands;
 		commands.put("leaderboard", new LeaderboardCommand());
 		commands.put("stats", new StatsCommand());
 		commands.put("profile", new ProfileCommand());
+		commands.put("guildinfo", new GuildInfoCommand());
 	}
 	
 	public void perform(String commandName, MessageReceivedEvent event) {
