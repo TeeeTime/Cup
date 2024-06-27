@@ -17,16 +17,25 @@ public class StatsCommand implements Command{
 	public void execute(MessageReceivedEvent event) {
 		String[] args = event.getMessage().getContentDisplay().substring(1).trim().split(" ");
 		
-		if(args.length != 1) {
+		if(args.length > 2) {
 			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.usageEmbed(this).build()).queue();
 			return;
 		}
 		
 		User user = event.getAuthor();
 		
+		if(args.length == 2) {
+			if(event.getMessage().getMentions().getMembers().size() == 1) {
+				user = event.getMessage().getMentions().getMembers().get(0).getUser();
+			}else {
+				event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.usageEmbed(this).build()).queue();
+				return;
+			}
+		}
+		
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.ORANGE);
-		eb.setTitle("Stats");
+		eb.setTitle(user.getName() + "'s stats");
 		
 		DecimalFormat df = new DecimalFormat("0.00");
 		
