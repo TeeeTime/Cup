@@ -25,7 +25,7 @@ public class StakeCommand implements Command{
 		if(args.length == 1) {
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.ORANGE);
-			eb.setTitle("Race");
+			eb.setTitle("Stake");
 			eb.setDescription("Stake is a game, where you set a muliplier for your bet. If you win, you get the amount you bet multiplied by the multiplier you set. The catch is, that your chances of winning get lower according to your multiplier. The chances of winning comply with the rules of a fair randomized game.\n"
 					+ "\nTo start, type `" + DiscordBot.INSTANCE.getPrefix() + "stake [multiplier] [bet]`");
 			
