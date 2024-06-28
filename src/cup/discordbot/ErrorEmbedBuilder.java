@@ -95,4 +95,13 @@ public class ErrorEmbedBuilder {
 		
 		return eb;
 	}
+	
+	public static EmbedBuilder minimumMultiplierEmbed(int amount) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.RED);
+		eb.setTitle("🚫");
+		eb.addField("Minimum multiplier:", "`" + amount + "x`", false);
+		
+		return eb;
+	}
 }
