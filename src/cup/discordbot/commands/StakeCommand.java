@@ -82,7 +82,7 @@ public class StakeCommand implements Command{
 
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		}else {
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - ((multiplier - 1) * bet));
+			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.RED);
