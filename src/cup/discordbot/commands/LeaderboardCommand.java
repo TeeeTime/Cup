@@ -28,11 +28,11 @@ public class LeaderboardCommand implements Command {
 		}
 		
 		
-		ResultSet results = LiteSQL.onQuery("SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 10");
+		ResultSet results = LiteSQL.onQuery("SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 11");
 		
 		Collection<Long> userids = new ArrayList<Long>();
 		
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 11; i++) {
 			try {
 				if(results.next()) {
 					userids.add(Long.parseLong(results.getString("userid")));
