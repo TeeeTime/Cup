@@ -211,7 +211,7 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 	@Override
 	public boolean isPublic() {
 
-		return false;
+		return true;
 	}
 
 }
