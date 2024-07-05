@@ -69,29 +69,11 @@ public class ErrorEmbedBuilder {
 		return eb;
 	}
 	
-	public static EmbedBuilder minimumStockAmountEmbed(int amount) {
+	public static EmbedBuilder multipleBlackjacksEmbed() {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.RED);
 		eb.setTitle("🚫");
-		eb.addField("Minimum amount:", amount + "", false);
-		
-		return eb;
-	}
-	
-	public static EmbedBuilder stockDoesntExistEmbed() {
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.RED);
-		eb.setTitle("🚫");
-		eb.addField("This stock doesn't exist", "To get an overview of the available stocks use `" + DiscordBot.INSTANCE.getPrefix() + "stocks`", false);
-		
-		return eb;
-	}
-	
-	public static EmbedBuilder notEnoughStocksEmbed() {
-		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.RED);
-		eb.setTitle("🚫");
-		eb.addField("You don't own enough stocks", "To buy more stocks, use `" + DiscordBot.INSTANCE.getPrefix() + "stock`", false);
+		eb.addField("You already have started a game of blackjack", "End the game to start a new one!", false);
 		
 		return eb;
 	}
