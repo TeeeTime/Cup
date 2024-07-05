@@ -59,4 +59,22 @@ public class ErrorEmbedBuilder {
 		
 		return eb;
 	}
+	
+	public static EmbedBuilder minimumAmountEmbed(int amount) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.RED);
+		eb.setTitle("🚫");
+		eb.addField("Minimum amount:", amount + " :coin:", false);
+		
+		return eb;
+	}
+	
+	public static EmbedBuilder multipleBlackjacksEmbed() {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.RED);
+		eb.setTitle("🚫");
+		eb.addField("You already have started a game of blackjack", "End the game to start a new one!", false);
+		
+		return eb;
+	}
 }
