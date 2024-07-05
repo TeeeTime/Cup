@@ -1,8 +1,10 @@
 package cup.discordbot;
 
+import cup.discordbot.commands.BlackjackCommand;
 import cup.discordbot.commands.RaceCommand;
 import cup.discordbot.commands.RockPaperScissorsCommand;
 import cup.discordbot.commands.RulesCommand;
+import cup.games.BlackjackManager;
 import cup.games.RaceManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -23,6 +25,8 @@ public class DiscordBot {
 	
 	private RaceManager raceManager;
 	
+	private BlackjackManager blackjackManager;
+	
 	public DiscordBot(String token, String prefix, String adminId) {
 		
 		INSTANCE = this;
@@ -41,6 +45,7 @@ public class DiscordBot {
 				.addEventListeners(new RockPaperScissorsCommand())
 				.addEventListeners(new RulesCommand())
 				.addEventListeners(new RaceCommand())
+				.addEventListeners(new BlackjackCommand())
 				.build();
 		
 		System.out.println("[DISCORD] BOT online as " + jda.getSelfUser().getName());
@@ -48,6 +53,7 @@ public class DiscordBot {
 		commandManager = new CommandManager();
 		
 		raceManager = new RaceManager();
+		blackjackManager = new BlackjackManager();
 	}
 	
 	public JDA getJDA() {
@@ -70,4 +76,7 @@ public class DiscordBot {
 		return raceManager;
 	}
 
+	public BlackjackManager getBlackjackManager() {
+		return blackjackManager;
+	}
 }
