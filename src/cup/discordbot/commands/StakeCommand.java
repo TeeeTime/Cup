@@ -74,11 +74,11 @@ public class StakeCommand implements Command{
 		DecimalFormat df = new DecimalFormat("0.00");
 		
 		if(randomInt == 0) {
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + ((multiplier - 1) * bet));
+			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + (multiplier * bet));
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.GREEN);
-			eb.addField("Winner", "You hit a `" + df.format(winChance) + "%` chance and won " + ((multiplier - 1) * bet) + ":coin:", false);
+			eb.addField("Winner", "You hit a `" + df.format(winChance) + "%` chance and won " + (multiplier * bet) + " :coin:", false);
 
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		}else {
@@ -86,7 +86,7 @@ public class StakeCommand implements Command{
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.RED);
-			eb.addField("Loser", "You missed a `" + df.format(winChance) + "%` chance and lost " + bet + ":coin:", false);
+			eb.addField("Loser", "You missed a `" + df.format(winChance) + "%` chance and lost " + bet + " :coin:", false);
 
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		}
