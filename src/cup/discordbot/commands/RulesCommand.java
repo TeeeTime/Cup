@@ -1,6 +1,7 @@
 package cup.discordbot.commands;
 
 import java.awt.Color;
+import java.time.Instant;
 
 import cup.discordbot.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -23,7 +24,7 @@ public class RulesCommand extends ListenerAdapter implements Command{
 			eb.addField("2", "No spamming", false);
 			eb.addField("3", "No self promotion", false);
 			eb.addField("4", "Discord TOS", false);
-			eb.setFooter("31.05.2024");
+			eb.setTimestamp(Instant.now());
 			
 			event.getChannel().sendMessageEmbeds(eb.build()).addActionRow(
 					Button.success("rulesaccept", Emoji.fromUnicode("✅"))
@@ -35,7 +36,7 @@ public class RulesCommand extends ListenerAdapter implements Command{
 	
 	public void onButtonInteraction(ButtonInteractionEvent event) {
 		if(event.getComponentId().equals("rulesaccept")) {
-			event.getGuild().addRoleToMember(event.getUser(), event.getJDA().getRoleById("862809845753315328")).queue();
+			event.getGuild().addRoleToMember(event.getUser(), event.getJDA().getRoleById("678647130935656500")).queue();
 			event.deferEdit().queue();
 		}
 	}
