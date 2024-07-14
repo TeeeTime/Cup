@@ -69,16 +69,10 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
 		
 		Blackjack blackjack = new Blackjack(bet);
+		System.out.println("DEALER: " + blackjack.getDealerValue());
+		System.out.println("DEALER: " + blackjack.getPlayerValue());
 		DiscordBot.INSTANCE.getBlackjackManager().addBlackjack(event.getAuthor().getId(), blackjack);
 		
-		if(blackjack.isPlaying()) {
-			event.getChannel().sendMessageEmbeds(getGameEmbed(blackjack, event.getAuthor()).build()).addActionRow(
-					Button.secondary("bj-h-" + event.getAuthor().getId(), "HIT"),
-					Button.secondary("bj-s-" + event.getAuthor().getId(), "STAND")
-				    ).complete();
-		}else {
-			event.getChannel().sendMessageEmbeds(getGameEmbed(blackjack, event.getAuthor()).build()).queue();
-		}
 		
 		if(blackjack.getGameState() == GameState.INSTANTBLACKJACK) {
 			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + (blackjack.getBet() * 2) + (blackjack.getBet() / 2));
@@ -91,6 +85,15 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getAuthor().getId());
 			
 		}
+		
+		if(blackjack.isPlaying()) {
+			event.getChannel().sendMessageEmbeds(getGameEmbed(blackjack, event.getAuthor()).build()).addActionRow(
+					Button.secondary("bj-h-" + event.getAuthor().getId(), "HIT"),
+					Button.secondary("bj-s-" + event.getAuthor().getId(), "STAND")
+				    ).complete();
+		}else {
+			event.getChannel().sendMessageEmbeds(getGameEmbed(blackjack, event.getAuthor()).build()).queue();
+		}
 
 	}
 
@@ -99,11 +102,15 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 			return;
 		}
 		
-		event.deferEdit().queue();
-		event.getMessage().editMessageComponents().complete();
-		
 		String[] args = event.getComponentId().split("-");
 		
+		if(!event.getUser().getId().equals(args[2])) {
+			return;
+		}
+		
+		event.deferEdit().queue();
+		event.getMessage().editMessageComponents().complete();
+
 		if(!DiscordBot.INSTANCE.getBlackjackManager().contains(args[2])) {
 			return;
 		}
@@ -113,15 +120,6 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		switch(args[1]) {
 		case "s": game.stand(); break;
 		case "h": game.hit(); break;
-		}
-		
-		if(game.isPlaying()) {
-			event.getMessage().editMessageEmbeds(getGameEmbed(game, event.getUser()).build()).setActionRow(
-					Button.secondary("bj-h-" + event.getUser().getId(), "HIT"),
-					Button.secondary("bj-s-" + event.getUser().getId(), "STAND")
-				    ).complete();
-		}else {
-			event.getMessage().editMessageEmbeds(getGameEmbed(game, event.getUser()).build()).queue();
 		}
 		
 		if(game.getGameState() == GameState.DEALERWIN) {
@@ -140,6 +138,14 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getUser().getId());
 		}
 		
+		if(game.isPlaying()) {
+			event.getMessage().editMessageEmbeds(getGameEmbed(game, event.getUser()).build()).setActionRow(
+					Button.secondary("bj-h-" + event.getUser().getId(), "HIT"),
+					Button.secondary("bj-s-" + event.getUser().getId(), "STAND")
+				    ).complete();
+		}else {
+			event.getMessage().editMessageEmbeds(getGameEmbed(game, event.getUser()).build()).queue();
+		}
 	}
 	
 	private EmbedBuilder getGameEmbed(Blackjack blackjack, User user) {

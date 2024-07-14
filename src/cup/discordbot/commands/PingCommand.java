@@ -34,7 +34,7 @@ public class PingCommand implements Command{
 
 	@Override
 	public boolean isPublic() {
-		return true;
+		return false;
 	}
 
 }

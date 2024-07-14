@@ -46,6 +46,7 @@ public class DiscordBot {
 				.addEventListeners(new RulesCommand())
 				.addEventListeners(new RaceCommand())
 				.addEventListeners(new BlackjackCommand())
+				.setAutoReconnect(true)
 				.build();
 		
 		System.out.println("[DISCORD] BOT online as " + jda.getSelfUser().getName());

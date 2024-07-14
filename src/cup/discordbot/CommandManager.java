@@ -28,6 +28,8 @@ private HashMap<String, Command> commands;
 		commands.put("guildinfo", new GuildInfoCommand());
 		commands.put("blackjack", new BlackjackCommand());
 		commands.put("emojis", new EmojisCommand());
+		commands.put("info", new InfoCommand());
+		commands.put("stake", new StakeCommand());
 	}
 	
 	public void perform(String commandName, MessageReceivedEvent event) {
