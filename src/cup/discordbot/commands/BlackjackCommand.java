@@ -69,8 +69,6 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
 		
 		Blackjack blackjack = new Blackjack(bet);
-		System.out.println("DEALER: " + blackjack.getDealerValue());
-		System.out.println("DEALER: " + blackjack.getPlayerValue());
 		DiscordBot.INSTANCE.getBlackjackManager().addBlackjack(event.getAuthor().getId(), blackjack);
 		
 		
