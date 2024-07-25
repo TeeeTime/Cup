@@ -96,7 +96,7 @@ public class ProfileCommand implements Command{
 
 	@Override
 	public String getUsage() {
-		return DiscordBot.INSTANCE.getPrefix() + "profile <user>";
+		return DiscordBot.INSTANCE.getPrefix() + "profile [user]";
 	}
 
 	@Override
