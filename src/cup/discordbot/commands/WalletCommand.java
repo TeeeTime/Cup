@@ -2,7 +2,6 @@ package cup.discordbot.commands;
 
 import java.awt.Color;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import cup.database.LiteSQL;
 import cup.discordbot.Command;
@@ -36,16 +35,15 @@ public class WalletCommand implements Command{
 			
 			user = event.getMessage().getMentions().getMembers().get(0).getUser();
 		}
-		
-		ResultSet results = LiteSQL.onQuery("SELECT count(DISTINCT balance) AS place FROM coins WHERE (balance > " + CoinManager.getCoins(user) + ")");
-		
 		int place = 1;
 		
 		try {
+			ResultSet results = LiteSQL.onQuery("SELECT count(DISTINCT balance) AS place FROM coins WHERE (balance > " + CoinManager.getCoins(user) + ")");
+		
 			if(results.next()) {
 				place += results.getInt("place");
 			}
-		} catch(SQLException e) {
+		} catch(Exception e) {
 			System.out.println("[LiteSQL] An error occurred while retrieving users position in leaderboard for wallet overview");
 			e.printStackTrace();
 		}

@@ -1,7 +1,6 @@
 package cup.games;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import cup.database.LiteSQL;
 import net.dv8tion.jda.api.entities.User;
@@ -11,13 +10,13 @@ public class Stats {
 	public static int getStat(String statId, User user) {
 		if(!entryExists(statId, user)) return 0;
 		
-		ResultSet results = LiteSQL.onQuery("SELECT value FROM stats WHERE statid = '" + statId + "' AND userid = '" + user.getId() + "'");
-		
 		try {
+			ResultSet results = LiteSQL.onQuery("SELECT value FROM stats WHERE statid = '" + statId + "' AND userid = '" + user.getId() + "'");
+		
 			if(results.next()) {
 				return results.getInt("value");
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -33,16 +32,15 @@ public class Stats {
 	}
 	
 	public static boolean entryExists(String statId, User user) {
-		
-        ResultSet results = LiteSQL.onQuery("SELECT value FROM stats WHERE statid = '" + statId + "' AND userid = '" + user.getId() + "'");
-		
 		try {
+			ResultSet results = LiteSQL.onQuery("SELECT value FROM stats WHERE statid = '" + statId + "' AND userid = '" + user.getId() + "'");
+		
 			if(results.next()) {
 				return true;
 			}else {
 				return false;
 			}
-		}catch(SQLException e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		

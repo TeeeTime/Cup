@@ -53,12 +53,8 @@ public class LiteSQL {
 		}
 	}
 	
-	public static ResultSet onQuery(String sql) {
-		try {
-			return statement.executeQuery(sql);
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public static ResultSet onQuery(String sql) throws Exception{
+
+		return statement.executeQuery(sql);
 	}
 }

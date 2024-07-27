@@ -2,7 +2,6 @@ package cup.discordbot.commands;
 
 import java.awt.Color;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,22 +26,20 @@ public class LeaderboardCommand implements Command {
 			return;
 		}
 		
-		
-		ResultSet results = LiteSQL.onQuery("SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 11");
-		
 		Collection<Long> userids = new ArrayList<Long>();
 		
-		for(int i = 0; i < 11; i++) {
-			try {
+		try {
+			ResultSet results = LiteSQL.onQuery("SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 11");
+		
+			for(int i = 0; i < 11; i++) {
 				if(results.next()) {
 					userids.add(Long.parseLong(results.getString("userid")));
 					
 				}
-			} catch (SQLException e) {
-				System.out.println("[Leaderboard] An error occurred while retrieving user ids from database");
 			}
+		}catch(Exception e) {
+			System.out.println("[Leaderboard] An error occurred while retrieving user ids from database");
 		}
-		
 		event.getGuild().retrieveMembersByIds(userids).onSuccess(members -> {
 			String output = "";
 			

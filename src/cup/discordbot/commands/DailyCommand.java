@@ -2,7 +2,6 @@ package cup.discordbot.commands;
 
 import java.awt.Color;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -80,15 +79,15 @@ public class DailyCommand implements Command{
 	}
 	
 	private boolean entryExists(User user) {
-		ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + user.getId());
 		
 		try {
+			ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + user.getId());
 			if(results.next()) {
 				return true;
 			}else {
 				return false;
 			}
-		}catch(SQLException e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -104,13 +103,14 @@ public class DailyCommand implements Command{
 	}
 	
 	private String getDate(User user) {
-		ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + user.getId());
-		
+
 		try {
+			ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + user.getId());
+			
 			if(results.next()) {
 				return results.getString("lastclaimdate");
 			}
-		} catch(SQLException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
