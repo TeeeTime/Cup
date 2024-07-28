@@ -95,11 +95,15 @@ public class DailyCommand implements Command{
 	}
 	
 	private void putNewDate(User user, String date) {
-		if(!entryExists(user)) {
-        	LiteSQL.onUpdate("INSERT INTO daily(userid, lastclaimdate) VALUES(" + user.getId() + ", '" + date + "')");
-        }else {
-        	LiteSQL.onUpdate("UPDATE daily SET lastclaimdate = '" + date + "' WHERE userid = " + user.getId());
-        }
+		try {
+			if(!entryExists(user)) {
+				LiteSQL.onUpdate("INSERT INTO daily(userid, lastclaimdate) VALUES(" + user.getId() + ", '" + date + "')");
+			}else {
+				LiteSQL.onUpdate("UPDATE daily SET lastclaimdate = '" + date + "' WHERE userid = " + user.getId());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private String getDate(User user) {

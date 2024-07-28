@@ -45,12 +45,9 @@ public class LiteSQL {
 		}
 	}
 	
-	public static void onUpdate(String sql) {
-		try {
-			statement.execute(sql);
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
+	public static int onUpdate(String sql) throws Exception{
+		
+		return statement.executeUpdate(sql);
 	}
 	
 	public static ResultSet onQuery(String sql) throws Exception{

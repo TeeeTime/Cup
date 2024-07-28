@@ -30,6 +30,12 @@ public class SQLCommand implements Command{
 				eb.addField("Error:", "```ini\n" + e.getMessage() + "\n```", false);
 			}
 			
+		}else {
+			try {
+				eb.addField("Result:", "```" + LiteSQL.onUpdate(args[1]) + " rows affected```", false);
+			} catch (Exception e) {
+				eb.addField("Error:", "```ini\n" + e.getMessage() + "\n```", false);
+			}
 		}
 		
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();
@@ -57,7 +63,11 @@ public class SQLCommand implements Command{
 			int rowIterator = 0;
 			while(results.next()) {
 				for (int i = 1; i <= columnCount; i++) {
-				    content[rowIterator][i - 1] = results.getObject(i).toString();
+					if(results.getObject(i) != null) {
+						content[rowIterator][i - 1] = results.getObject(i).toString();
+					}else {
+						content[rowIterator][i - 1] = "null";
+					}
 				}
 				rowIterator++;
 			}

@@ -35,11 +35,14 @@ public class CoinManager {
 	}
 	
 	public static void setCoins(User user, int amount) {
-        
-        if(!entryExists(user)) {
-        	LiteSQL.onUpdate("INSERT INTO coins(userid, balance) VALUES(" + user.getId() + ", " + amount + ")");
-        }else {
-        	LiteSQL.onUpdate("UPDATE coins SET balance = " + amount + " WHERE userid = " + user.getId());
+        try {
+        	if(!entryExists(user)) {
+        		LiteSQL.onUpdate("INSERT INTO coins(userid, balance) VALUES(" + user.getId() + ", " + amount + ")");
+        	}else {
+        		LiteSQL.onUpdate("UPDATE coins SET balance = " + amount + " WHERE userid = " + user.getId());
+        	}
+        }catch(Exception e) {
+        	e.printStackTrace();
         }
 	}
 	
