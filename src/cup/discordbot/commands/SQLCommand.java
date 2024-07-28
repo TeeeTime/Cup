@@ -24,7 +24,7 @@ public class SQLCommand implements Command{
 		
 		if(args[1].startsWith("select")) {
 			try {
-				ResultSet results = LiteSQL.onQuery(args[1]);
+				ResultSet results = LiteSQL.onQuery("select * from (" + args[1] + ") limit 50");
 				eb.addField("Result:", "```" + asStringTable(results) + "```", false);
 			}catch(Exception e) {
 				eb.addField("Error:", "```ini\n" + e.getMessage() + "\n```", false);
@@ -58,7 +58,7 @@ public class SQLCommand implements Command{
 			table += "\n\n";
 			
 			
-			content = new String[2000][columnCount];
+			content = new String[50][columnCount];
 			
 			int rowIterator = 0;
 			while(results.next()) {
