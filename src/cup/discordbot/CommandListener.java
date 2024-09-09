@@ -7,7 +7,7 @@ public class CommandListener extends ListenerAdapter {
 	
 	public void onMessageReceived(MessageReceivedEvent event) {
 		
-		if(event.getAuthor().isBot()) {
+		if(event.getAuthor().equals(event.getJDA().getSelfUser())) {
 			return;
 		}
 		
