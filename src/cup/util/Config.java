@@ -10,6 +10,7 @@ public class Config {
 	private String discordAPIToken;
 	private String commandPrefix;
 	private String adminId;
+	private String stockdataAPIToken;
 	
 	public Config() {
 		
@@ -29,6 +30,7 @@ public class Config {
 			discordAPIToken = scanner.nextLine().substring(18).trim();
 			commandPrefix = scanner.nextLine().substring(15).trim();
 			adminId = scanner.nextLine().substring(9).trim();
+			stockdataAPIToken = scanner.nextLine().substring(24).trim();
 			
 			System.out.println("[Config] Command Prefix: " + commandPrefix);
 			System.out.println("[Config] Admin Id: " + adminId);
@@ -50,7 +52,7 @@ public class Config {
 			file.createNewFile();
 			
 			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write("Discord API Token:\nCommand Prefix:\nAdmin Id:");
+			fileWriter.write("Discord API Token:\nCommand Prefix:\nAdmin Id:\nStockdata.org API Token:");
 			fileWriter.close();
 			System.out.println("[Config] New config file has been created");
 			
@@ -73,6 +75,10 @@ public class Config {
 	
 	public String getAdminId() {
 		return adminId;
+	}
+
+	public String getStockdataAPIToken() {
+		return stockdataAPIToken;
 	}
 
 }

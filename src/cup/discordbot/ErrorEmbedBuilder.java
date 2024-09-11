@@ -86,4 +86,13 @@ public class ErrorEmbedBuilder {
 		
 		return eb;
 	}
+	
+	public static EmbedBuilder cantFindStockEmbed(String search) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.RED);
+		eb.setTitle("🚫");
+		eb.addField("No such stock:", "`" + search + "`", false);
+		
+		return eb;
+	}
 }
