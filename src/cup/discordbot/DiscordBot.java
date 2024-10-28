@@ -6,7 +6,6 @@ import cup.discordbot.commands.RockPaperScissorsCommand;
 import cup.discordbot.commands.RulesCommand;
 import cup.games.BlackjackManager;
 import cup.games.RaceManager;
-import cup.util.StocksAPI;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -28,9 +27,7 @@ public class DiscordBot {
 	
 	private BlackjackManager blackjackManager;
 	
-	private StocksAPI stocksAPI;
-	
-	public DiscordBot(String token, String prefix, String adminId, String stocksToken) {
+	public DiscordBot(String token, String prefix, String adminId) {
 		
 		INSTANCE = this;
 		
@@ -59,7 +56,6 @@ public class DiscordBot {
 		raceManager = new RaceManager();
 		blackjackManager = new BlackjackManager();
 		
-		stocksAPI = new StocksAPI(stocksToken);
 	}
 	
 	public JDA getJDA() {
@@ -84,9 +80,5 @@ public class DiscordBot {
 
 	public BlackjackManager getBlackjackManager() {
 		return blackjackManager;
-	}
-
-	public StocksAPI getStocksAPI() {
-		return stocksAPI;
 	}
 }

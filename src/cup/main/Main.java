@@ -19,7 +19,7 @@ public class Main {
 		SQLManager.onCreate();
 		
 		
-		DiscordBot bot = new DiscordBot(config.getDiscordAPIToken(), config.getCommandPrefix(), config.getAdminId(), config.getStockdataAPIToken());
+		DiscordBot bot = new DiscordBot(config.getDiscordAPIToken(), config.getCommandPrefix(), config.getAdminId());
 		bot.getJDA().getPresence().setActivity(Activity.watching("teeestream"));
 	}
 }

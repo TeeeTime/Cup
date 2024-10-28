@@ -74,7 +74,7 @@ public class StakeCommand implements Command{
 		DecimalFormat df = new DecimalFormat("0.00");
 		
 		if(randomInt == 0) {
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + (multiplier * bet));
+			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + (multiplier * bet) - bet);
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.GREEN);
