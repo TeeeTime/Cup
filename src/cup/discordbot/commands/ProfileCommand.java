@@ -67,6 +67,7 @@ public class ProfileCommand implements Command{
 		case OFFLINE: onlineStatus = ":black_circle: Offline"; break;
 		case INVISIBLE: onlineStatus = ":black_circle: Offline"; break;
 		case UNKNOWN: onlineStatus = ":black_circle: Offline"; break;
+		default: onlineStatus = ":black_circle: Offline"; break;
 		}
 		eb.addField("Status:", onlineStatus, true);
 		List<Activity> activities = new ArrayList<Activity>();
