@@ -69,6 +69,26 @@ public class StatsCommand implements Command{
 					+ "`Lost:` " + rpsLost + " (" + df.format(lostPercentage) + "%)", false);
 		}
 		
+		int blackjackPlayed = Stats.getStat("blackjackPlayed", user);
+		int blackjackWon = Stats.getStat("blackjackWon", user);
+		int blackjackTied = Stats.getStat("blackjackTied", user);
+		int blackjackLost = Stats.getStat("blackjackLost", user);
+		
+		System.out.println(blackjackWon);
+		
+		if(blackjackPlayed < 1) {
+			eb.addField("Blackjack", "You didn't play any games of blackjack yet!", false);
+		}else {
+			float winPercentage = ((float) blackjackWon / (float) blackjackPlayed) * 100;
+			float tiedPercentage = ((float) blackjackTied / (float) blackjackPlayed) * 100;
+			float lostPercentage = ((float) blackjackLost / (float) blackjackPlayed) * 100;
+			
+			eb.addField("Blackjack", "`Played:` " + blackjackPlayed + "\n"
+					+ "`Won:` " + blackjackWon + " (" + df.format(winPercentage) + "%)\n"
+					+ "`Tied:` " + blackjackTied + " (" + df.format(tiedPercentage) + "%)\n"
+					+ "`Lost:` " + blackjackLost + " (" + df.format(lostPercentage) + "%)", false);
+		}
+		
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 

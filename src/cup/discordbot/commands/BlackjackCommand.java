@@ -10,6 +10,7 @@ import cup.economy.CoinManager;
 import cup.games.Blackjack;
 import cup.games.Card;
 import cup.games.GameState;
+import cup.games.Stats;
 import cup.util.CustomEmoji;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -75,12 +76,19 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		if(blackjack.getGameState() == GameState.INSTANTBLACKJACK) {
 			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + (blackjack.getBet() * 2) + (blackjack.getBet() / 2));
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getAuthor().getId());
+			Stats.incrementStat("blackjackPlayed", event.getAuthor());
+			Stats.incrementStat("blackjackWon", event.getAuthor());
 			
 		}else if(blackjack.getGameState() == GameState.TIE) {
 			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + blackjack.getBet());
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getAuthor().getId());
+			Stats.incrementStat("blackjackPlayed", event.getAuthor());
+			Stats.incrementStat("blackjackTied", event.getAuthor());
+			
 		}else if(blackjack.getGameState() == GameState.DEALERWIN) {
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getAuthor().getId());
+			Stats.incrementStat("blackjackPlayed", event.getAuthor());
+			Stats.incrementStat("blackjackLost", event.getAuthor());
 			
 		}
 		
@@ -122,6 +130,9 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		
 		if(game.getGameState() == GameState.DEALERWIN) {
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getUser().getId());
+			System.out.println("l");
+			Stats.incrementStat("blackjackPlayed", event.getUser());
+			Stats.incrementStat("blackjackLost", event.getUser());
 			
 		}else if(game.getGameState() == GameState.INSTANTBLACKJACK) {
 			CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + (game.getBet() * 2) + (game.getBet() / 2));
@@ -130,10 +141,14 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		}else if(game.getGameState() == GameState.PLAYERWIN) {
 			CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + (game.getBet() * 2));
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getUser().getId());
+			Stats.incrementStat("blackjackPlayed", event.getUser());
+			Stats.incrementStat("blackjackWon", event.getUser());
 			
 		}else if(game.getGameState() == GameState.TIE) {
 			CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + game.getBet());
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getUser().getId());
+			Stats.incrementStat("blackjackPlayed", event.getUser());
+			Stats.incrementStat("blackjackTied", event.getUser());
 		}
 		
 		if(game.isPlaying()) {
