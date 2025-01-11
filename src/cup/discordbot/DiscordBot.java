@@ -27,12 +27,15 @@ public class DiscordBot {
 	
 	private BlackjackManager blackjackManager;
 	
-	public DiscordBot(String token, String prefix, String adminId) {
+	private String chatGPTToken;
+	
+	public DiscordBot(String token, String prefix, String adminId, String chatGPTToken) {
 		
 		INSTANCE = this;
 		
 		this.prefix = prefix;
 		this.adminId = adminId;
+		this.chatGPTToken = chatGPTToken;
 		
 		jda = JDABuilder.createDefault(token)
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
@@ -46,6 +49,7 @@ public class DiscordBot {
 				.addEventListeners(new RulesCommand())
 				.addEventListeners(new RaceCommand())
 				.addEventListeners(new BlackjackCommand())
+				.addEventListeners(new CounterstrikeChangelogListener())
 				.setAutoReconnect(true)
 				.build();
 		
@@ -80,5 +84,9 @@ public class DiscordBot {
 
 	public BlackjackManager getBlackjackManager() {
 		return blackjackManager;
+	}
+
+	public String getChatGPTToken() {
+		return chatGPTToken;
 	}
 }
