@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Activity;
 public class Main {
 
 	public static void main(String[] args) {
+		
 		Config config = new Config();
 		
 		CustomEmoji customEmoji = new CustomEmoji();
@@ -19,7 +20,7 @@ public class Main {
 		SQLManager.onCreate();
 		
 		
-		DiscordBot bot = new DiscordBot(config.getDiscordAPIToken(), config.getCommandPrefix(), config.getAdminId());
+		DiscordBot bot = new DiscordBot(config.getDiscordAPIToken(), config.getCommandPrefix(), config.getAdminId(), config.getChatGPTAPIToken());
 		bot.getJDA().getPresence().setActivity(Activity.watching("teeestream"));
 	}
 }
