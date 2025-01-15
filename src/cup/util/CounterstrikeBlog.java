@@ -49,15 +49,15 @@ public class CounterstrikeBlog {
                     .replaceAll("\\\\n", "\n")
                     .replaceAll("\\\\r", "")
                     .replaceAll("\\\\\"", "\"")
-                    // Fix the first list item formatting
-                    .replaceAll("\\[list\\]\\n?\\[\\*\\]\\n", "- ")
-                    // Handle remaining list items
-                    .replaceAll("\\n\\[\\*\\]", "\n- ")
-                    // Clean up list tags
+                    // Convert bullet points to Discord format
+                    .replaceAll("\\[\\*\\]", "- ")
+                    // Convert BBCode italics to Discord italics
+                    .replaceAll("\\[i\\]", "_")
+                    .replaceAll("\\[/i\\]", "_")
+                    // Remove list tags
                     .replaceAll("\\[/?list\\]", "")
-                    // Format headers and clean up
-                    .replaceAll("\\[ ([^\\]]+) \\]", "**[$1]**")
-                    .replaceAll("<[^>]*>", "")
+                    // Format headers with Discord bold
+                    .replaceAll("\\[(.*?)\\]", "**[$1]**")
                     .replaceAll("(?m)^\\s+$", "")
                     .replaceAll("\n{3,}", "\n\n")
                     .trim();
