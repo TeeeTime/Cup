@@ -9,11 +9,11 @@ import java.nio.charset.StandardCharsets;
 
 import org.json.JSONObject;
 
-public class ChatGPTAPI {
+public class ChatGPT {
     private final String apiKey;
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     
-    public ChatGPTAPI(String apiKey) {
+    public ChatGPT(String apiKey) {
         this.apiKey = apiKey;
     }
     

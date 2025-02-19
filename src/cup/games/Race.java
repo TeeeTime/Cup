@@ -91,5 +91,18 @@ public class Race {
 		secondsToJoin -= seconds;
 	}
 	
+	public String getAsFormatedText() {
+		String output = "{";
+		
+		for(int i = 0; i < users.size(); i++) {
+			User user = users.get(i);
+			output += user.getName() + " : " + field.get(user.getId()) + ", ";
+		}
+		
+		output += "}";
+		
+		return output;
+	}
+	
 }
 
