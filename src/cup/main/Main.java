@@ -21,6 +21,6 @@ public class Main {
 		
 		
 		DiscordBot bot = new DiscordBot(config.getDiscordAPIToken(), config.getCommandPrefix(), config.getAdminId(), config.getChatGPTAPIToken());
-		bot.getJDA().getPresence().setActivity(Activity.watching("teeestream"));
+		bot.getJDA().getPresence().setActivity(Activity.customStatus("3000 lines of shit code"));
 	}
 }
