@@ -8,7 +8,7 @@ public class AIListener extends ListenerAdapter {
 	
 	public void onMessageReceived(MessageReceivedEvent event) {
 		
-		if(!event.getMessage().getContentRaw().split("")[0].toLowerCase().equals("teaz")) return;
+		if(!event.getMessage().getContentRaw().split(" ")[0].toLowerCase().equals("teaz")) return;
 		if(event.getAuthor().isBot()) return;
 		
 		ChatGPT chatGPT = new ChatGPT(DiscordBot.INSTANCE.getChatGPTToken());
