@@ -50,7 +50,7 @@ public class DiscordBot {
 				.addEventListeners(new RaceCommand())
 				.addEventListeners(new BlackjackCommand())
 				.addEventListeners(new CounterstrikeChangelogListener())
-				.addEventListeners(new ImageListener())
+				.addEventListeners(new AIListener())
 				.setAutoReconnect(true)
 				.build();
 		
