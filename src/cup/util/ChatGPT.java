@@ -58,7 +58,7 @@ public class ChatGPT {
     }
     
     public String getImageResponse(String prompt, String imageURL) {
-    	String body = "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":[{\"type\":\"text\",\"text\":\"" + prompt +"\"},{\"type\":\"image_url\",\"image_url\":{\"url\":\"" + imageURL + "\"}}]}],\"temperature\":1}";
+    	String body = "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":[{\"type\":\"text\",\"text\":\"" + escape(prompt) +"\"},{\"type\":\"image_url\",\"image_url\":{\"url\":\"" + imageURL + "\"}}]}],\"temperature\":0.7}";
     	
     	HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
