@@ -16,7 +16,7 @@ public class ChatGPT {
     }
     
     public String getResponse(String prompt) {
-    	String body = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + escape(prompt) + "\"}]}";
+    	String body = "{\"model\": \"gpt-4o\", \"messages\": [{\"role\": \"user\", \"content\": \"" + escape(prompt) + "\"}]}";
     	
     	HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
@@ -37,7 +37,7 @@ public class ChatGPT {
     }
     
     public String getResponse(String system, String prompt) {
-    	String body = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"system\", \"content\": \"" + escape(system) + "\"},{\"role\": \"user\", \"content\": \"" + escape(prompt) + "\"}]}";
+    	String body = "{\"model\": \"gpt-4o\", \"messages\": [{\"role\": \"system\", \"content\": \"" + escape(system) + "\"},{\"role\": \"user\", \"content\": \"" + escape(prompt) + "\"}]}";
     	
     	HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
