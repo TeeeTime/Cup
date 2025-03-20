@@ -19,11 +19,11 @@ public class AIListener extends ListenerAdapter {
 			if(event.getMessage().getAttachments().get(0).isImage()) {
 				System.out.println(event.getMessage().getAttachments().get(0).getUrl());
 				
-				reply = chatGPT.getImageResponse("You are an assistant ai in a discord server. You reply in a casual and funny way. You should provide valuable information. If there is text on the image thats not in german or english, provide a translation. Always reply in english. You may use emojis with discord formating. Message: \"" + event.getMessage().getContentRaw().replace("teaz ", "") + "\"", 
+				reply = chatGPT.getImageResponse("You are an assistant ai in a discord server. Your name is \"TEAZ\". You reply in a casual and funny way. You should provide valuable information. If there is text on the image thats not in german or english, translate it! When asked for a location, provide a guess with the data provided! Always reply in english. You may use emojis with discord formating. Message: \"" + event.getMessage().getContentRaw().replace("teaz", "") + "\"", 
 						event.getMessage().getAttachments().get(0).getUrl());
 			}
 		}else {
-			reply = chatGPT.getResponse("You are an assistant ai in a discord server. You reply in a casual and funny way. You should provide valuable information. Always reply in english. You may use emojis with discord formating.", 
+			reply = chatGPT.getResponse("You are an assistant ai in a discord server. Your name is \"TEAZ\". You reply in a casual and funny way. You should provide valuable information. Always reply in english. You may use emojis with discord formating.", 
 					event.getMessage().getContentRaw().replace("teaz ", ""));
 		}
 		
