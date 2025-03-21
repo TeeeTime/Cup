@@ -19,7 +19,7 @@ public class CounterstrikeChangelogListener extends ListenerAdapter{
 			String changelog = blog.extractChangelog(link);
 			TextChannel textChannel = event.getGuild().getTextChannelsByName("counter-strike",true).get(0);
 			
-			textChannel.sendMessage("New update :tada: :tada: :tada:\n\n" + changelog).queue();
+			textChannel.sendMessage("New update :tada: :tada: :tada:\n\n" + changelog).setSuppressEmbeds(true).queue();
 			
 			ChatGPT chatGPT = new ChatGPT(DiscordBot.INSTANCE.getChatGPTToken());
 			

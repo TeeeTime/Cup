@@ -54,6 +54,8 @@ public class CounterstrikeBlog {
                     // Convert BBCode italics to Discord italics
                     .replaceAll("\\[i\\]", "_")
                     .replaceAll("\\[/i\\]", "_")
+                    // Extract just the URL from BBCode URL tags
+                    .replaceAll("\\[url=([^\\]]+)\\].*?\\[/url\\]", "$1")
                     // Remove list tags
                     .replaceAll("\\[/?list\\]", "")
                     // Format headers with Discord bold
