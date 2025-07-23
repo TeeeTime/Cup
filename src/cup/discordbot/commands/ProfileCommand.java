@@ -70,29 +70,7 @@ public class ProfileCommand implements Command{
 		default: onlineStatus = ":black_circle: Offline"; break;
 		}
 		eb.addField("Status:", onlineStatus, true);
-		List<Activity> activities = new ArrayList<Activity>();
-		if(event.getMember().getActivities() != null) {
-			activities = member.getActivities();
-		}
 		
-		if(activities.size() > 0) {
-			String activitiesAsString = "";
-			
-			for(Activity activity : activities) {
-				switch(activity.getType()) {
-				case PLAYING: activitiesAsString += "* Playing " + activity.getName() + "\n"; break;
-				case LISTENING: activitiesAsString += "* Listening to " + activity.getState().replace("; ", " & ") + "\n"; break;
-				case WATCHING: activitiesAsString += "* Watching " + activity.getName() + "\n"; break;
-				case STREAMING: activitiesAsString += "* Streaming " + activity.getState() + "[LINK](" + activity.getUrl() + ")" + "\n"; break;
-				case CUSTOM_STATUS: activitiesAsString += "* " + activity.getEmoji().getFormatted() + " " + activity.getName() + "\n"; break;
-				default: break;
-				}
-			}
-			
-			eb.addField("Activity:", activitiesAsString, false);
-		}
-		
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 
 	@Override
