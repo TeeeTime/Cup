@@ -1,15 +1,12 @@
 package cup.discordbot.commands;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
 import cup.economy.CoinManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -71,6 +68,7 @@ public class ProfileCommand implements Command{
 		}
 		eb.addField("Status:", onlineStatus, true);
 		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 
 	@Override
