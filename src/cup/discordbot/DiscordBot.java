@@ -42,6 +42,7 @@ public class DiscordBot {
 				.enableIntents(GatewayIntent.GUILD_MESSAGES)
 				.enableIntents(GatewayIntent.GUILD_MEMBERS)
 				.enableIntents(GatewayIntent.GUILD_PRESENCES)
+				.enableIntents(GatewayIntent.GUILD_VOICE_STATES)
 				.enableCache(CacheFlag.ONLINE_STATUS)
 				.enableCache(CacheFlag.ACTIVITY)
 				.addEventListeners(new CommandListener())
@@ -51,6 +52,7 @@ public class DiscordBot {
 				.addEventListeners(new BlackjackCommand())
 				.addEventListeners(new CounterstrikeChangelogListener())
 				.addEventListeners(new AIListener())
+				.addEventListeners(new VoiceSessionListener())
 				.setAutoReconnect(true)
 				.build();
 		
