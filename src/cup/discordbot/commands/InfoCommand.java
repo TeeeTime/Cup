@@ -36,6 +36,8 @@ public class InfoCommand implements Command{
 
 		eb.addField("Memory usage:", "`" + memoryUsage + "`", false);
 		
+		eb.addField("Available Cores:", "`" + Runtime.getRuntime().availableProcessors() + "`", false);
+		
 		DiscordBot.INSTANCE.getJDA().getRestPing().queue( (time) ->
 			event.getChannel().sendMessageEmbeds(eb.addField("Ping to discord:", "`" + time + " ms`", false).build()).queue()
 		);
