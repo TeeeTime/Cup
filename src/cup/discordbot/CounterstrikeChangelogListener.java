@@ -1,6 +1,6 @@
 package cup.discordbot;
 
-import cup.util.ChatGPT;
+import cup.ai.ChatGPT;
 import cup.util.CounterstrikeBlog;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

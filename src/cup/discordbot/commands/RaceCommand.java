@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cup.ai.ChatGPT;
 import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
 import cup.economy.CoinManager;
 import cup.games.Race;
 import cup.games.Stats;
-import cup.util.ChatGPT;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;

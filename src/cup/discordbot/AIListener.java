@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import cup.util.ChatGPT;
+import cup.ai.ChatGPT;
+import cup.ai.Response;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.FileUpload;
@@ -26,26 +27,28 @@ public class AIListener extends ListenerAdapter {
 			}
 		}
 		
-		String reply = chatGPT.getAssistantResponse(event.getMessage().getContentRaw().replace("teaz", "").trim(), imageURL);
+		Response response = chatGPT.getAssistantResponse(event.getMessage().getContentRaw().replace("teaz", "").trim(), imageURL);
 		
-		if(reply.startsWith("https://oaidalleapiprodscus")) {
+		if(response.getImageURLs().size() == 0) {
+			event.getMessage().reply(response.getText()).queue();
+		}else {
 			try {
-				InputStream stream = new URL(reply).openStream();
+				InputStream stream = new URL(response.getImageURLs().get(0)).openStream();
 				FileUpload upload = FileUpload.fromData(stream, "img.jpg");
 
-			    event.getMessage().reply("Here you go :)")
+			    event.getMessage().reply(response.getText())
 			         .addFiles(upload)
 			         .queue();
 			    
 			    return;
 			    
 			} catch (IOException e) {
-			    event.getMessage().reply("Could not load the image").queue();
+			    event.getMessage().reply("Something went wrong :(").queue();
 			    e.printStackTrace();
 			}
 		}
 		
-		event.getMessage().reply(reply).queue();
+		
 		
 	}
 }
