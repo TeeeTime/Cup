@@ -1,4 +1,4 @@
-package cup.util;
+package cup.ai;
 
 import java.io.IOException;
 import java.net.URI;
@@ -8,6 +8,8 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import cup.util.Mapbox;
 
 public class ChatGPT {
     private final String apiKey;
@@ -160,52 +162,67 @@ public class ChatGPT {
     /*
      *	Call the API with tools. If a tool response is returned, call the appropriate tool. Else, get a normal text response 
      */
-    public String getAssistantResponse(String userPrompt, String image) {
+    public Response getAssistantResponse(String userPrompt, String image) {
     	//	API request body
     	JSONObject requestBody = new JSONObject();
     	requestBody.put("model", "gpt-4o");
     	
     	//	Defining tools
     	JSONArray tools = new JSONArray();
-    	
-    	//	Defining generate_image tool
-    	JSONObject generateImageTool = new JSONObject();
-    	generateImageTool.put("type", "function");
-    	
-    	JSONObject generateImageFunction = new JSONObject();
-    	generateImageFunction.put("name", "generate_image");
-    	generateImageFunction.put("description", "Generates an image based on a text description. Use this ONLY when the user explicitly asks to draw, create, or generate a picture.");
-    	
-    	JSONObject parameters = new JSONObject();
-    	parameters.put("type", "object");
-    	
-    	JSONObject promptProp = new JSONObject();
-    	promptProp.put("type", "string");
-    	promptProp.put("description", "The detailed visual description of the image to generate.");
-    	
-    	JSONObject properties = new JSONObject();
-    	properties.put("prompt", promptProp);
-    	
-    	parameters.put("properties", properties);
-    	parameters.put("required", new JSONArray().put("prompt"));
-    	
-    	generateImageFunction.put("parameters", parameters);
-    	generateImageTool.put("function", generateImageFunction);
-    	tools.put(generateImageTool);
+    	tools.put(getGenerateImageTool());
+    	tools.put(getGenerateLocationMapTool());
     	
     	//	JSON array to store the messages
     	JSONArray messages = new JSONArray();
     	
     	//	Adding the system prompt
+    	String systemPromptContent = """
+    			You are TEAZ, a casual, funny, and helpful AI assistant in a Discord server. Always reply in English. You use emojis and Discord formatting (markdown) to make your messages look great.
+
+    			### YOUR CAPABILITIES & TOOLS:
+    			1.  **Image Generation:** If the user asks for a picture, drawing, or art, you MUST call the `generate_image` tool.
+    			2.  **Geolocation (CRITICAL):** If the user provides an image and asks "Where is this?", "Find this location", or implies a location search, you MUST call the `generate_location_map` tool. Do NOT describe coordinates in text.
+    			3.  **General Chat:** For everything else, chat casually. If an image contains text in a foreign language (non-English/German), translate it automatically.
+
+    			### RULES FOR GEOLOCATION:
+    			* **Trigger:** Any visual cue implying a location search.
+    			* **Confidence:** If you are unsure of the exact spot, guess the city or region and lower the `zoom` level in the tool call.
+    			* **Output:** Never output raw latitude/longitude in your text response. Always use the map tool.
+
+    			### PERSONALITY:
+    			* Be witty but helpful.
+    			* Keep responses concise unless asked for detail.
+    			""";
+    	
     	JSONObject systemMessage = new JSONObject();
     	systemMessage.put("role", "system");
-    	systemMessage.put("content", "You are an assistant ai in a discord server. Your name is \"TEAZ\". You reply in a casual and funny way. You should provide valuable information. Always reply in english. You may use emojis with discord formating.");
+    	systemMessage.put("content", systemPromptContent);
     	messages.put(systemMessage);
     	
     	//	Adding user prompt
     	JSONObject userMessage = new JSONObject();
     	userMessage.put("role", "user");
-    	userMessage.put("content", userPrompt);
+    	
+    	if(!image.equals("NONE")) {
+    		JSONArray userContent = new JSONArray();
+    		
+    		JSONObject textContent = new JSONObject();
+        	textContent.put("type", "text");
+        	textContent.put("text", userPrompt);
+        	userContent.put(textContent);
+        	
+        	JSONObject imageContent = new JSONObject();
+        	imageContent.put("type", "image_url");
+        	JSONObject imageUrl = new JSONObject();
+        	imageUrl.put("url", image);
+        	imageContent.put("image_url", imageUrl);
+        	userContent.put(imageContent);
+        	
+        	userMessage.put("content", userContent);
+    	}else {
+        	userMessage.put("content", userPrompt);
+    	}
+
     	messages.put(userMessage);
     	
     	requestBody.put("messages", messages);
@@ -240,26 +257,120 @@ public class ChatGPT {
 	                    JSONObject args = new JSONObject(argsString);
 	                    String imagePrompt = args.getString("prompt");
 	                    
+	                    Response responseMessage = new Response(getTextResponse("You are an ai that just generated an image. You get the image prompt and write a short message (max 15 words) stating that and what you generated in a fun way. You may use emojis with discord formating.", imagePrompt));
+	                    responseMessage.addImageURL(getImageResponse(imagePrompt));
 	                    
-	                    return getImageResponse(imagePrompt);
+	                    return responseMessage;
+					}else if(toolName.equals("generate_location_map")) {
+						String argsString = toolCall.getJSONObject("function").getString("arguments");
+	                    JSONObject args = new JSONObject(argsString);
+						String summary = args.getString("summary");
+						double latitude = args.getDouble("latitude");
+						double longitude = args.getDouble("longitude");
+						int zoom = args.getInt("zoom");
+						
+						Mapbox mapbox = new Mapbox();
+						String mapURL = mapbox.getLocationMapURL("pk.eyJ1IjoidGVlZXRpbWUiLCJhIjoiY21pcGIxbzE1MDVncTNncGo5azJhdXVwaSJ9.Z4YLtq-cH9kq4mWU3E9o_A", "satellite-streets-v12", latitude, longitude, zoom);
+						
+						Response responseMessage = new Response(summary + " **(confidence: " + (int) (((double) zoom / 18) * 100) + "%)**");
+						responseMessage.addImageURL(mapURL);
+						
+						return responseMessage;
 					}
 				}
-				
-			//	Check if a image URL as context has been added
-			}else if(!image.equals("NONE")) {
-				return getTextResponse("You are an assistant ai in a discord server. Your name is \"TEAZ\". You reply in a casual and funny way. You should provide valuable information. If there is text on the image thats not in german or english, translate it! When asked for a location, provide a guess with the data provided! Always reply in english. You may use emojis with discord formating."
-						, userPrompt, image);
-				
-			//	Default case with no context
-			}else {
-				return getTextResponse("You are an assistant ai in a discord server. Your name is \"TEAZ\". You reply in a casual and funny way. You should provide valuable information. If there is text on the image thats not in german or english, translate it! When asked for a location, provide a guess with the data provided! Always reply in english. You may use emojis with discord formating."
-						, userPrompt);
+			}	
+			
+			if (message.has("content") && !message.isNull("content")) { 
+				String chatResponse = message.getString("content");
+				    
+				return new Response(chatResponse);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Error while trying to call openai API: " + e.getMessage();
+			return new Response("Error while trying to call openai API: " + e.getMessage());
 		}
-    	return "Error while trying to process the request";
+    	return new Response("Error while trying to process the request");
+    }
+    
+    private JSONObject getGenerateImageTool() {
+    	//	Defining generate_image tool
+    	JSONObject generateImageTool = new JSONObject();
+    	generateImageTool.put("type", "function");
+    	
+    	JSONObject generateImageFunction = new JSONObject();
+    	generateImageFunction.put("name", "generate_image");
+    	generateImageFunction.put("description", "Generates an image based on a text description. Use this ONLY when the user explicitly asks to draw, create, or generate a picture.");
+    	
+    	JSONObject parameters = new JSONObject();
+    	parameters.put("type", "object");
+    	
+    	JSONObject promptProp = new JSONObject();
+    	promptProp.put("type", "string");
+    	promptProp.put("description", "The detailed visual description of the image to generate.");
+    	
+    	JSONObject properties = new JSONObject();
+    	properties.put("prompt", promptProp);
+    	
+    	parameters.put("properties", properties);
+    	parameters.put("required", new JSONArray().put("prompt"));
+    	
+    	generateImageFunction.put("parameters", parameters);
+    	
+    	generateImageTool.put("function", generateImageFunction);
+    	
+    	return generateImageTool;
+    }
+    
+    private JSONObject getGenerateLocationMapTool() {
+    	//	Define generate_location_map tool
+    	JSONObject generateLocationMapTool = new JSONObject();
+    	generateLocationMapTool.put("type", "function");
+    	
+    	JSONObject generateLocationMapFunction = new JSONObject();
+    	generateLocationMapFunction.put("name", "generate_location_map");
+    	generateLocationMapFunction.put("description", "Triggers a map view for any location inquiry. Use this whenever the user provides an image and asks for its location, coordinates, or country. It replaces text descriptions of coordinates.");
+    	
+    	JSONObject parameters = new JSONObject();
+    	parameters.put("type", "object");
+    	
+    	JSONObject properties = new JSONObject();
+    	
+    	JSONObject latitudeProp = new JSONObject();
+    	latitudeProp.put("type", "number");
+    	latitudeProp.put("description", "The estimated latitude of the location");
+    	properties.put("latitude", latitudeProp);
+    	
+    	JSONObject longitudeProp = new JSONObject();
+    	longitudeProp.put("type", "number");
+    	longitudeProp.put("description", "The estimated longitude of the location");
+    	properties.put("longitude", longitudeProp);
+    	
+    	JSONObject zoomProp = new JSONObject();
+    	zoomProp.put("type", "integer");
+    	zoomProp.put("description", "The zoom level (1-18). Use 15-18 for precise matches, 10-12 for city, 4-6 for country.");
+    	properties.put("zoom", zoomProp);
+    	
+    	JSONObject summaryProp = new JSONObject();
+    	summaryProp.put("type", "string");
+    	summaryProp.put("description", "A 5-word summary of the location (e.g., 'Near Eiffel Tower, Paris').");
+    	properties.put("summary", summaryProp);
+    	
+    	parameters.put("properties", properties);
+    	parameters.put("additionalProperties", false);
+    	
+    	JSONArray required = new JSONArray();
+    	required.put("latitude");
+        required.put("longitude");
+        required.put("zoom");
+        required.put("summary");
+        parameters.put("required", required);
+        
+        generateLocationMapFunction.put("parameters", parameters);
+        generateLocationMapFunction.put("strict", true);
+        
+        generateLocationMapTool.put("function", generateLocationMapFunction);
+
+    	return generateLocationMapTool;
     }
 }
 
