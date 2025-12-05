@@ -7,3 +7,9 @@
 
 ### This project is currently only maintained by ![](https://img.shields.io/badge/TeeeTime-7834a7?style=for-the-badge&logo=github&logoColor=white&logoSize=auto&link=https%3A%2F%2Fgithub.com%2FTeeeTime)
 
+## FAQ
+
+#### Can I use this bot on my own server?
+
+Maybe but you would need to host it yourself and tweak code. I would also highly discourage it, maily because this bot is held together by ducktape and could have some flawed systems for bigger userbases and traffic.
+
