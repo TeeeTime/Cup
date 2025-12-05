@@ -270,9 +270,9 @@ public class ChatGPT {
 						int zoom = args.getInt("zoom");
 						
 						Mapbox mapbox = new Mapbox();
-						String mapURL = mapbox.getLocationMapURL("pk.eyJ1IjoidGVlZXRpbWUiLCJhIjoiY21pcGIxbzE1MDVncTNncGo5azJhdXVwaSJ9.Z4YLtq-cH9kq4mWU3E9o_A", "satellite-streets-v12", latitude, longitude, zoom);
+						String mapURL = mapbox.getLocationMapURL(latitude, longitude, zoom);
 						
-						Response responseMessage = new Response(summary + " **(confidence: " + (int) (((double) zoom / 18) * 100) + "%)**");
+						Response responseMessage = new Response(summary);
 						responseMessage.addImageURL(mapURL);
 						
 						return responseMessage;
@@ -347,12 +347,12 @@ public class ChatGPT {
     	
     	JSONObject zoomProp = new JSONObject();
     	zoomProp.put("type", "integer");
-    	zoomProp.put("description", "The zoom level (1-18). Use 15-18 for precise matches, 10-12 for city, 4-6 for country.");
+    	zoomProp.put("description", "The zoom level (4-16) describes the confidence in your estimate of the location. For precise and urban guesses, use 12-16. For unprecise and rural guesses, use 7-10. For precise guesses in a rural area, use 9-12. For just the country, use 4-5. For departments of a country, use 6.");
     	properties.put("zoom", zoomProp);
     	
     	JSONObject summaryProp = new JSONObject();
     	summaryProp.put("type", "string");
-    	summaryProp.put("description", "A 5-word summary of the location (e.g., 'Near Eiffel Tower, Paris').");
+    	summaryProp.put("description", "A max 7 word summary of the location (e.g., 'Near Eiffel Tower, Paris'). Always include the City and County!");
     	properties.put("summary", summaryProp);
     	
     	parameters.put("properties", properties);
