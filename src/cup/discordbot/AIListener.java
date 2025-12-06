@@ -17,6 +17,8 @@ public class AIListener extends ListenerAdapter {
 		if(!event.getMessage().getContentRaw().toLowerCase().startsWith("teaz")) return;
 		if(event.getAuthor().isBot()) return;
 		
+		event.getChannel().sendTyping().queue();
+		
 		ChatGPT chatGPT = new ChatGPT(DiscordBot.INSTANCE.getChatGPTToken());
 		
 		String imageURL = "NONE";
