@@ -54,6 +54,28 @@ public class VoiceSessionListener extends ListenerAdapter {
 		}else if(event.getChannelJoined() != null && event.getChannelLeft() != null) {
 			if(VoiceSession.voiceSessionExists(event.getChannelLeft().asVoiceChannel())) {
 				VoiceSession.getVoiceSession(event.getChannelLeft().asVoiceChannel()).userLeft(event.getMember().getUser());
+				
+				if(event.getChannelLeft().getMembers().size() == 0) {
+					VoiceSession.getVoiceSession(event.getChannelLeft().asVoiceChannel()).getTimer().stop();
+					
+					String userTimeReport = "";
+					
+					for(String userId : VoiceSession.getVoiceSession(event.getChannelLeft().asVoiceChannel()).getUserIds()) {
+						User user = DiscordBot.INSTANCE.getJDA().retrieveUserById(userId).complete();
+						userTimeReport += "**`" + user.getEffectiveName() + "`** `" + formatTime(VoiceSession.getVoiceSession(event.getChannelLeft().asVoiceChannel()).getTimer(user).getCurrentTimeInMillis()) + "`\n";
+					}
+					
+					EmbedBuilder eb = new EmbedBuilder();
+					eb.setColor(Color.YELLOW);
+					eb.setTitle("📊 Session Summary");
+					
+					eb.setDescription("**Duration:**\n`" + formatTime(VoiceSession.getVoiceSession(event.getChannelLeft().asVoiceChannel()).getTimer().getCurrentTimeInMillis()) + "`\n\n**Users:**\n" + userTimeReport);
+					
+					eb.setTimestamp(Instant.now());
+					event.getChannelLeft().asGuildMessageChannel().sendMessageEmbeds(eb.build()).queue();
+					
+					VoiceSession.removeVoiceSession(event.getChannelLeft().asVoiceChannel());
+				}
 			}
 			
 			if(!VoiceSession.voiceSessionExists(event.getChannelJoined().asVoiceChannel())) {

@@ -132,13 +132,14 @@ public class RaceCommand extends ListenerAdapter implements Command{
 								}
 								raceEmbed.addField("Winner: " + movedUser.getName() + " :trophy:", "They received " + winnings + " :coin:", false);
 								
-								ChatGPT chatGPT = new ChatGPT(DiscordBot.INSTANCE.getChatGPTToken());
-								
-								raceEmbed.setFooter(chatGPT.getTextResponse("Comment on races. The race state is given by this list of usernames and a number associated with them. The user with the highest number won, the higher the number, the closer the people where to the finishline. Include every user in your comment and maybe use their usernames in wordplays or other funny sentences. Don't mention the scores, they just indicate the position of the users on the board. Keep the reply short (maximum of 3 sentences).", "Here is the race state: " + race.getAsFormatedText()));
-								
 								DiscordBot.INSTANCE.getRaceManager().removeRace(race.getUsers().get(0).getId());
 								
 								raceTimer.cancel();
+								
+								message.editMessageEmbeds(raceEmbed.build()).complete();
+								
+								ChatGPT chatGPT = new ChatGPT(DiscordBot.INSTANCE.getChatGPTToken());
+								raceEmbed.setFooter(chatGPT.getTextResponse("Comment on races. The race state is given by this list of usernames and a number associated with them. The user with the highest number won, the higher the number, the closer the people where to the finishline. Include every user in your comment and maybe use their usernames in wordplays or other funny sentences. Don't mention the scores, they just indicate the position of the users on the board. Keep the reply short (maximum of 3 sentences).", "Here is the race state: " + race.getAsFormatedText()));
 							}
 							
 							message.editMessageEmbeds(raceEmbed.build()).complete();

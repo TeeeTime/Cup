@@ -15,9 +15,17 @@ private HashMap<String, Command> commands;
 		
 		commands.put("ping", new PingCommand());
 		commands.put("daily", new DailyCommand());
-		commands.put("rps", new RockPaperScissorsCommand());
+		
+		RockPaperScissorsCommand rockPaperScissorsCommand = new RockPaperScissorsCommand();
+		commands.put("rps", rockPaperScissorsCommand);
+		commands.put("rockpaperscissors", rockPaperScissorsCommand);
+		
 		commands.put("shutdown", new ShutdownCommand());
-		commands.put("wallet", new WalletCommand());
+		
+		WalletCommand walletCommand = new WalletCommand();
+		commands.put("wallet", walletCommand);
+		commands.put("balance", walletCommand);
+		
 		commands.put("help", new HelpCommand());
 		commands.put("rules", new RulesCommand());
 		commands.put("race", new RaceCommand());
