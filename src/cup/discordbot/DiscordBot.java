@@ -6,6 +6,7 @@ import cup.discordbot.commands.RockPaperScissorsCommand;
 import cup.discordbot.commands.RulesCommand;
 import cup.games.BlackjackManager;
 import cup.games.RaceManager;
+import cup.music.PlayerManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -29,6 +30,8 @@ public class DiscordBot {
 	
 	private String chatGPTToken;
 	
+	private PlayerManager playerManager;
+	
 	public DiscordBot(String token, String prefix, String adminId, String chatGPTToken) {
 		
 		INSTANCE = this;
@@ -36,6 +39,7 @@ public class DiscordBot {
 		this.prefix = prefix;
 		this.adminId = adminId;
 		this.chatGPTToken = chatGPTToken;
+		this.playerManager = new PlayerManager();
 		
 		jda = JDABuilder.createDefault(token)
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
@@ -91,5 +95,9 @@ public class DiscordBot {
 
 	public String getChatGPTToken() {
 		return chatGPTToken;
+	}
+
+	public PlayerManager getPlayerManager() {
+		return playerManager;
 	}
 }

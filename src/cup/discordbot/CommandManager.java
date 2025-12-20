@@ -39,6 +39,7 @@ private HashMap<String, Command> commands;
 		commands.put("info", new InfoCommand());
 		commands.put("stake", new StakeCommand());
 		commands.put("sql", new SQLCommand());
+		commands.put("radio", new RadioCommand());
 	}
 	
 	public void perform(String commandName, MessageReceivedEvent event) {
