@@ -55,7 +55,7 @@ public class ErrorEmbedBuilder {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.RED);
 		eb.setTitle("🚫");
-		eb.addField("You already have started a race", "Let the race conclude to start a new one!", false);
+		eb.addField("You already have started a race", "Let the race conclude to start a new one", false);
 		
 		return eb;
 	}
@@ -73,7 +73,7 @@ public class ErrorEmbedBuilder {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.RED);
 		eb.setTitle("🚫");
-		eb.addField("You already have started a game of blackjack", "End the game to start a new one!", false);
+		eb.addField("You already have started a game of blackjack", "End the game to start a new one", false);
 		
 		return eb;
 	}
@@ -83,6 +83,24 @@ public class ErrorEmbedBuilder {
 		eb.setColor(Color.RED);
 		eb.setTitle("🚫");
 		eb.addField("Minimum multiplier:", "`" + amount + "x`", false);
+		
+		return eb;
+	}
+	
+	public static EmbedBuilder notInVoicechannelEmbed() {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.RED);
+		eb.setTitle("🚫");
+		eb.addField("You are not in a voicechannel", "Join a voicechannel to listen to radio", false);
+		
+		return eb;
+	}
+	
+	public static EmbedBuilder notStreamingEmbed() {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(Color.RED);
+		eb.setTitle("🚫");
+		eb.addField("You are currently not streaming radio", "Join a voicechannel to listen to radio", false);
 		
 		return eb;
 	}
