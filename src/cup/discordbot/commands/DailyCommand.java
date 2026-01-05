@@ -1,6 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,7 +39,7 @@ public class DailyCommand implements Command{
 			putNewDate(user, currentDateFormated);
 			
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.addField("Daily bonus claimed!", "You received 500 :coin:", false);
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 			
@@ -53,7 +52,7 @@ public class DailyCommand implements Command{
 			putNewDate(user, currentDateFormated);
 			
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.addField("Daily bonus claimed!", "You received 500 :coin:", false);
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 			

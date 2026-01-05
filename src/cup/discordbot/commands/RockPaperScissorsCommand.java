@@ -23,7 +23,7 @@ public class RockPaperScissorsCommand extends ListenerAdapter implements Command
 		
 		if(args.length == 1) {
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.setTitle("Rock Paper Scissors");
 			eb.setDescription("Rock Paper Scissors is a game where you choose one symbol and battle against the computer.\n\nTo start, type `$rps [bet]`");
 			eb.addField(":rock:" + " Rock", "Rock beats Scissors", false);
@@ -58,7 +58,7 @@ public class RockPaperScissorsCommand extends ListenerAdapter implements Command
 			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
 			
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.setTitle("Rock Paper Scissors");
 			eb.setDescription("**Bet:** " + bet + " :coin:\nChoose your symbol");
 			

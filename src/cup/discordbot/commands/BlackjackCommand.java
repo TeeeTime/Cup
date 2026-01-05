@@ -32,7 +32,7 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		
 		if(args.length == 1) {
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.setTitle("Blackjack");
 			eb.setDescription("This is the classic blackjack game we all know and love.\n"
 					+ "[Wikipedia](https://en.wikipedia.org/wiki/Blackjack)"
@@ -166,9 +166,9 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		eb.setTitle("Blackjack");
 		
 		switch(blackjack.getGameState()) {
-		case PLAYING: eb.setColor(Color.ORANGE); break;
+		case PLAYING: eb.setColor(DiscordBot.EMBEDCOLOR); break;
 		case DEALERWIN: eb.setColor(Color.RED); eb.setTitle("Lose"); break;
-		case END: eb.setColor(Color.ORANGE); break;
+		case END: eb.setColor(DiscordBot.EMBEDCOLOR); break;
 		case INSTANTBLACKJACK: eb.setColor(Color.GREEN); eb.setTitle("Win"); break;
 		case PLAYERWIN: eb.setColor(Color.GREEN); eb.setTitle("Win"); break;
 		case TIE: eb.setColor(Color.GRAY); eb.setTitle("Tie"); break;

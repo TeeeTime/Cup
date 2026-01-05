@@ -1,6 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.sql.ResultSet;
 
 import cup.database.LiteSQL;
@@ -49,7 +48,7 @@ public class WalletCommand implements Command{
 		}
 		
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.ORANGE);
+		eb.setColor(DiscordBot.EMBEDCOLOR);
 		eb.setTitle(user.getName() + "'s wallet :moneybag:");
 		eb.setThumbnail(user.getAvatarUrl());
 		eb.addField("Balance:", CoinManager.getCoins(user) + " :coin:", true);

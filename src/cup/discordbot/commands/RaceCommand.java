@@ -1,6 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,7 +32,7 @@ public class RaceCommand extends ListenerAdapter implements Command{
 		
 		if(args.length == 1) {
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.setTitle("Race");
 			eb.setDescription("Race is a game where you set a bet and a lobby is opened for others to enter. Others users get **30 seconds** to enter. Once the lobby phase is concluded, the race starts. Every player is assigned a colored dot. The dots move forward in random intervals until one reaches the goal. The winning player receives all bets collected by the other players.\n\nTo start, type `$race [bet]`");
 			
@@ -215,7 +214,7 @@ public class RaceCommand extends ListenerAdapter implements Command{
 	
 	private EmbedBuilder getRaceEmbed(Race race) {
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.YELLOW);
+		eb.setColor(DiscordBot.EMBEDCOLOR);
 		eb.setTitle("Race🏁");
 		eb.setDescription("**Bet:** " + race.getBet() + " :coin:");
 		eb.addField("Participants:", participantsAsText(race), false);

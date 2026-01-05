@@ -1,7 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
-
 import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
@@ -40,7 +38,7 @@ public class ProfileCommand implements Command{
 		}
 		
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.ORANGE);
+		eb.setColor(DiscordBot.EMBEDCOLOR);
 		eb.setTitle(user.getName() + "'s profile");
 		eb.setThumbnail(user.getAvatarUrl());
 		

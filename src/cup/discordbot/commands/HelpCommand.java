@@ -1,6 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.util.Map.Entry;
 
 import cup.discordbot.Command;
@@ -23,7 +22,7 @@ public class HelpCommand implements Command{
 			}
 			
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.setTitle("Help");
 			eb.setDescription("Here is a list of all commands");
 			eb.addField("Commands:", commandList, false);
@@ -32,7 +31,7 @@ public class HelpCommand implements Command{
 		}else if(args.length == 2) {
 			if(DiscordBot.INSTANCE.getCommandManager().getCommands().containsKey(args[1])) {
 				EmbedBuilder eb = new EmbedBuilder();
-				eb.setColor(Color.ORANGE);
+				eb.setColor(DiscordBot.EMBEDCOLOR);
 				eb.setTitle(args[1]);
 				eb.setDescription(DiscordBot.INSTANCE.getCommandManager().getCommands().get(args[1]).getDescription());
 				eb.addField("Usage:", "`" + DiscordBot.INSTANCE.getCommandManager().getCommands().get(args[1]).getUsage() + "`", false);

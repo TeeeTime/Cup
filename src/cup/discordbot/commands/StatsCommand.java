@@ -1,6 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.text.DecimalFormat;
 
 import cup.discordbot.Command;
@@ -34,7 +33,7 @@ public class StatsCommand implements Command{
 		}
 		
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.ORANGE);
+		eb.setColor(DiscordBot.EMBEDCOLOR);
 		eb.setTitle(user.getName() + "'s stats");
 		
 		DecimalFormat df = new DecimalFormat("0.00");

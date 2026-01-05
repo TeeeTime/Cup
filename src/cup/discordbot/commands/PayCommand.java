@@ -1,6 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.time.Instant;
 
 import cup.discordbot.Command;
@@ -53,7 +52,7 @@ public class PayCommand implements Command{
 		CoinManager.setCoins(member.getUser(), CoinManager.getCoins(member.getUser()) + amount);
 		
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setColor(Color.YELLOW);
+		eb.setColor(DiscordBot.EMBEDCOLOR);
 		eb.setTitle("Transaction");
 		
 		eb.setDescription("```diff\n-" + amount + " " + event.getAuthor().getName() + "\n+" + amount + " " + member.getUser().getName() + "```");

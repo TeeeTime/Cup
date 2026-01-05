@@ -1,5 +1,7 @@
 package cup.discordbot;
 
+import java.awt.Color;
+
 import cup.discordbot.commands.BlackjackCommand;
 import cup.discordbot.commands.RaceCommand;
 import cup.discordbot.commands.RockPaperScissorsCommand;
@@ -31,6 +33,8 @@ public class DiscordBot {
 	private String chatGPTToken;
 	
 	private PlayerManager playerManager;
+	
+	public static final Color EMBEDCOLOR = Color.getHSBColor(46, 100, 47);
 	
 	public DiscordBot(String token, String prefix, String adminId, String chatGPTToken) {
 		

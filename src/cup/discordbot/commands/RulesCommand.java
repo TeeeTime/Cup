@@ -1,9 +1,9 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.time.Instant;
 
 import cup.discordbot.Command;
+import cup.discordbot.DiscordBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -17,7 +17,7 @@ public class RulesCommand extends ListenerAdapter implements Command{
 	public void execute(MessageReceivedEvent event) {
 		if(event.getAuthor().getId().equals("359013020057206786")) {
 			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(Color.ORANGE);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.setTitle("Rules");
 			eb.setDescription("You need to accept the rules in order to get access to the discord");
 			eb.addField("1", "Be nice and respectful to others", false);

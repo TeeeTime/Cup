@@ -1,6 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,7 +58,7 @@ public class LeaderboardCommand implements Command {
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			
-			eb.setColor(Color.YELLOW);
+			eb.setColor(DiscordBot.EMBEDCOLOR);
 			eb.addField("🏆 Leaderboard 🏆", output, false);
 			
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();

@@ -1,7 +1,5 @@
 package cup.discordbot.commands;
 
-import java.awt.Color;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +30,7 @@ public class RadioCommand implements Command{
 					playerManager.loadAndPlay(event.getGuild(), event.getMember().getVoiceState().getChannel().asVoiceChannel(), BBC_RADIO_1);
 					
 					EmbedBuilder eb = new EmbedBuilder();
-					eb.setColor(Color.YELLOW);
+					eb.setColor(DiscordBot.EMBEDCOLOR);
 					eb.setDescription("📡 **Started streaming in `" + event.getMember().getVoiceState().getChannel().getName() + "`**\n\n"
 							+ "🔴 **Playing:** _`" + getCurrentTrack() + "`_");
 					
@@ -47,7 +45,7 @@ public class RadioCommand implements Command{
 				playerManager.stopAndClear(event.getGuild());
 				
 				EmbedBuilder eb = new EmbedBuilder();
-				eb.setColor(Color.YELLOW);
+				eb.setColor(DiscordBot.EMBEDCOLOR);
 				eb.setDescription("❌ **Stoped Streaming**");
 				
 				event.getChannel().sendMessageEmbeds(eb.build()).queue();
@@ -59,7 +57,7 @@ public class RadioCommand implements Command{
 				if(playerManager.getPlayer(event.getGuild()) != null) {
 					
 					EmbedBuilder eb = new EmbedBuilder();
-					eb.setColor(Color.YELLOW);
+					eb.setColor(DiscordBot.EMBEDCOLOR);
 					eb.setDescription("🔴 **Playing:** _`" + getCurrentTrack() + "`_");
 					
 					event.getChannel().sendMessageEmbeds(eb.build()).queue();
@@ -87,7 +85,7 @@ public class RadioCommand implements Command{
 					playerManager.getPlayer(event.getGuild()).setVolume(volume);
 					
 					EmbedBuilder eb = new EmbedBuilder();
-					eb.setColor(Color.YELLOW);
+					eb.setColor(DiscordBot.EMBEDCOLOR);
 					eb.setDescription("🔊 **Set volume to `" + volume + "`**");
 					
 					event.getChannel().sendMessageEmbeds(eb.build()).queue();
