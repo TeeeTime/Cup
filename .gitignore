@@ -5,3 +5,6 @@ Database.db
 target
 bin
 .settings
+*.p12
+application-dev.properties
+application-prod.properties

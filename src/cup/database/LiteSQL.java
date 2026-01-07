@@ -8,11 +8,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+
+@Service
 public class LiteSQL {
 	
 	private static Connection connection;
 	private static Statement statement;
 	
+	@PostConstruct
 	public static void connect() {
 		connection = null;
 		
@@ -32,8 +39,11 @@ public class LiteSQL {
 		}catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
+		
+		SQLManager.onCreate();
 	}
 	
+	@PreDestroy
 	public static void disconnect() {
 		try {
 			if(connection != null) {

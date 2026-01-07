@@ -2,6 +2,9 @@ package cup.discordbot;
 
 import java.awt.Color;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import cup.discordbot.commands.BlackjackCommand;
 import cup.discordbot.commands.RaceCommand;
 import cup.discordbot.commands.RockPaperScissorsCommand;
@@ -9,41 +12,52 @@ import cup.discordbot.commands.RulesCommand;
 import cup.games.BlackjackManager;
 import cup.games.RaceManager;
 import cup.music.PlayerManager;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
+@Service
 public class DiscordBot {
 	
 	public static DiscordBot INSTANCE;
 	
 	private JDA jda;
 	
-	private CommandManager commandManager;
+	@Value("${discord.bot.token}")
+	private String token;
 	
+	@Value("${discord.bot.prefix}")
 	private String prefix;
 	
+	@Value("${discord.bot.admin-id}")
 	private String adminId;
 	
+	@Value("${discord.bot.chatgpt-token}")
+	private String chatGPTToken;
+	
+	private CommandManager commandManager;
+
 	private RaceManager raceManager;
 	
 	private BlackjackManager blackjackManager;
-	
-	private String chatGPTToken;
 	
 	private PlayerManager playerManager;
 	
 	public static final Color EMBEDCOLOR = Color.getHSBColor(46, 100, 47);
 	
-	public DiscordBot(String token, String prefix, String adminId, String chatGPTToken) {
-		
+	public DiscordBot() {
 		INSTANCE = this;
-		
-		this.prefix = prefix;
-		this.adminId = adminId;
-		this.chatGPTToken = chatGPTToken;
+	}
+	
+	@PostConstruct
+	public void startBot() {
 		this.playerManager = new PlayerManager();
+		this.commandManager = new CommandManager();
+		this.raceManager = new RaceManager();
+		this.blackjackManager = new BlackjackManager();
 		
 		jda = JDABuilder.createDefault(token)
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
@@ -65,13 +79,15 @@ public class DiscordBot {
 				.build();
 		
 		System.out.println("[DISCORD] BOT online as " + jda.getSelfUser().getName());
-		
-		commandManager = new CommandManager();
-		
-		raceManager = new RaceManager();
-		blackjackManager = new BlackjackManager();
-		
 	}
+	
+	@PreDestroy
+    public void stopBot() {
+        if (jda != null) {
+            System.out.println("[DISCORD] Shutting down...");
+            jda.shutdownNow();
+        }
+    }
 	
 	public JDA getJDA() {
 		return jda;

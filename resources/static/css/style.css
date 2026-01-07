@@ -1,0 +1,131 @@
+@font-face {
+    font-family: 'DiscordNord';
+    src: url('../fonts/DiscordNord-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ggsans';
+    src: url('../fonts/ggsans-Normal.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #23272a;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.container {
+    text-align: center;
+    background-color: #2c2f33;
+    padding: 2rem 5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid #23272a;
+}
+
+.title {
+	font-family: 'DiscordNord', sans-serif;
+	color: white;
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+	font-family: 'ggsans', sans-serif;
+    color: #99aab5;
+    font-size: 2rem;
+}
+
+.balance {
+	font-family: 'ggsans', sans-serif;
+    color: white;
+    font-size: 2.2rem;
+}
+
+button {
+    background-color: #4E5058;
+    color: white;
+    font-family: 'ggsans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    
+    border: none;
+    padding: 10px 25px;
+    margin-top: 20px;
+    
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background-color: #6D6F78;
+}
+
+button:active {
+    transform: scale(0.96);
+    background-color: #3b3d42;
+}
+
+.btn-logout {
+    background-color: #ed4245;
+    color: white;
+    font-family: 'ggsans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    
+    border: none;
+    padding: 10px 25px;
+    margin-top: 20px;
+    
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-logout:hover {
+    background-color: #d83c3e;
+}
+
+.btn-logout:active {
+    transform: scale(0.96);
+    background-color: #c03537;
+}
+
+.btn-login {
+    background-color: #5865F2;
+    color: white;
+    font-family: 'ggsans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    
+    border: none;
+    padding: 10px 25px;
+    margin-top: 20px;
+    
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-login:hover {
+    background-color: #4752C4;
+}
+
+.btn-login:active {
+    transform: scale(0.96);
+    background-color: #3c45a5;
+}
