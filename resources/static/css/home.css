@@ -1,0 +1,247 @@
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: transparent; /* Let particles show through */
+}
+
+.brand-logo {
+    font-family: 'DiscordNord', sans-serif;
+    font-size: 1.5rem;
+}
+
+.profile-dropdown {
+    position: relative; /* Anchor for the dropdown menu */
+    cursor: pointer;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #2c2f33;
+    padding: 8px 15px;
+    border-radius: 50px; /* Pill shape */
+    border: 1px solid #40444b;
+    transition: 0.2s;
+}
+
+.profile-trigger:hover {
+    background: #383c42;
+}
+
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.arrow {
+    font-size: 0.8rem;
+    color: #b9bbbe;
+}
+
+.dropdown-content {
+    display: none; 
+    position: absolute;
+    right: 0;
+    top: 110%; 
+    background: #18191c;
+    min-width: 160px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    border: 1px solid #2f3136;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.profile-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 15px;
+    color: #dcddde;
+    text-decoration: none;
+    font-size: 0.9rem;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #5865F2; 
+    color: white;
+}
+
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: auto auto;
+    gap: 20px;
+    padding: 20px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.card {
+    background: #1e1f22; 
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px solid #2b2d31;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.card h3 {
+    color: #f2f3f5;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.balance-card {
+    grid-column: 1 / 2; 
+    background: linear-gradient(135deg, #1e1f22 0%, #161719 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-amount {
+    font-size: 6rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.currency-symbol {
+    font-size: 2rem;
+    color: #949BA4;
+    vertical-align: top;
+}
+
+.daily-card {
+    grid-column: 2 / 3;
+}
+
+.daily-progress {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.day-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #2b2d31;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #949BA4;
+}
+
+.day-circle.active {
+    background: #5865F2;
+    color: white;
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
+}
+
+.leaderboard-card {
+	grid-column: 3 / 4;
+	grid-row: 1 / span 2;
+	display: flex;
+    flex-direction: column;
+    max-height: 600px;
+}
+
+.lb-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #2b2d31;
+    gap: 10px;
+}
+
+.lb-item:last-child {
+    border-bottom: none;
+}
+
+.lb-rank {
+    font-weight: bold;
+    width: 25px;
+}
+
+.lb-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.lb-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.lb-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.lb-score {
+    font-size: 0.8rem;
+    color: #949BA4;
+}
+
+.games-card {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+}
+
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.game-item {
+    background: #2b2d31;
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.2s;
+}
+
+.game-item:hover {
+    transform: translateY(-3px);
+    background: #313338;
+}
+
+.game-icon {
+    font-size: 1.5rem;
+    background: #1e1f22;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-info {
+    flex-grow: 1;
+}
+
+.game-info h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.game-info span {
+    font-size: 0.8rem;
+    color: #949BA4;
+}
