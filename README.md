@@ -11,5 +11,5 @@
 
 #### Can I use this bot on my own server?
 
-Maybe but you would need to host it yourself and tweak code. I would also highly discourage it, mainly because this bot is held together by ducktape and could have some flawed systems for bigger userbases and traffic.
+Nope
 
