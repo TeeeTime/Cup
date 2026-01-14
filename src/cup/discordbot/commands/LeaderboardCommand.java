@@ -47,13 +47,13 @@ public class LeaderboardCommand implements Command {
 			int lastAmount = 0;
 			
 			for(Member member : sortMemberList(members)) {
-				if(lastAmount == CoinManager.getCoins(member.getUser())) {
-					output += "**`" + iterator + ".`** `" + member.getUser().getName() + "` (" + CoinManager.getCoins(member.getUser()) + " :coin:)\n";
+				if(lastAmount == CoinManager.getCoins(member.getUser().getId())) {
+					output += "**`" + iterator + ".`** `" + member.getUser().getName() + "` (" + CoinManager.getCoins(member.getUser().getId()) + " :coin:)\n";
 				}else {
 					iterator++;
-					output += "**`" + iterator + ".`** `" + member.getUser().getName() + "` (" + CoinManager.getCoins(member.getUser()) + " :coin:)\n";
+					output += "**`" + iterator + ".`** `" + member.getUser().getName() + "` (" + CoinManager.getCoins(member.getUser().getId()) + " :coin:)\n";
 				}
-				lastAmount = CoinManager.getCoins(member.getUser());
+				lastAmount = CoinManager.getCoins(member.getUser().getId());
 			}
 			
 			EmbedBuilder eb = new EmbedBuilder();
@@ -89,7 +89,7 @@ public class LeaderboardCommand implements Command {
 		while(change) {
 			change = false;
 			for(int i = 0; i < (list.size() - 1); i++) {
-				if(CoinManager.getCoins(list.get(i).getUser()) < CoinManager.getCoins(list.get(i + 1).getUser())) {
+				if(CoinManager.getCoins(list.get(i).getUser().getId()) < CoinManager.getCoins(list.get(i + 1).getUser().getId())) {
 					
 					Member current = list.get(i);
 					list.set(i, list.get(i + 1));

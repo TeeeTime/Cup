@@ -3,14 +3,14 @@ package cup.website.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import cup.database.LiteSQL;
 import cup.discordbot.DiscordBot;
-import cup.website.model.LeaderboardEntry;
+import cup.economy.CoinManager;
+import cup.economy.DailyManager;
+import cup.economy.LeaderboardEntry;
 import net.dv8tion.jda.api.entities.User;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -20,21 +20,7 @@ public class EconomyService {
     private String dbUrl;
 	
 	public int getBalance(String discordId) {
-        String query = "SELECT balance FROM coins WHERE userid = ?";
-        
-        try(Connection connection = DriverManager.getConnection(dbUrl);
-            PreparedStatement statement = connection.prepareStatement(query)) {
-            
-            statement.setString(1, discordId);
-            ResultSet results = statement.executeQuery();
-            
-            if (results.next()) {
-                return results.getInt("balance");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return CoinManager.getCoins(discordId);
 	}
 	
 	public List<LeaderboardEntry> getLeaderboard() {
@@ -50,7 +36,7 @@ public class EconomyService {
 			int rank = 1;
 			
 			while(results.next()) {
-				User user = DiscordBot.INSTANCE.getJDA().getUserById(Long.parseLong(results.getString("userid")));
+				User user = DiscordBot.INSTANCE.getJDA().retrieveUserById(Long.parseLong(results.getString("userid"))).complete();
 				
 				leaderboard.add(new LeaderboardEntry(rank, user.getName(), getBalance(user.getId()), user.getAvatarUrl()));
 				
@@ -63,5 +49,20 @@ public class EconomyService {
 		
 		
 		return leaderboard;
+	}
+	
+	public int getStreak(String discordId) {
+		DailyManager dailyManager = new DailyManager();
+		return dailyManager.getStreak(discordId);
+	}
+	
+	public boolean isDailyRedeemable(String discordId) {
+		DailyManager dailyManager = new DailyManager();
+		return dailyManager.redeemable(discordId);
+	}
+	
+	public void redeemDaily(String discordId) {
+		DailyManager dailyManager = new DailyManager();
+		dailyManager.redeem(discordId);
 	}
 }

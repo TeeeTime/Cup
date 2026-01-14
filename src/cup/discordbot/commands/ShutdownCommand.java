@@ -19,6 +19,7 @@ public class ShutdownCommand implements Command{
 			Consumer<Message> callback = (message) ->  {
 				System.out.println("Shuting down...");
 		        event.getJDA().shutdown();
+		        System.exit(0);
             }; 
 		      
             action.queue(callback);

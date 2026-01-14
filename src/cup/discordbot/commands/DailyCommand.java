@@ -34,7 +34,7 @@ public class DailyCommand implements Command{
 		User user = event.getAuthor();
 		
 		if(!entryExists(event.getAuthor())) {
-			CoinManager.setCoins(user, CoinManager.getCoins(user) + 500);
+			CoinManager.setCoins(user.getId(), CoinManager.getCoins(user.getId()) + 500);
 			
 			putNewDate(user, currentDateFormated);
 			
@@ -47,7 +47,7 @@ public class DailyCommand implements Command{
 		}
 		
 		if(!currentDateFormated.equals(getDate(user))) {
-			CoinManager.setCoins(user, CoinManager.getCoins(user) + 500);
+			CoinManager.setCoins(user.getId(), CoinManager.getCoins(user.getId()) + 500);
 			
 			putNewDate(user, currentDateFormated);
 			

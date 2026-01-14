@@ -8,3 +8,4 @@ bin
 *.p12
 application-dev.properties
 application-prod.properties
+launch.json

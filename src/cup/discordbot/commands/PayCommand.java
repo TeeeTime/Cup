@@ -43,13 +43,13 @@ public class PayCommand implements Command{
 			return;
 		}
 		
-		if((CoinManager.getCoins(event.getAuthor()) - amount) < 0) {
-			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(amount - CoinManager.getCoins(event.getAuthor())).build()).queue();
+		if((CoinManager.getCoins(event.getAuthor().getId()) - amount) < 0) {
+			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(amount - CoinManager.getCoins(event.getAuthor().getId())).build()).queue();
 			return;
 		}
 		
-		CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - amount);
-		CoinManager.setCoins(member.getUser(), CoinManager.getCoins(member.getUser()) + amount);
+		CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) - amount);
+		CoinManager.setCoins(member.getUser().getId(), CoinManager.getCoins(member.getUser().getId()) + amount);
 		
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(DiscordBot.EMBEDCOLOR);

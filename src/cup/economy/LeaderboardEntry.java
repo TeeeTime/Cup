@@ -1,4 +1,4 @@
-package cup.website.model;
+package cup.economy;
 
 public class LeaderboardEntry {
 	

@@ -8,7 +8,7 @@
 
 .brand-logo {
     font-family: 'DiscordNord', sans-serif;
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 .profile-dropdown {
@@ -43,38 +43,81 @@
 }
 
 .dropdown-content {
-    display: none; 
+    display: none;
     position: absolute;
     right: 0;
-    top: 110%; 
-    background: #18191c;
-    min-width: 160px;
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    top: 100%;
+    margin-top: 10px; 
+    width: 200px; 
+    background-color: #111214; 
     border: 1px solid #2f3136;
-    z-index: 100;
-    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    padding: 6px; 
+    z-index: 1000;
+    flex-direction: column;
+    padding: 8px;
+    gap: 8px;     
+}
+
+.dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -20px; /* Stretches up to touch the profile trigger */
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: transparent; /* Invisible */
+}
+
+.dropdown-content form {
+    display: contents;
 }
 
 .profile-dropdown:hover .dropdown-content {
     display: block;
+    animation: fadeIn 0.2s ease;
 }
 
 .dropdown-item {
-    display: block;
-    padding: 10px 15px;
-    color: #dcddde;
-    text-decoration: none;
-    font-size: 0.9rem;
-    background: none;
-    border: none;
+    display: flex;
+    align-items: center;
     width: 100%;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    margin: 0;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    
+    color: #dcddde;
+    font-family: 'ggsans', sans-serif;
+    font-size: 0.95rem;
     text-align: left;
+    text-decoration: none;
     cursor: pointer;
+    transition: background 0.1s;
 }
 
 .dropdown-item:hover {
     background-color: #5865F2; 
+    color: white;
+}
+
+.dropdown-item .icon {
+    margin-right: 10px;
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.dropdown-item:hover {
+    background-color: #5865F2; /* Discord Blurple */
+    color: white;
+}
+
+.dropdown-item.danger:hover {
+    background-color: #ed4245; /* Discord Red */
     color: white;
 }
 
@@ -89,17 +132,43 @@
 }
 
 .card {
-    background: #1e1f22; 
-    border-radius: 16px;
-    padding: 25px;
-    border: 1px solid #2b2d31;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    background: rgba(30, 31, 35, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    padding: 35px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .card h3 {
     color: #f2f3f5;
     margin-bottom: 15px;
     font-size: 1.1rem;
+}
+
+.balance-display {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    height: 100px;
+    margin-top: 5px;
+    overflow: hidden;
 }
 
 .balance-card {
@@ -110,15 +179,16 @@
 }
 
 .balance-amount {
-    font-size: 6rem;
+    font-size: 4rem;
+    vertical-align: middle;
     font-weight: 700;
     color: #ffffff;
 }
 
 .currency-symbol {
-    font-size: 2rem;
-    color: #949BA4;
-    vertical-align: top;
+    flex-shrink: 0; 
+    font-size: 4rem;
+    line-height: 1;
 }
 
 .daily-card {
@@ -155,6 +225,14 @@
 	display: flex;
     flex-direction: column;
     max-height: 600px;
+}
+
+.leaderboard-list {
+    max-height: 400px; 
+    
+    overflow-y: auto;
+    
+    padding-right: 5px; 
 }
 
 .lb-item {
@@ -216,6 +294,10 @@
     transition: transform 0.2s;
 }
 
+.game-item .btn-login {
+    margin-top: 0; 
+}
+
 .game-item:hover {
     transform: translateY(-3px);
     background: #313338;
@@ -244,4 +326,77 @@
 .game-info span {
     font-size: 0.8rem;
     color: #949BA4;
+}
+
+.streak-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+.streak-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+}
+
+.fire-icon {
+    font-size: 1.3rem;
+    /* Optional: Animate the fire */
+    animation: pulse 2s infinite; 
+}
+
+.streak-goal {
+    font-size: 0.8rem;
+    color: #949BA4;
+    padding-bottom: 2px;
+}
+
+/* --- The Segmented Bar --- */
+.progress-track {
+    display: flex;
+    gap: 4px; /* This creates the "cuts" between segments */
+    height: 12px; /* Height of the bar */
+    width: 100%;
+}
+
+.progress-segment {
+    flex-grow: 1; /* All segments stretch equally to fill the width */
+    background-color: #2b2d31; /* Empty state (Dark Gray) */
+    border-radius: 2px; /* Slight rounding for modern look */
+    transition: background-color 0.3s ease;
+}
+
+/* Active State (Filled) */
+.progress-segment.active {
+    background-color: #5865F2; /* Discord Blurple */
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.4); /* Glow effect */
+}
+
+/* The Final Segment (Big Prize) */
+.progress-segment.final {
+    /* Optional: Make the last one wider or different color */
+    flex-grow: 1.5; 
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.progress-segment.final.active {
+    background-color: #FEE75C; /* Gold */
+    box-shadow: 0 0 10px rgba(254, 231, 92, 0.5);
+}
+
+.progress-segment:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
 }

@@ -48,7 +48,7 @@ public class ProfileCommand implements Command{
 			eb.setImage(bannerURL);
 		}
 		
-		int coins = CoinManager.getCoins(user);
+		int coins = CoinManager.getCoins(user.getId());
 		if(coins > 0) eb.addField("Coins:", coins + " :coin:", true);
 		
 		eb.addField("Account created:", "<t:" + user.getTimeCreated().toEpochSecond() + ":d>", true);
