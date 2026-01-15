@@ -133,19 +133,13 @@
                 </div>
 
                 <div class="game-item">
-                    <div class="game-icon">🔴</div> 
-                    <div class="game-info">
-                        <h4>Roulette</h4>
-                        <span>Spin to win</span>
-                    </div>
-                    <form action="/games/roulette" method="post">
-            			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            			<button type="submit" class="btn-login">Play</button>
-        			</form>
-                </div>
-
-                
-
+    				<div class="game-icon">🔴</div>
+    				<div class="game-info">
+        				<h4>Roulette</h4>
+        				<span>Spin the wheel</span>
+    				</div>
+    				<a href="/games/roulette" class="btn-login" style="margin-top:0;">Play</a>
+				</div>
             </div>
         </div>
     </div>

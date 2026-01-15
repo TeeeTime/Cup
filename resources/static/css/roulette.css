@@ -1,0 +1,222 @@
+.roulette-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.wheel-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 25px solid white;
+    z-index: 10;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+}
+
+.wheel-border {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 8px solid #ffffff;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+    overflow: hidden;
+    position: relative;
+    background: #111;
+}
+
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+
+    transition: transform 3s cubic-bezier(0.15, 0, 0.20, 1); 
+    
+    background: conic-gradient(
+        #3ba55d 0deg 9.73deg,      /* 0 (Green) */
+        #ed4245 9.73deg 19.46deg,  /* 32 (Red) */
+        #202225 19.46deg 29.19deg, /* 15 (Black) */
+        #ed4245 29.19deg 38.92deg, /* 19 (Red) */
+        #202225 38.92deg 48.65deg, /* 4 (Black) */
+        #ed4245 48.65deg 58.38deg, /* 21 (Red) */
+        #202225 58.38deg 68.11deg, /* 2 (Black) */
+        #ed4245 68.11deg 77.84deg, /* 25 (Red) */
+        #202225 77.84deg 87.57deg, /* 17 (Black) */
+        #ed4245 87.57deg 97.30deg, /* 34 (Red) */
+        #202225 97.30deg 107.03deg, /* 6 (Black) */
+        #ed4245 107.03deg 116.76deg, /* 27 (Red) */
+        #202225 116.76deg 126.49deg, /* 13 (Black) */
+        #ed4245 126.49deg 136.22deg, /* 36 (Red) */
+        #202225 136.22deg 145.95deg, /* 11 (Black) */
+        #ed4245 145.95deg 155.68deg, /* 30 (Red) */
+        #202225 155.68deg 165.41deg, /* 8 (Black) */
+        #ed4245 165.41deg 175.14deg, /* 23 (Red) */
+        #202225 175.14deg 184.87deg, /* 10 (Black) */
+        #ed4245 184.87deg 194.60deg, /* 5 (Red) */
+        #202225 194.60deg 204.33deg, /* 24 (Black) */
+        #ed4245 204.33deg 214.06deg, /* 16 (Red) */
+        #202225 214.06deg 223.79deg, /* 33 (Black) */
+        #ed4245 223.79deg 233.52deg, /* 1 (Red) */
+        #202225 233.52deg 243.25deg, /* 20 (Black) */
+        #ed4245 243.25deg 252.98deg, /* 14 (Red) */
+        #202225 252.98deg 262.71deg, /* 31 (Black) */
+        #ed4245 262.71deg 272.44deg, /* 9 (Red) */
+        #202225 272.44deg 282.17deg, /* 22 (Black) */
+        #ed4245 282.17deg 291.90deg, /* 18 (Red) */
+        #202225 291.90deg 301.63deg, /* 29 (Black) */
+        #ed4245 301.63deg 311.36deg, /* 7 (Red) */
+        #202225 311.36deg 321.09deg, /* 28 (Black) */
+        #ed4245 321.09deg 330.82deg, /* 12 (Red) */
+        #202225 330.82deg 340.55deg, /* 35 (Black) */
+        #ed4245 340.55deg 350.28deg, /* 3 (Red) */
+        #202225 350.28deg 360.00deg  /* 26 (Black) */
+    );
+}
+
+.game-card {
+    width: 100%;
+    max-width: 500px;
+    gap: 20px; 
+}
+
+.bet-adjust-row {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    gap: 10px;
+    
+    height: 45px; 
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.bet-input-display {
+    height: 100%; 
+    width: 120px;
+    
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    box-sizing: border-box;
+    
+    color: white;
+    font-family: 'ggsans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    
+    padding: 0;
+    margin: 0;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.btn-adjust {
+    height: 100% !important; 
+    width: 50px !important;
+    
+    background-color: #4E5058;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    transition: background 0.2s;
+}
+
+.btn-adjust:hover { background-color: #6D6F78; }
+.btn-adjust:active { transform: scale(0.96); }
+
+.bet-input-display::-webkit-outer-spin-button,
+.bet-input-display::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.shortcut-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.color-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.game-btn {
+    font-family: 'ggsans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    padding: 12px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.game-btn:active {
+    transform: scale(0.96);
+}
+
+.game-btn span {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    font-weight: normal;
+}
+
+.btn-control {
+    background-color: #4E5058;
+    font-size: 1.2rem;
+}
+.btn-control:hover { background-color: #6D6F78; }
+
+.btn-red { background-color: #ed4245; }
+.btn-red:hover { background-color: #c03537; }
+
+.btn-green { background-color: #3ba55d; }
+.btn-green:hover { background-color: #2d7d46; }
+
+.btn-black { background-color: #2f3136; border: 1px solid #40444b; }
+.btn-black:hover { background-color: #40444b; }
+
+.result-msg {
+    height: 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}

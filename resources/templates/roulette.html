@@ -1,16 +1,166 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Teaz</title>
+    <title>Roulette - Teaz</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/roulette.css">
 </head>
 <body>
-	<div class="container">
-    	<div class="logincard">
-        	<h1 class="title">Roulette</h1> 
-        	<p class="subtitle">Coming soon</p>
-    	</div>
+
+    <nav class="top-nav">
+        <h1 class="brand-logo">teaz.fun</h1>
+        <a href="/home" class="backhome">Back home ↵</a>
+    </nav>
+
+    <div class="roulette-wrapper">
+        
+        <div id="resultText" class="result-msg">Place your bet!</div>
+
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <div class="wheel-border">
+                <div id="wheel" class="wheel"></div>
+            </div>
+        </div>
+
+        <div>
+            Balance: <span id="currentBalance" th:text="${balance}">0</span> 🪙
+        </div>
+
+        <div class="logincard game-card">
+            
+            <div class="bet-adjust-row">
+    			<button type="button" class="btn-adjust" onclick="adjustBet(-100)">−</button>
+    
+    			<input type="number" id="betAmount" class="bet-input-display" value="100" min="1">
+    
+    			<button type="button" class="btn-adjust" onclick="adjustBet(100)">+</button>
+			</div>
+
+            <div class="shortcut-row">
+                <button type="button" class="game-btn btn-control" onclick="setBet(100)">100</button>
+                <button type="button" class="game-btn btn-control" onclick="setBet(1000)">1k</button>
+                <button type="button" class="game-btn btn-control" onclick="setBet(10000)">10k</button>
+                <button type="button" class="game-btn btn-control" onclick="doubleBet()">2x</button>
+            </div>
+
+            <div class="color-row">
+                <button type="button" class="game-btn btn-red" onclick="spin('RED')">
+                    RED <span>2x</span>
+                </button>
+                <button type="button" class="game-btn btn-green" onclick="spin('GREEN')">
+                    GREEN <span>36x</span>
+                </button>
+                <button type="button" class="game-btn btn-black" onclick="spin('BLACK')">
+                    BLACK <span>2x</span>
+                </button>
+            </div>
+
+        </div>
+
     </div>
+
+    <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+
+    <script>
+        const wheel = document.getElementById('wheel');
+        const resultText = document.getElementById('resultText');
+        const balanceSpan = document.getElementById('currentBalance');
+        const csrfToken = document.getElementById('csrfToken').value;
+        const betInput = document.getElementById('betAmount');
+
+        const WHEEL_ORDER = [
+            0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 
+            5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
+        ];
+        
+        let currentRotation = 0; 
+		
+        betInput.addEventListener('blur', function() {
+            if (this.value === "" || parseInt(this.value) < 1) {
+                this.value = 1;
+            }
+        });
+        
+        function adjustBet(amount) {
+            const input = document.getElementById('betAmount');
+            let current = parseInt(input.value) || 0;
+            
+            let newVal = current + amount;
+            
+            if (newVal < 1) newVal = 1;
+            
+            input.value = newVal;
+        }
+
+        function setBet(amount) {
+            document.getElementById('betAmount').value = amount;
+        }
+
+        function doubleBet() {
+            const input = document.getElementById('betAmount');
+            let current = parseInt(input.value) || 0;
+            input.value = current * 2;
+        }
+        
+        function spin(betType) {
+            const betAmount = document.getElementById('betAmount').value;
+            const betNumber = 0;
+
+            resultText.innerText = "Spinning...";
+            resultText.style.color = "white";
+
+            const formData = new FormData();
+            formData.append("betType", betType);
+            formData.append("betNumber", betNumber);
+            formData.append("betAmount", betAmount);
+            formData.append("_csrf", csrfToken);
+
+            fetch('/api/roulette/spin', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.error) {
+                    resultText.innerText = "❌ " + data.error;
+                    return;
+                }
+
+				const index = WHEEL_ORDER.indexOf(data.resultNumber);
+
+				const degPerSlice = 360 / 37;
+
+				const targetAngle = (index * degPerSlice) + (degPerSlice / 2);
+				
+				const extraSpins = 360 * 5; 
+				
+				const totalRotationNeeded = targetAngle + extraSpins;
+				
+				const nearestCircle = Math.ceil(Math.abs(currentRotation) / 360) * 360;
+				
+				currentRotation = -(nearestCircle + totalRotationNeeded);
+				
+				wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+                setTimeout(() => {
+                    balanceSpan.innerText = data.newBalance;
+                    
+                    if(data.won) {
+                        resultText.innerText = `${data.resultColor} - You Won ${data.payout}!`;
+                        resultText.style.color = "#3ba55d";
+                    } else {
+                        resultText.innerText = `${data.resultColor} - You Lost.`;
+                        resultText.style.color = "#ed4245";
+                    }
+                }, 3000);
+            })
+            .catch(err => {
+                console.error(err);
+                resultText.innerText = "Error connecting to server.";
+            });
+        }
+    </script>
 </body>
 </html>

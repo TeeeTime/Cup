@@ -23,6 +23,10 @@ public class EconomyService {
         return CoinManager.getCoins(discordId);
 	}
 	
+	public void setBalance(String discordId, int amount) {
+		CoinManager.setCoins(discordId, amount);
+	}
+	
 	public List<LeaderboardEntry> getLeaderboard() {
 		String query = "SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 10";
 		

@@ -16,10 +16,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // 1. Public Pages
                 .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/fonts/**", "/images/**", "/error").permitAll()
                 
-                // 2. Everything else requires login
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
