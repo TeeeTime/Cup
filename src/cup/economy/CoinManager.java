@@ -1,8 +1,13 @@
 package cup.economy;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import cup.database.LiteSQL;
+import cup.discordbot.DiscordBot;
+
+import net.dv8tion.jda.api.entities.User;
 
 public class CoinManager {
 	
@@ -59,6 +64,29 @@ public class CoinManager {
 		}
 		
 		return false;		
+	}
+	
+	public static List<LeaderboardEntry> getLeaderboard() {	
+		List<LeaderboardEntry> leaderboard = new ArrayList<>();
+		
+		try {
+			ResultSet results = LiteSQL.onQuery("SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 10");
+			
+			int rank = 1;
+			
+			while(results.next()) {
+				User user = DiscordBot.INSTANCE.getJDA().retrieveUserById(Long.parseLong(results.getString("userid"))).complete();
+				
+				leaderboard.add(new LeaderboardEntry(rank, user.getName(), getCoins(user.getId()), user.getAvatarUrl()));
+				
+				rank++;
+			}	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return leaderboard;
 	}
 	
 }

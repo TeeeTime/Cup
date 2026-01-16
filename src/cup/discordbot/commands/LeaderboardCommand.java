@@ -10,6 +10,7 @@ import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
 import cup.economy.CoinManager;
+import cup.economy.LeaderboardEntry;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -25,46 +26,20 @@ public class LeaderboardCommand implements Command {
 			return;
 		}
 		
-		Collection<Long> userids = new ArrayList<Long>();
+		String output = "";
 		
-		try {
-			ResultSet results = LiteSQL.onQuery("SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 11");
+		List<LeaderboardEntry> users = CoinManager.getLeaderboard();
 		
-			for(int i = 0; i < 11; i++) {
-				if(results.next()) {
-					userids.add(Long.parseLong(results.getString("userid")));
-					
-				}
-			}
-		}catch(Exception e) {
-			System.out.println("[Leaderboard] An error occurred while retrieving user ids from database");
+		for(int i = 0; i < users.size(); i++) {
+			output += "**`" + users.get(i).getRank() + ".`** `" + users.get(i).getName() + "` (" + users.get(i).getBalance() + " :coin:)\n";
 		}
-		event.getGuild().retrieveMembersByIds(userids).onSuccess(members -> {
-			String output = "";
-			
-			int iterator = 0;
-			
-			int lastAmount = 0;
-			
-			for(Member member : sortMemberList(members)) {
-				if(lastAmount == CoinManager.getCoins(member.getUser().getId())) {
-					output += "**`" + iterator + ".`** `" + member.getUser().getName() + "` (" + CoinManager.getCoins(member.getUser().getId()) + " :coin:)\n";
-				}else {
-					iterator++;
-					output += "**`" + iterator + ".`** `" + member.getUser().getName() + "` (" + CoinManager.getCoins(member.getUser().getId()) + " :coin:)\n";
-				}
-				lastAmount = CoinManager.getCoins(member.getUser().getId());
-			}
-			
-			EmbedBuilder eb = new EmbedBuilder();
-			
-			eb.setColor(DiscordBot.EMBEDCOLOR);
-			eb.addField("🏆 Leaderboard 🏆", output, false);
-			
-			event.getChannel().sendMessageEmbeds(eb.build()).queue();
-			
-			return;
-		});
+		
+		EmbedBuilder eb = new EmbedBuilder();
+		
+		eb.setColor(DiscordBot.EMBEDCOLOR);
+		eb.addField("🏆 Leaderboard 🏆", output, false);
+		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 
 	@Override

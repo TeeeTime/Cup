@@ -27,32 +27,8 @@ public class EconomyService {
 		CoinManager.setCoins(discordId, amount);
 	}
 	
-	public List<LeaderboardEntry> getLeaderboard() {
-		String query = "SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 10";
-		
-		List<LeaderboardEntry> leaderboard = new ArrayList<>();
-		
-		try(Connection connection = DriverManager.getConnection(dbUrl);
-			PreparedStatement statement = connection.prepareStatement(query)) {
-			
-			ResultSet results = statement.executeQuery();
-			
-			int rank = 1;
-			
-			while(results.next()) {
-				User user = DiscordBot.INSTANCE.getJDA().retrieveUserById(Long.parseLong(results.getString("userid"))).complete();
-				
-				leaderboard.add(new LeaderboardEntry(rank, user.getName(), getBalance(user.getId()), user.getAvatarUrl()));
-				
-				rank++;
-			}
-			
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		return leaderboard;
+	public List<LeaderboardEntry> getLeaderboard() {	
+		return CoinManager.getLeaderboard();
 	}
 	
 	public int getStreak(String discordId) {
