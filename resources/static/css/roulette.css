@@ -202,6 +202,13 @@
     background-color: #4E5058;
     font-size: 1.2rem;
 }
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important; /* Stop the click animation */
+}
+
 .btn-control:hover { background-color: #6D6F78; }
 
 .btn-red { background-color: #ed4245; }

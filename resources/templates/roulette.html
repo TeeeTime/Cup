@@ -105,6 +105,10 @@
         }
         
         function spin(betType) {
+        	
+        	const allButtons = document.querySelectorAll('button'); 
+            allButtons.forEach(btn => btn.disabled = true);
+        	
             const betAmount = document.getElementById('betAmount').value;
             const betNumber = 0;
 
@@ -154,6 +158,9 @@
                         resultText.innerText = `${data.resultColor} - You Lost.`;
                         resultText.style.color = "#ed4245";
                     }
+                    
+                    allButtons.forEach(btn => btn.disabled = false);
+                    
                 }, 3000);
             })
             .catch(err => {
