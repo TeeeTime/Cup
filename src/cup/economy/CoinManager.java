@@ -76,8 +76,9 @@ public class CoinManager {
 			
 			while(results.next()) {
 				User user = DiscordBot.INSTANCE.getJDA().retrieveUserById(Long.parseLong(results.getString("userid"))).complete();
+				int balance = results.getInt("balance");
 				
-				leaderboard.add(new LeaderboardEntry(rank, user.getName(), getCoins(user.getId()), user.getAvatarUrl()));
+				leaderboard.add(new LeaderboardEntry(rank, user.getName(), balance, user.getAvatarUrl()));
 				
 				rank++;
 			}	

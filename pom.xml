@@ -5,7 +5,7 @@
   
   <groupId>Cup</groupId>
   <artifactId>Cup</artifactId>
-  <version>1.0</version>
+  <version>1.9</version>
 
   <parent>
       <groupId>org.springframework.boot</groupId>
