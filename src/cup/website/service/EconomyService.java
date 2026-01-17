@@ -24,17 +24,14 @@ public class EconomyService {
 	}
 	
 	public int getStreak(String discordId) {
-		DailyManager dailyManager = new DailyManager();
-		return dailyManager.getStreak(discordId);
+		return DailyManager.getStreak(discordId);
 	}
 	
 	public boolean isDailyRedeemable(String discordId) {
-		DailyManager dailyManager = new DailyManager();
-		return dailyManager.redeemable(discordId);
+		return DailyManager.redeemable(discordId);
 	}
 	
 	public void redeemDaily(String discordId) {
-		DailyManager dailyManager = new DailyManager();
-		dailyManager.redeem(discordId);
+		DailyManager.redeem(discordId);
 	}
 }

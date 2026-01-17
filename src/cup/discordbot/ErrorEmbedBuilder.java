@@ -15,7 +15,7 @@ public class ErrorEmbedBuilder {
 		return eb;
 	}
 	
-	public static EmbedBuilder dailyClaimedEmbed(Command command, String cooldown) {
+	public static EmbedBuilder dailyClaimedEmbed(String cooldown) {
 		EmbedBuilder eb = new EmbedBuilder();
 		eb.setColor(Color.RED);
 		eb.setTitle("🚫");

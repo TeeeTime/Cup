@@ -11,7 +11,7 @@ public class DailyManager {
 	
 	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
-	public boolean redeemable(String userId) {
+	public static boolean redeemable(String userId) {
 		if(!entryExists(userId)) {
 			return true;
 		}
@@ -23,7 +23,7 @@ public class DailyManager {
 		}
 	}
 	
-	public void redeem(String userId) {
+	public static void redeem(String userId) {
 		if(redeemable(userId)) {
 			try {
 				if(!entryExists(userId)) {
@@ -49,7 +49,7 @@ public class DailyManager {
 		}
 	}
 	
-	public int getStreak(String userId) {
+	public static int getStreak(String userId) {
 		try {
 			if(!(calculateDayDifference(userId) > 1)) {
 				ResultSet results = LiteSQL.onQuery("SELECT streak FROM daily WHERE userid = " + userId);
@@ -65,7 +65,7 @@ public class DailyManager {
 		return 0;
 	}
 	
-	private String getLastDate(String userId) {
+	private static String getLastDate(String userId) {
 		try {
 			ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + userId);
 			
@@ -79,11 +79,11 @@ public class DailyManager {
 		return getCurrentDate();
 	}
 	
-	private String getCurrentDate() {
+	private static String getCurrentDate() {
 		return LocalDate.now().format(DATE_FORMAT);
 	}
 	
-	private boolean entryExists(String userId) {
+	private static boolean entryExists(String userId) {
 		
 		try {
 			ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + userId);
@@ -99,7 +99,7 @@ public class DailyManager {
 		return false;
 	}
 	
-	private int calculateDayDifference(String userId) {
+	private static int calculateDayDifference(String userId) {
 		LocalDate currentDate = LocalDate.now();
 		LocalDate lastDate = LocalDate.parse(getLastDate(userId), DATE_FORMAT);
 		
