@@ -62,25 +62,25 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 			return;
 		}
 		
-		if(bet > CoinManager.getCoins(event.getAuthor())) {
-			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor())).build()).queue();
+		if(bet > CoinManager.getCoins(event.getAuthor().getId())) {
+			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor().getId())).build()).queue();
 			return;
 		}
 		
-		CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
+		CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) - bet);
 		
 		Blackjack blackjack = new Blackjack(bet);
 		DiscordBot.INSTANCE.getBlackjackManager().addBlackjack(event.getAuthor().getId(), blackjack);
 		
 		
 		if(blackjack.getGameState() == GameState.INSTANTBLACKJACK) {
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + (blackjack.getBet() * 2) + (blackjack.getBet() / 2));
+			CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) + (blackjack.getBet() * 2) + (blackjack.getBet() / 2));
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getAuthor().getId());
 			Stats.incrementStat("blackjackPlayed", event.getAuthor());
 			Stats.incrementStat("blackjackWon", event.getAuthor());
 			
 		}else if(blackjack.getGameState() == GameState.TIE) {
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + blackjack.getBet());
+			CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) + blackjack.getBet());
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getAuthor().getId());
 			Stats.incrementStat("blackjackPlayed", event.getAuthor());
 			Stats.incrementStat("blackjackTied", event.getAuthor());
@@ -135,17 +135,17 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 			Stats.incrementStat("blackjackLost", event.getUser());
 			
 		}else if(game.getGameState() == GameState.INSTANTBLACKJACK) {
-			CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + (game.getBet() * 2) + (game.getBet() / 2));
+			CoinManager.setCoins(event.getUser().getId(), CoinManager.getCoins(event.getUser().getId()) + (game.getBet() * 2) + (game.getBet() / 2));
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getUser().getId());
 			
 		}else if(game.getGameState() == GameState.PLAYERWIN) {
-			CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + (game.getBet() * 2));
+			CoinManager.setCoins(event.getUser().getId(), CoinManager.getCoins(event.getUser().getId()) + (game.getBet() * 2));
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getUser().getId());
 			Stats.incrementStat("blackjackPlayed", event.getUser());
 			Stats.incrementStat("blackjackWon", event.getUser());
 			
 		}else if(game.getGameState() == GameState.TIE) {
-			CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + game.getBet());
+			CoinManager.setCoins(event.getUser().getId(), CoinManager.getCoins(event.getUser().getId()) + game.getBet());
 			DiscordBot.INSTANCE.getBlackjackManager().removeBlackjack(event.getUser().getId());
 			Stats.incrementStat("blackjackPlayed", event.getUser());
 			Stats.incrementStat("blackjackTied", event.getUser());

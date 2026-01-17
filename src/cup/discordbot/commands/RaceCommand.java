@@ -60,12 +60,12 @@ public class RaceCommand extends ListenerAdapter implements Command{
 			return;
 		}
 		
-		if(bet > CoinManager.getCoins(event.getAuthor())) {
-			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor())).build()).queue();
+		if(bet > CoinManager.getCoins(event.getAuthor().getId())) {
+			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor().getId())).build()).queue();
 			return;
 		}
 		
-		CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
+		CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) - bet);
 		
 		Race race = new Race(bet);
 		race.addUser(event.getAuthor());
@@ -127,7 +127,7 @@ public class RaceCommand extends ListenerAdapter implements Command{
 								
 								int winnings = race.getBet() * race.size();
 								if(!movedUser.isBot()) {
-									CoinManager.setCoins(movedUser, CoinManager.getCoins(movedUser) + winnings);
+									CoinManager.setCoins(movedUser.getId(), CoinManager.getCoins(movedUser.getId()) + winnings);
 								}
 								raceEmbed.addField("Winner: " + movedUser.getName() + " :trophy:", "They received " + winnings + " :coin:", false);
 								
@@ -160,11 +160,11 @@ public class RaceCommand extends ListenerAdapter implements Command{
 			event.deferEdit().queue();
 			String[] args = event.getComponentId().split("-");
 			Race race = DiscordBot.INSTANCE.getRaceManager().getRace(args[1]);
-			if(CoinManager.getCoins(event.getUser()) >= race.getBet()) {
+			if(CoinManager.getCoins(event.getUser().getId()) >= race.getBet()) {
 				if(race.containsUser(event.getUser())) return;
 				
 				if(race.size() < 8) {
-					CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) - race.getBet());
+					CoinManager.setCoins(event.getUser().getId(), CoinManager.getCoins(event.getUser().getId()) - race.getBet());
 					
 					race.addUser(event.getUser());
 					Stats.incrementStat("racesPlayed", event.getUser());

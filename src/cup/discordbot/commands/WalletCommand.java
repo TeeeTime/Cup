@@ -37,7 +37,7 @@ public class WalletCommand implements Command{
 		int place = 1;
 		
 		try {
-			ResultSet results = LiteSQL.onQuery("SELECT count(DISTINCT balance) AS place FROM coins WHERE (balance > " + CoinManager.getCoins(user) + ")");
+			ResultSet results = LiteSQL.onQuery("SELECT count(DISTINCT balance) AS place FROM coins WHERE (balance > " + CoinManager.getCoins(user.getId()) + ")");
 		
 			if(results.next()) {
 				place += results.getInt("place");
@@ -51,7 +51,7 @@ public class WalletCommand implements Command{
 		eb.setColor(DiscordBot.EMBEDCOLOR);
 		eb.setTitle(user.getName() + "'s wallet :moneybag:");
 		eb.setThumbnail(user.getAvatarUrl());
-		eb.addField("Balance:", CoinManager.getCoins(user) + " :coin:", true);
+		eb.addField("Balance:", CoinManager.getCoins(user.getId()) + " :coin:", true);
 		eb.addField("Place:", place + "", true);
 		
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();

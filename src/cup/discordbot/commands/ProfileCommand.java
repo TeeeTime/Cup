@@ -4,6 +4,7 @@ import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
 import cup.economy.CoinManager;
+import cup.economy.DailyManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -48,10 +49,14 @@ public class ProfileCommand implements Command{
 			eb.setImage(bannerURL);
 		}
 		
-		int coins = CoinManager.getCoins(user);
-		if(coins > 0) eb.addField("Coins:", coins + " :coin:", true);
+		int coins = CoinManager.getCoins(user.getId());
+		if(coins > 0) eb.addField("Coins:", coins + " :coin:", false);
 		
-		eb.addField("Account created:", "<t:" + user.getTimeCreated().toEpochSecond() + ":d>", true);
+		int dailyStreak = DailyManager.getStreak(user.getId());
+		
+		if(dailyStreak > 0) eb.addField("Daily Streak:", dailyStreak + " :fire:", false);
+		
+		eb.addField("Account created:", "<t:" + user.getTimeCreated().toEpochSecond() + ":d>", false);
 		
 		String onlineStatus = "";
 		
@@ -64,7 +69,7 @@ public class ProfileCommand implements Command{
 		case UNKNOWN: onlineStatus = ":black_circle: Offline"; break;
 		default: onlineStatus = ":black_circle: Offline"; break;
 		}
-		eb.addField("Status:", onlineStatus, true);
+		eb.addField("Status:", onlineStatus, false);
 		
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}

@@ -62,8 +62,8 @@ public class StakeCommand implements Command{
 			return;
 		}
 		
-		if(bet > CoinManager.getCoins(event.getAuthor())) {
-			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor())).build()).queue();
+		if(bet > CoinManager.getCoins(event.getAuthor().getId())) {
+			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor().getId())).build()).queue();
 			return;
 		}
 		
@@ -74,7 +74,7 @@ public class StakeCommand implements Command{
 		DecimalFormat df = new DecimalFormat("0.00");
 		
 		if(randomInt == 0) {
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) + (multiplier * bet) - bet);
+			CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) + (multiplier * bet) - bet);
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.GREEN);
@@ -82,7 +82,7 @@ public class StakeCommand implements Command{
 
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		}else {
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
+			CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) - bet);
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(Color.RED);

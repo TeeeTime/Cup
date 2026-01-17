@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-left">
+            <h1 class="brand-logo">teaz.fun</h1>
+        </div>
+        
+        <div class="nav-right">
+            <div class="profile-dropdown">
+                <div class="profile-trigger">
+                    <img th:src="${avatar}" class="nav-avatar">
+                    <span class="nav-username" th:text="${username}">Username</span>
+                    <span class="arrow">▼</span>
+                </div>
+                
+                <div class="dropdown-content">
+                    <a href="/settings" class="dropdown-item">
+            			<span class="icon">⚙️</span> Settings
+        			</a>
+                    <form action="/logout" method="post" style="margin: 0;">
+            			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            			<button type="submit" class="dropdown-item danger">
+                			<span class="icon">🚪</span> Logout
+            			</button>
+        			</form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="card balance-card">
+            <div class="card-header">
+                <h3>Total Balance</h3>
+			</div>
+            <div class="balance-display">
+                <span class="balance-amount" th:text="${balance}" style="white-space: nowrap;">0</span>
+                <span class="currency-symbol">🪙</span>
+            </div>
+            <div class="graph-placeholder">
+                <div class="wave-line"></div>
+            </div>
+        	</div>
+
+        	<div class="card daily-card">
+            	<h3>Daily Reward</h3>
+    
+   				 <div class="streak-header">
+        			<div class="streak-count">
+            			<span class="fire-icon">🔥</span>
+            			<span class="count-text">
+                			<span th:text="${currentStreak}">0</span>
+                			Day Streak
+           				</span>
+       				</div>
+        			<span class="streak-goal">
+        				Goal:
+        				<span th:text="${nextStreakGoal}">7</span>
+        				Days
+        			</span>
+    			</div>
+
+    			<div class="progress-track">
+        			<div class="progress-segment" th:classappend="${streakGoalProgress >= 1} ? 'active'"></div>
+        			<div class="progress-segment" th:classappend="${streakGoalProgress >= 2} ? 'active'"></div>
+        			<div class="progress-segment" th:classappend="${streakGoalProgress >= 3} ? 'active'"></div>
+        			<div class="progress-segment" th:classappend="${streakGoalProgress >= 4} ? 'active'"></div>
+        			<div class="progress-segment" th:classappend="${streakGoalProgress >= 5} ? 'active'"></div>
+        			<div class="progress-segment" th:classappend="${streakGoalProgress >= 6} ? 'active'"></div>
+        			<div class="progress-segment final" th:classappend="${streakGoalProgress >= 7} ? 'active'"></div>
+    			</div>
+
+    			<div style="margin-top: 20px;">
+        			<form th:if="${dailyReady}" action="/claim-daily" method="post">
+            			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            			<button type="submit" class="btn-login" style="width: 100%;">Claim Bonus</button>
+        			</form>
+
+        			<div th:unless="${dailyReady}">
+            			<button class="btn-disabled" disabled style="width: 100%;">
+                			Next in: 
+                			<span th:text="${dailyTimeLeft}">00h 00m</span>
+           				</button>
+        			</div>
+    			</div>
+        	</div>
+		
+		<div class="card leaderboard-card">
+        	<h3>🏆 Leaderboard</h3>
+        
+        	<div class="leaderboard-list">
+    			<div class="lb-item" th:each="player : ${leaderboard}">
+        			<span class="lb-rank" th:text="'#' + ${player.rank}" th:style="${player.rank == 1} ? 'color: gold;' : ''">
+            			#1
+        			</span>
+
+        			<img th:src="${player.avatarUrl}" class="lb-avatar">
+
+        			<div class="lb-info">
+            			<span class="lb-name" th:text="${player.name}">Username</span>
+            			<span class="lb-score" th:text="${#numbers.formatInteger(player.balance, 1, 'COMMA')} + '🪙'">
+                			$0
+            			</span>
+        			</div>
+    			</div>
+    			<div th:if="${leaderboard.empty}" style="padding:10px; color:#999;">
+        			No players found yet.
+    			</div>
+			</div>
+   	 	</div>
+		
+        <div class="card games-card">
+            <h3>Minigames</h3>
+            <div class="game-list">
+                
+                <div class="game-item">
+                    <div class="game-icon">🎰</div> 
+                    <div class="game-info">
+                        <h4>Slots</h4>
+                        <span>Win big</span>
+                    </div>
+                    <form action="/games/slots" method="post">
+            			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            			<button type="submit" class="btn-login">Play</button>
+        			</form>
+                </div>
+
+                <div class="game-item">
+    				<div class="game-icon">🔴</div>
+    				<div class="game-info">
+        				<h4>Roulette</h4>
+        				<span>Spin the wheel</span>
+    				</div>
+    				<a href="/games/roulette" class="btn-login" style="margin-top:0;">Play</a>
+				</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

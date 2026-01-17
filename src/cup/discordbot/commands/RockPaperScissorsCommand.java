@@ -45,8 +45,8 @@ public class RockPaperScissorsCommand extends ListenerAdapter implements Command
 				return;
 			}
 			
-			if(bet > CoinManager.getCoins(event.getAuthor())) {
-				event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor())).build()).queue();
+			if(bet > CoinManager.getCoins(event.getAuthor().getId())) {
+				event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.insufficientBalanceEmbed(bet - CoinManager.getCoins(event.getAuthor().getId())).build()).queue();
 				return;
 			}
 			
@@ -55,7 +55,7 @@ public class RockPaperScissorsCommand extends ListenerAdapter implements Command
 				return;
 			}
 			
-			CoinManager.setCoins(event.getAuthor(), CoinManager.getCoins(event.getAuthor()) - bet);
+			CoinManager.setCoins(event.getAuthor().getId(), CoinManager.getCoins(event.getAuthor().getId()) - bet);
 			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(DiscordBot.EMBEDCOLOR);
@@ -110,8 +110,8 @@ public class RockPaperScissorsCommand extends ListenerAdapter implements Command
     			}
             	
             	switch(result) {
-            	case "w": eb.setColor(Color.GREEN); eb.addField("Winner", emojiRepresentation + "\n\nYou won " + bet + " :coin:", false); CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + (bet * 2)); Stats.incrementStat("rpsWon", event.getUser()); Stats.incrementStat("rpsPlayed", event.getUser()); break;
-            	case "t": eb.setColor(Color.GRAY); eb.addField("Tie", emojiRepresentation + "\n\nYour balance stays untouched", false); CoinManager.setCoins(event.getUser(), CoinManager.getCoins(event.getUser()) + bet); Stats.incrementStat("rpsTied", event.getUser()); Stats.incrementStat("rpsPlayed", event.getUser()); break;
+            	case "w": eb.setColor(Color.GREEN); eb.addField("Winner", emojiRepresentation + "\n\nYou won " + bet + " :coin:", false); CoinManager.setCoins(event.getUser().getId(), CoinManager.getCoins(event.getUser().getId()) + (bet * 2)); Stats.incrementStat("rpsWon", event.getUser()); Stats.incrementStat("rpsPlayed", event.getUser()); break;
+            	case "t": eb.setColor(Color.GRAY); eb.addField("Tie", emojiRepresentation + "\n\nYour balance stays untouched", false); CoinManager.setCoins(event.getUser().getId(), CoinManager.getCoins(event.getUser().getId()) + bet); Stats.incrementStat("rpsTied", event.getUser()); Stats.incrementStat("rpsPlayed", event.getUser()); break;
             	case "l": eb.setColor(Color.RED); eb.addField("Loser", emojiRepresentation + "\n\nYou lost " + bet + " :coin:", false); Stats.incrementStat("rpsLost", event.getUser()); Stats.incrementStat("rpsPlayed", event.getUser()); break;
             	}
             	

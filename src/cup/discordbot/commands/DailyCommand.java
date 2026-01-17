@@ -1,15 +1,14 @@
 package cup.discordbot.commands;
 
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 
-import cup.database.LiteSQL;
 import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
-import cup.economy.CoinManager;
+import cup.economy.DailyManager;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -25,99 +24,36 @@ public class DailyCommand implements Command{
 			return;
 		}
 		
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		
-		LocalDate currentDate = LocalDate.now();
-		
-		String currentDateFormated = currentDate.format(format);
-		
 		User user = event.getAuthor();
 		
-		if(!entryExists(event.getAuthor())) {
-			CoinManager.setCoins(user, CoinManager.getCoins(user) + 500);
-			
-			putNewDate(user, currentDateFormated);
-			
-			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(DiscordBot.EMBEDCOLOR);
-			eb.addField("Daily bonus claimed!", "You received 500 :coin:", false);
-			event.getChannel().sendMessageEmbeds(eb.build()).queue();
-			
-			return;
+		if(!DailyManager.redeemable(user.getId())) {
+			LocalDateTime now = LocalDateTime.now();
+            LocalDateTime midnight = LocalDate.now().atTime(LocalTime.MAX);
+            
+            long secondsUntilMidnight = java.time.Duration.between(now, midnight).getSeconds();
+            long hours = secondsUntilMidnight / 3600;
+            long minutes = (secondsUntilMidnight % 3600) / 60;
+            
+            String timeLeft = hours + "h " + minutes + "m";
+             
+            event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.dailyClaimedEmbed(timeLeft).build()).queue();
+            
+            return;
 		}
 		
-		if(!currentDateFormated.equals(getDate(user))) {
-			CoinManager.setCoins(user, CoinManager.getCoins(user) + 500);
-			
-			putNewDate(user, currentDateFormated);
-			
-			EmbedBuilder eb = new EmbedBuilder();
-			eb.setColor(DiscordBot.EMBEDCOLOR);
-			eb.addField("Daily bonus claimed!", "You received 500 :coin:", false);
-			event.getChannel().sendMessageEmbeds(eb.build()).queue();
-			
+		DailyManager.redeem(user.getId());
+		
+		int streak = DailyManager.getStreak(user.getId());
+		
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setColor(DiscordBot.EMBEDCOLOR);
+		if(streak % 7 == 0) {
+			eb.addField("Daily bonus claimed!", "You received 500 :coin: + 500 :coin: streak reward\n\nYou are on a " + streak + " day streak :fire:", false);
 		}else {
-			LocalDateTime currentDateTime = LocalDateTime.now();
-
-			String hours, minutes = "";
-			
-			if(currentDateTime.getMinute() == 0) {
-				hours = 24 - currentDateTime.getHour() + "h";
-				minutes = "";
-				
-			}else {
-				hours = 23 - currentDateTime.getHour() + "h";
-				minutes = 60 - currentDateTime.getMinute() + "m";
-			}
-			
-			String cooldown = hours + " " + minutes;
-			
-			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.dailyClaimedEmbed(this, cooldown).build()).queue();
+			eb.addField("Daily bonus claimed!", "You received 500 :coin:\n\nYou are on a " + streak + " day streak :fire:", false);
 		}
 		
-	}
-	
-	private boolean entryExists(User user) {
-		
-		try {
-			ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + user.getId());
-			if(results.next()) {
-				return true;
-			}else {
-				return false;
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return false;
-	}
-	
-	private void putNewDate(User user, String date) {
-		try {
-			if(!entryExists(user)) {
-				LiteSQL.onUpdate("INSERT INTO daily(userid, lastclaimdate) VALUES(" + user.getId() + ", '" + date + "')");
-			}else {
-				LiteSQL.onUpdate("UPDATE daily SET lastclaimdate = '" + date + "' WHERE userid = " + user.getId());
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private String getDate(User user) {
-
-		try {
-			ResultSet results = LiteSQL.onQuery("SELECT lastclaimdate FROM daily WHERE userid = " + user.getId());
-			
-			if(results.next()) {
-				return results.getString("lastclaimdate");
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return "";
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 
 	@Override
@@ -127,7 +63,7 @@ public class DailyCommand implements Command{
 
 	@Override
 	public String getDescription() {
-		return "Claim 100 :coin: daily. Resets at 12 PM GMT+2";
+		return "Claim 500 :coin: daily. Resets at 12 PM GMT+2. Every 7 days you can keep a streak, you will receive a 500 :coin: reward.";
 	}
 
 	@Override
