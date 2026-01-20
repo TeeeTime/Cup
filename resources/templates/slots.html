@@ -52,6 +52,10 @@
     			<button type="button" id="spinBtn" class="game-btn btn-green" style="font-size: 1.5rem; width: 100%;" onclick="spinSlots()">
         			SPIN
     			</button>
+    			
+    			<div style="text-align: center; margin-top: 12px; font-size: 0.85rem; color: #b9bbbe; opacity: 0.8;">
+        			Press <span style="border: 1px solid #4f545c; border-radius: 4px; padding: 1px 5px; font-size: 0.75rem; background: #2f3136;">SPACE</span> to spin
+    			</div>
 			</div>
 			
         	</div>
@@ -180,6 +184,19 @@
         }
         document.getElementById('betAmount').addEventListener('blur', function() {
             if(this.value === "" || parseInt(this.value) < 1) this.value = 1;
+        });
+        
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                
+                event.preventDefault(); 
+                
+                const spinBtn = document.getElementById('spinBtn');
+                
+                if (spinBtn && !spinBtn.disabled) {
+                    spinBtn.click();
+                }
+            }
         });
     </script>
 </body>
