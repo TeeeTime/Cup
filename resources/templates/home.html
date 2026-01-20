@@ -121,16 +121,13 @@
             <div class="game-list">
                 
                 <div class="game-item">
-                    <div class="game-icon">🎰</div> 
-                    <div class="game-info">
-                        <h4>Slots</h4>
-                        <span>Win big</span>
-                    </div>
-                    <form action="/games/slots" method="post">
-            			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            			<button type="submit" class="btn-login">Play</button>
-        			</form>
-                </div>
+    				<div class="game-icon">🎰</div>
+    				<div class="game-info">
+        				<h4>Slots</h4>
+        				<span>Win big</span>
+    				</div>
+    				<a href="/games/slots" class="btn-login" style="margin-top:0;">Play</a>
+				</div>
 
                 <div class="game-item">
     				<div class="game-icon">🔴</div>
