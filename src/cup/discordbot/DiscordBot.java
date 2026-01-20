@@ -16,6 +16,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
@@ -77,6 +78,8 @@ public class DiscordBot {
 				.addEventListeners(new VoiceSessionListener())
 				.setAutoReconnect(true)
 				.build();
+		
+		jda.getPresence().setActivity(Activity.customStatus("Check out teaz.fun"));
 		
 		System.out.println("[DISCORD] BOT online as " + jda.getSelfUser().getName());
 	}

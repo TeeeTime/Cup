@@ -1,16 +1,204 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Teaz</title>
+	<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <title>Slots - Teaz</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/roulette.css"> <link rel="stylesheet" href="/css/slots.css">
 </head>
 <body>
-	<div class="container">
-    	<div class="logincard">
-        	<h1 class="title">Slots</h1> 
-        	<p class="subtitle">Coming soon</p>
-    	</div>
-    </div>
+
+    <nav class="top-nav">
+        <h1 class="brand-logo">teaz.fun</h1>
+        <a href="/home" class="backhome">Back home ↵</a>
+    </nav>
+
+    <div class="slots-wrapper">
+        
+        <div id="resultText" class="result-msg" style="height:30px;">Ready to Spin!</div>
+
+        <div class="slot-machine">
+            <div class="reel-window">
+                <div id="reel1" class="reel-strip"></div>
+            </div>
+            <div class="reel-window">
+                <div id="reel2" class="reel-strip"></div>
+            </div>
+            <div class="reel-window">
+                <div id="reel3" class="reel-strip"></div>
+            </div>
+        </div>
+
+        <div>
+            Balance: <span id="currentBalance" th:text="${balance}">0</span> 🪙
+        </div>
+
+        <div class="logincard game-card">
+            
+            <div class="bet-adjust-row">
+                <button type="button" class="btn-adjust" onclick="adjustBet(-100)">−</button>
+                <input type="number" id="betAmount" class="bet-input-display" value="100" min="1">
+                <button type="button" class="btn-adjust" onclick="adjustBet(100)">+</button>
+            </div>
+
+            <div class="shortcut-row">
+                <button type="button" class="game-btn btn-control" onclick="setBet(100)">100</button>
+                <button type="button" class="game-btn btn-control" onclick="setBet(1000)">1k</button>
+                <button type="button" class="game-btn btn-control" onclick="setBet(10000)">10k</button>
+                <button type="button" class="game-btn btn-control" onclick="doubleBet()">2x</button>
+            </div>
+
+			<div style="width: 100%;">
+    			<button type="button" id="spinBtn" class="game-btn btn-green" style="font-size: 1.5rem; width: 100%;" onclick="spinSlots()">
+        			SPIN
+    			</button>
+    			
+    			<div style="text-align: center; margin-top: 12px; font-size: 0.85rem; color: #b9bbbe; opacity: 0.8;">
+        			Press <span style="border: 1px solid #4f545c; border-radius: 4px; padding: 1px 5px; font-size: 0.75rem; background: #2f3136;">SPACE</span> to spin
+    			</div>
+			</div>
+			
+        	</div>
+        
+        		<div class="logincard payout-card">
+        			<div class="payout-title">Payouts</div>
+        
+        			<div class="payout-item">
+            			<span>7️⃣ 7️⃣ 7️⃣</span> <span class="multiplier">100x</span>
+        			</div>
+        			<div class="payout-item">
+            			<span>💎 💎 💎</span> <span class="multiplier">75x</span>
+        			</div>
+        			<div class="payout-item">
+            			<span>🍇 🍇 🍇</span> <span class="multiplier">50x</span>
+        			</div>
+        			<div class="payout-item">
+            			<span>🍊 🍊 🍊</span> <span class="multiplier">25x</span>
+        			</div>
+       				<div class="payout-item">
+            			<span>🍒 🍒 🍒</span> <span class="multiplier">15x</span>
+        			</div>
+        
+        			<div style="margin: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>
+        
+        			<div class="payout-item">
+            			<span style="font-size: 1rem;">Any 2 7️⃣</span> <span class="multiplier">2x</span>
+        			</div>
+    			</div>
+    		</div>
+
+    <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+
+    <script>
+        const SYMBOLS = ["🍒", "🍋", "🍊", "🫐", "🍇", "💎", "7️⃣"];
+        const ICON_HEIGHT = 120; // Pixels (Must match CSS)
+        const REELS = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
+        const resultText = document.getElementById('resultText');
+        const balanceSpan = document.getElementById('currentBalance');
+        const csrfToken = document.getElementById('csrfToken').value;
+
+        function initReels() {
+            REELS.forEach(reel => {
+                let content = "";
+                for(let k=0; k<4; k++) {
+                    SYMBOLS.forEach(sym => {
+                        content += `<div class="slot-icon">${sym}</div>`;
+                    });
+                }
+                reel.innerHTML = content;
+            });
+        }
+        initReels();
+
+        function spinSlots() {
+            const betInput = document.getElementById('betAmount');
+            if (!betInput.value || parseInt(betInput.value) < 1) betInput.value = 1;
+            
+            const allButtons = document.querySelectorAll('button'); 
+            allButtons.forEach(btn => btn.disabled = true);
+            resultText.innerText = "Spinning...";
+            resultText.style.color = "white";
+
+            const formData = new FormData();
+            formData.append("betAmount", betInput.value);
+            formData.append("_csrf", csrfToken);
+
+            fetch('/api/slots/spin', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if(data.error) {
+                    resultText.innerText = "❌ " + data.error;
+                    spinBtn.disabled = false;
+                    return;
+                }
+
+                data.symbolIndexes.forEach((targetIndex, i) => {
+                    const reel = REELS[i];
+                    
+                    const loops = 2 + (i * 2); // 2, 4, 6 loops
+                    
+                    const targetPositionIndex = (SYMBOLS.length * 2) + targetIndex;
+                    
+                    const pixelOffset = targetPositionIndex * ICON_HEIGHT;
+
+                    reel.style.transition = "none";
+                    reel.style.transform = `translateY(0px)`;
+                    
+                    reel.offsetHeight; 
+                    
+                    const duration = 1 + (i * 0.5);
+                    
+                    reel.style.transition = `transform ${duration}s cubic-bezier(0.25, 1, 0.5, 1)`;
+                    reel.style.transform = `translateY(-${pixelOffset}px)`;
+                });
+
+                setTimeout(() => {
+                    balanceSpan.innerText = data.newBalance;
+                    allButtons.forEach(btn => btn.disabled = false);
+                    
+                    if(data.won) {
+                        resultText.innerText = `YOU WON ${data.payout} 🪙`;
+                        resultText.style.color = "#3ba55d";
+                    } else {
+                        resultText.innerText = "Try again";
+                        resultText.style.color = "#ed4245";
+                    }
+                }, 2100);
+            })
+            .catch(err => {
+                console.error(err);
+                allButtons.forEach(btn => btn.disabled = false);
+            });
+        }
+        
+        function adjustBet(amount) {
+            const input = document.getElementById('betAmount');
+            let val = parseInt(input.value) + amount;
+            if(val < 1) val = 1;
+            input.value = val;
+        }
+        function setBet(amount) { document.getElementById('betAmount').value = amount; }
+        function doubleBet() { 
+            const input = document.getElementById('betAmount');
+            input.value = parseInt(input.value) * 2; 
+        }
+        document.getElementById('betAmount').addEventListener('blur', function() {
+            if(this.value === "" || parseInt(this.value) < 1) this.value = 1;
+        });
+        
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                
+                event.preventDefault(); 
+                
+                const spinBtn = document.getElementById('spinBtn');
+                
+                if (spinBtn && !spinBtn.disabled) {
+                    spinBtn.click();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
