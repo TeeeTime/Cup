@@ -76,6 +76,7 @@ public class DiscordBot {
 				.addEventListeners(new CounterstrikeChangelogListener())
 				.addEventListeners(new AIListener())
 				.addEventListeners(new VoiceSessionListener())
+				.addEventListeners(new GuildJoinListener())
 				.setAutoReconnect(true)
 				.build();
 		
