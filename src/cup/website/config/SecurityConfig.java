@@ -15,8 +15,11 @@ public class SecurityConfig {
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/fonts/**", "/images/**", "/error").permitAll()
+                
+                .requestMatchers("/overlay", "/api/overlay/**").permitAll()
                 
                 .anyRequest().authenticated()
             )

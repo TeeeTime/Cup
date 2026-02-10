@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OBS Overlay</title>
+    <style>
+        @font-face { font-family: 'ggsans'; src: url('/fonts/ggsans-Normal.ttf'); } 
+
+        /* --- LAYOUT & RESET --- */
+        body {
+            margin: 0; padding: 0; overflow: hidden;
+            background: transparent; /* Essential for OBS */
+            font-family: 'ggsans', sans-serif;
+            display: flex;
+            justify-content: flex-end; /* Align card to bottom-right */
+            align-items: flex-end;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* --- THE MEDIA CARD --- */
+        #media-card {
+            /* Position & Size */
+            margin-right: 50px;
+            margin-bottom: 50px;
+            width: 600px;
+            
+            /* Visuals */
+            background-color: #202225; /* Dark background */
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+            overflow: hidden; /* Clips the video corners */
+            
+            /* Animation State (Hidden by default) */
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none; /* Removed from flow when inactive */
+            flex-direction: column;
+        }
+
+        #media-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* 1. TOP HEADER */
+        .card-header {
+            background-color: #202225;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #2f3136;
+        }
+        
+        .user-highlight { color: #FEE75C; margin-left: 5px; }
+
+        /* 2. VIDEO CONTAINER */
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* Enforce standard video shape */
+            background: black;
+            position: relative;
+        }
+
+        #yt-player {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 3. BOTTOM FOOTER (Progress Bar) */
+        .card-footer {
+            background-color: #202225;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* The gray track */
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background-color: #40444b;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* The white fill */
+        .progress-fill {
+            width: 0%; /* Starts at 0 */
+            height: 100%;
+            background-color: white;
+            border-radius: 4px;
+            transition: width 0.1s linear; /* Smooth movement */
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div style="position:absolute; top:5px; left:5px; width:5px; height:5px; background:rgba(0,255,0,0.3); border-radius:50%;"></div>
+
+    <div id="media-card">
+        <div class="card-header">
+            Redeemed by <span id="requesterName" class="user-highlight">User</span>
+        </div>
+
+        <div class="video-container">
+            <div id="yt-player"></div>
+        </div>
+
+        <div class="card-footer">
+            <div class="progress-track">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:if="${_csrf}">
+        <input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+    </th:block>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        // --- CONFIG ---
+        const POLL_INTERVAL = 3000;
+        
+        // --- STATE ---
+        let player;
+        let isPlaying = false;
+        let currentRedemptionId = null;
+        let progressTimer = null;
+
+        // --- 1. SETUP ---
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player', {
+                height: '100%', width: '100%',
+                playerVars: { 'autoplay': 1, 'controls': 0, 'disablekb': 1, 'origin': window.location.origin },
+                events: {
+                    'onReady': () => {
+                        // Init Speech Synthesis
+                        window.speechSynthesis.getVoices(); 
+                        // Start Polling
+                        setInterval(checkQueue, POLL_INTERVAL);
+                    },
+                    'onStateChange': onPlayerStateChange,
+                    'onError': () => finishPlayback()
+                }
+            });
+        }
+
+        // --- 2. QUEUE POLLING ---
+        function checkQueue() {
+            if (isPlaying) return;
+
+            fetch('/api/overlay/queue/next')
+                .then(res => {
+                    if(res.status === 401 || res.status === 403) return null;
+                    if (res.status === 204) return null;
+                    return res.json();
+                })
+                .then(data => {
+                    if (data) processItem(data);
+                })
+                .catch(e => console.error(e));
+        }
+
+        // --- 3. ROUTER (Video vs TTS) ---
+        function processItem(item) {
+            isPlaying = true;
+            currentRedemptionId = item.id;
+            
+            console.log("Processing:", item.type);
+
+            if (item.type === 'TTS') {
+                playTTS(item);
+            } else {
+                playVideo(item);
+            }
+        }
+
+        // --- 4. TTS LOGIC ---
+        function playTTS(item) {
+            const utterance = new SpeechSynthesisUtterance(item.content);
+            
+            // Optional: Customize Voice
+            // utterance.pitch = 1;
+            // utterance.rate = 1; 
+            // utterance.volume = 1;
+
+            // Handle End of Speech
+            utterance.onend = function() {
+                console.log("TTS Finished");
+                markAsComplete(item.id);
+                isPlaying = false;
+                currentRedemptionId = null;
+            };
+
+            // Handle Error (e.g. text too long or engine crash)
+            utterance.onerror = function() {
+                console.error("TTS Error");
+                // Force finish so queue doesn't get stuck
+                markAsComplete(item.id);
+                isPlaying = false;
+                currentRedemptionId = null;
+            };
+
+            // Speak
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- 5. VIDEO LOGIC ---
+        function playVideo(item) {
+            // UI Updates
+            document.getElementById('requesterName').innerText = item.username;
+            updateProgressBar(0);
+            
+            // Show Card
+            const card = document.getElementById('media-card');
+            card.style.display = 'flex';
+            setTimeout(() => card.classList.add('visible'), 50);
+
+            // Load Video
+            const videoId = extractVideoId(item.content);
+            if(player && videoId) {
+                player.loadVideoById(videoId);
+            } else {
+                finishVideo();
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === 1) startProgressTracker();
+            else if (event.data === 0) finishVideo();
+            else stopProgressTracker();
+        }
+
+        function finishVideo() {
+            stopProgressTracker();
+            updateProgressBar(100);
+
+            const card = document.getElementById('media-card');
+            card.classList.remove('visible');
+            
+            setTimeout(() => {
+                card.style.display = 'none';
+                markAsComplete(currentRedemptionId);
+                isPlaying = false;
+                currentRedemptionId = null;
+                if(player && player.stopVideo) player.stopVideo();
+            }, 600);
+        }
+
+        // --- 6. SHARED HELPERS ---
+        function markAsComplete(id) {
+            if(!id) return;
+            const csrfInput = document.getElementById('csrfToken');
+            const headers = {};
+            if(csrfInput) headers['X-CSRF-TOKEN'] = csrfInput.value;
+            fetch(`/api/overlay/queue/complete/${id}`, { method: 'POST', headers: headers });
+        }
+
+        // ... (Progress Bar & Video ID helpers remain the same as before) ...
+        function startProgressTracker() {
+            stopProgressTracker(); 
+            progressTimer = setInterval(() => {
+                if (player && player.getDuration) {
+                    const duration = player.getDuration();
+                    const current = player.getCurrentTime();
+                    if (duration > 0) updateProgressBar((current / duration) * 100);
+                }
+            }, 100);
+        }
+
+        function stopProgressTracker() { if (progressTimer) clearInterval(progressTimer); }
+        function updateProgressBar(percent) { 
+            const bar = document.getElementById('progressFill'); 
+            if(bar) bar.style.width = percent + "%"; 
+        }
+        function extractVideoId(url) {
+            if(!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+    </script>
+</body>
+</html>

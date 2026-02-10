@@ -140,6 +140,29 @@
 				</div>
             </div>
         </div>
+        <div class="card stream-card" th:if="${twitchLive}">
+            <div class="stream-header">
+                <div class="live-indicator">
+                    <span class="pulse-dot"></span>
+                    LIVE NOW
+                </div>
+            </div>
+
+            <div class="video-container">
+                <iframe
+                    src="https://player.twitch.tv/?channel=teeestream&parent=localhost&parent=teaz.fun&muted=false"
+                    height="100%"
+                    width="100%"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="stream-actions">
+                <a href="/live" class="btn-login" style="margin-top:0;">
+                    Go to Stream Dashboard ↗
+                </a>
+            </div>
+        </div>
     </div>
 </body>
 </html>
