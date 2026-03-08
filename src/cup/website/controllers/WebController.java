@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import cup.economy.LeaderboardEntry;
+import cup.twitch.LiveListener;
 import cup.website.service.EconomyService;
 
 @Controller
@@ -69,6 +70,8 @@ public class WebController {
         	streakGoalProgress = (streak - 1) % 7 + 1;
         }
         
+        boolean twitchLive = LiveListener.isLive;
+        
         model.addAttribute("username", username);
         model.addAttribute("avatar", avatarUrl);
         model.addAttribute("balance", balance);
@@ -78,6 +81,7 @@ public class WebController {
         model.addAttribute("dailyTimeLeft", timeLeft);
         model.addAttribute("nextStreakGoal", nextStreakGoal);
         model.addAttribute("streakGoalProgress", streakGoalProgress);
+        model.addAttribute("twitchLive", twitchLive);
         
 
         return "home";

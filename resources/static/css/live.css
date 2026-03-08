@@ -1,0 +1,176 @@
+/* --- Live Shop Layout --- */
+.live-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* --- Responsive: Stack on mobile --- */
+@media (max-width: 1000px) {
+    .live-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Specific Card Overrides --- */
+.stream-display-card {
+    grid-column: 1 / 2;
+    padding: 0 !important; /* Remove padding for flush video */
+    overflow: hidden;
+    background: black;
+    height: 500px; /* Fixed height for cinema feel */
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-card {
+    grid-column: 2 / 3;
+    padding: 0 !important;
+    height: 500px; /* Match stream height */
+    overflow: hidden;
+    background: #18191c; /* Twitch dark mode color */
+}
+
+.shop-item-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px !important;
+    min-height: 220px; /* Adjust based on your preference */
+}
+
+.shop-card-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 5px;
+}
+
+.shop-description {
+    color: #b9bbbe; 
+    font-size: 0.85rem; 
+    margin-bottom: 15px;
+}
+
+.shop-input-group {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+/* Helper text below input */
+.input-helper-text {
+    display: block;
+    font-size: 0.75rem;
+    color: #b9bbbe;
+    margin-top: 4px;
+    min-height: 1rem; /* Prevents button jumping when text appears */
+}
+
+.error-text {
+    color: #ff4444 !important;
+}
+
+.success-text {
+    color: #43b581; /* Discord Green */
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* The "Magic" that aligns buttons to bottom */
+.shop-item-card .btn-login {
+    margin-top: auto;
+    width: 100%;
+}
+
+/* --- Video & Chat Frames --- */
+.embed-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* --- Shop Inputs --- */
+.shop-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
+    font-family: 'ggsans', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.shop-input:focus {
+    border-color: #5865F2;
+}
+
+.price-tag {
+    font-size: 0.9rem;
+    color: #ffd700;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.time-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.time-group label {
+    font-size: 0.75rem;
+    color: #b9bbbe;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.time-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-family: 'ggsans', sans-serif;
+    outline: none;
+    -moz-appearance: textfield;
+    transition: border 0.2s;
+}
+
+.time-input:focus {
+    border-color: #5865F2;
+}
+
+/* Hide HTML5 spinner arrows */
+.time-input::-webkit-outer-spin-button,
+.time-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* --- Error Message --- */
+.error-msg {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ed4245;
+    font-size: 0.85rem;
+    font-weight: bold;
+    background: rgba(0,0,0,0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.shop-input.invalid {
+    border-color: #ed4245;
+}

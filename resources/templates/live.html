@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Shop - Teaz</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/live.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-left">
+            <h1 class="brand-logo">teaz.fun</h1>
+        </div>
+        <div class="nav-right">
+            <div class="profile-dropdown">
+                <div class="profile-trigger">
+                    <img th:src="${avatar}" class="nav-avatar">
+                    <span class="nav-username" th:text="${username}">User</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="dropdown-content">
+                    <a href="/home" class="dropdown-item">
+                        <span class="icon">🏠</span> Dashboard
+                    </a>
+                    <form action="/logout" method="post" style="margin: 0;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="dropdown-item danger">
+                            <span class="icon">🚪</span> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="live-container">
+    <div class="card stream-display-card">
+        <iframe class="embed-frame"
+            src="https://player.twitch.tv/?channel=teeestream&parent=localhost&parent=teaz.fun&muted=false"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <div class="card chat-card">
+        <iframe class="embed-frame"
+            src="https://www.twitch.tv/embed/teeestream/chat?parent=localhost&parent=teaz.fun&darkpopout"
+            id="chat_embed">
+        </iframe>
+    </div>
+
+    <div class="card shop-item-card">
+    	<div class="shop-card-header">
+        	<h3>🗣️ Text to Speech</h3>
+        	<div class="price-tag">100 🪙</div>
+    	</div>
+    	<p class="shop-description">Your message will be read aloud on stream!</p>
+    
+    	<div class="shop-input-group">
+        	<input type="text" id="ttsInput" class="shop-input" placeholder="Type your message here..." maxlength="300">
+        
+        	<div id="ttsErrorMsg" style="display:none;" class="input-helper-text error-text"></div>
+        
+        	<div id="ttsSuccessMsg" style="display:none;" class="input-helper-text success-text">
+            	Message Sent!
+        	</div>
+    	</div>
+    
+    	<button id="btnBuyTTS" class="btn-login" onclick="buyTTS()">
+        	Send Message
+    	</button>
+	</div>
+
+    	<div class="card shop-item-card">
+        	<div class="shop-card-header">
+            	<h3>📺 Media Share</h3>
+            	<div id="videoCostDisplay" class="price-tag">0 🪙</div>
+        	</div>
+        	<p class="shop-description">20 Coins per Second • Full Video</p>
+
+        	<div class="shop-input-group">
+            	<input type="text" id="videoInput" class="shop-input" placeholder="Paste YouTube Link..." autocomplete="off">
+            	<div id="videoInfo" style="display:none;" class="input-helper-text">
+                	Duration: <span id="durationDisplay" style="color: white; font-weight: bold;">0s</span>
+            	</div>
+            	<div id="urlErrorMsg" style="display:none;" class="input-helper-text error-text">
+                	Invalid YouTube Link
+            	</div>
+            	
+            	<div id="successMsg" style="display:none;" class="input-helper-text success-text">
+            		Added to queue!
+        		</div>
+        	</div>
+
+        	<button id="btnBuyVideo" class="btn-login" onclick="buyVideo()" disabled style="opacity: 0.5; cursor: not-allowed;">
+            	Play Video
+        	</button>
+    	</div>
+	</div>
+	
+	<input type="hidden" id="csrfToken" th:value="${_csrf.token}" />
+
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<script>
+    // --- CONFIG ---
+    const COINS_PER_SECOND = 20;
+
+    // --- STATE ---
+    let detectedDuration = 0;
+    let currentVideoUrl = "";
+
+    // --- UI ELEMENTS ---
+    const urlInput = document.getElementById('videoInput');
+    
+    // The 3 Text Statuses
+    const infoBox = document.getElementById('videoInfo');
+    const errorMsg = document.getElementById('urlErrorMsg');
+    const successMsg = document.getElementById('successMsg');
+    
+    const durationDisplay = document.getElementById('durationDisplay');
+    const costDisplay = document.getElementById('videoCostDisplay');
+    const buyBtn = document.getElementById('btnBuyVideo');
+    
+    const ttsInput = document.getElementById('ttsInput');
+    const ttsSuccess = document.getElementById('ttsSuccessMsg');
+    const ttsError = document.getElementById('ttsErrorMsg');
+    const ttsBtn = document.getElementById('btnBuyTTS');
+
+    // --- 1. INPUT HANDLER ---
+    urlInput.addEventListener('input', function() {
+        const url = urlInput.value.trim();
+        
+        // Hide success message as soon as user types again
+        successMsg.style.display = 'none';
+
+        const videoId = getVideoId(url);
+        if (!videoId) {
+            // Only hide info, don't show error immediately while typing
+            infoBox.style.display = 'none';
+            toggleButton(false);
+            updatePriceDisplay(0);
+            
+            if(url.length > 15) {
+                showStatus('error', "Invalid YouTube Link");
+            } else {
+                errorMsg.style.display = 'none';
+            }
+            return;
+        }
+
+        // Backend Check
+        fetch(`/api/shop/check-video?url=${encodeURIComponent(url)}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Video not found");
+                return res.json();
+            })
+            .then(data => {
+                detectedDuration = data.durationSeconds;
+                currentVideoUrl = url;
+                
+                // Show Duration
+                showStatus('info');
+                durationDisplay.innerText = data.formattedTime;
+                
+                updatePriceDisplay(data.cost);
+                toggleButton(true);
+            })
+            .catch(err => {
+                showStatus('error', "Video unavailable / Private");
+                toggleButton(false);
+            });
+    });
+
+    // --- 2. BUY FUNCTION (No Popups) ---
+    function buyVideo() {
+        if (!detectedDuration || !currentVideoUrl) return;
+
+        // 1. Lock UI
+        buyBtn.disabled = true;
+        buyBtn.innerText = "Processing...";
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+
+        // 2. Prepare Data
+        const params = new URLSearchParams();
+        params.append("url", currentVideoUrl);
+        params.append("durationSeconds", detectedDuration);
+        
+        const csrfToken = document.getElementById('csrfToken')?.value;
+
+        // 3. Send Request
+        fetch('/api/shop/buy/media', { 
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: params 
+        })
+        .then(async res => {
+            if (!res.ok) {
+                const text = await res.text();
+                try {
+                    const json = JSON.parse(text);
+                    throw new Error(json.error || json.message);
+                } catch (e) {
+                    throw new Error("Server Error");
+                }
+            }
+            return res.json();
+        })
+        .then(data => {
+            // --- SUCCESS CASE ---
+            urlInput.value = ""; // Clear Input
+            detectedDuration = 0;
+            currentVideoUrl = "";
+            
+            showStatus('success', "Added to Queue!");
+            
+            // Reset Button
+            buyBtn.innerText = "Play Video";
+            buyBtn.disabled = true;
+            buyBtn.style.opacity = "0.5";
+            buyBtn.style.cursor = "not-allowed";
+            updatePriceDisplay(0);
+        })
+        .catch(err => {
+            // --- ERROR CASE ---
+            showStatus('error', "❌ " + err.message);
+            
+            // Reset Button (allow retry)
+            buyBtn.disabled = false;
+            updatePriceDisplay(detectedDuration * COINS_PER_SECOND); // Restore price text
+        });
+    }
+    
+ 	// --- TTS FUNCTION ---
+ 	ttsInput.addEventListener('input', () => {
+        ttsSuccess.style.display = 'none';
+        ttsError.style.display = 'none';
+    });
+ 	
+ 	function buyTTS() {
+        const message = ttsInput.value.trim();
+
+        if (!message) return;
+        
+        // 1. Lock UI
+        ttsBtn.disabled = true;
+        ttsBtn.innerText = "Sending...";
+        ttsError.style.display = 'none';
+        ttsSuccess.style.display = 'none';
+
+        // 2. Prepare Data
+        const params = new URLSearchParams();
+        params.append("message", message);
+        
+        const csrfToken = document.getElementById('csrfToken')?.value;
+
+        // 3. Send Request
+        fetch('/api/shop/buy/tts', { 
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: params 
+        })
+        .then(async res => {
+            if (!res.ok) {
+                const text = await res.text();
+                try { throw new Error(JSON.parse(text).error); } 
+                catch (e) { throw new Error("Server Error"); }
+            }
+            return res.json();
+        })
+        .then(data => {
+            // --- SUCCESS ---
+            ttsInput.value = ""; // Clear input
+            ttsSuccess.innerText = "Message Sent!";
+            ttsSuccess.style.display = 'block';
+            
+            ttsBtn.innerText = "Send Message";
+            ttsBtn.disabled = false;
+        })
+        .catch(err => {
+            // --- ERROR ---
+            ttsError.innerText = "❌ " + err.message;
+            ttsError.style.display = 'block';
+            
+            ttsBtn.innerText = "Send Message";
+            ttsBtn.disabled = false;
+        });
+    }
+
+    // --- 3. HELPERS ---
+    
+    // Switch between Info, Error, and Success visibility
+    function showStatus(type, message = "") {
+        infoBox.style.display = 'none';
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+
+        if (type === 'info') {
+            infoBox.style.display = 'block';
+        } else if (type === 'error') {
+            errorMsg.innerText = message;
+            errorMsg.style.display = 'block';
+        } else if (type === 'success') {
+            successMsg.innerText = message;
+            successMsg.style.display = 'block';
+        }
+    }
+
+    function updatePriceDisplay(cost) {
+        costDisplay.innerText = cost + " 🪙";
+        if(cost > 0 && !buyBtn.disabled) {
+            buyBtn.innerText = `Play Video (${cost} 🪙)`;
+        } else if (buyBtn.innerText !== "Processing...") {
+            buyBtn.innerText = "Play Video";
+        }
+    }
+
+    function toggleButton(enable) {
+        buyBtn.disabled = !enable;
+        buyBtn.style.opacity = enable ? "1" : "0.5";
+        buyBtn.style.cursor = enable ? "pointer" : "not-allowed";
+    }
+
+    function getVideoId(url) {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+	</script>
+
+</body>
+</html>
