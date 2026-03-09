@@ -83,7 +83,7 @@ public class CoinManager {
 				rank++;
 			}	
 		} catch(Exception e) {
-			System.out.println("[Economy] Failed to load leaderboard");
+			e.printStackTrace();
 		}
 		
 		
