@@ -3,13 +3,11 @@ package cup.website;
 import org.apache.catalina.webresources.TomcatURLStreamHandlerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 import cup.util.CustomEmoji;
 
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-
+@SpringBootApplication
 @ComponentScan(basePackages = "cup")
 public class WebsiteApplication {
 

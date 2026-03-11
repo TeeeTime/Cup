@@ -16,6 +16,8 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.audio.AudioModuleConfig;
+import net.dv8tion.jda.api.audio.dave.DaveSessionFactory;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -60,7 +62,17 @@ public class DiscordBot {
 		this.raceManager = new RaceManager();
 		this.blackjackManager = new BlackjackManager();
 		
-		jda = JDABuilder.createDefault(token)
+		JDABuilder builder = JDABuilder.createDefault(token);
+		try {
+			Class<?> factoryClass = Class.forName("club.minnced.discord.jdave.interop.JDaveSessionFactory");
+			DaveSessionFactory factory = (DaveSessionFactory) factoryClass.getDeclaredConstructor().newInstance();
+			builder.setAudioModuleConfig(new AudioModuleConfig().withDaveSessionFactory(factory));
+		} catch (Throwable t) {
+			System.out.println("[DISCORD] Voice (DAVE) disabled: " + t.getMessage()
+					+ " — Radio/voice will not work until you run with Java 25+ (jdave requires Java 25).");
+		}
+		
+		jda = builder
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
 				.enableIntents(GatewayIntent.GUILD_MESSAGES)
 				.enableIntents(GatewayIntent.GUILD_MEMBERS)

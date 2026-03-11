@@ -14,7 +14,8 @@ import jakarta.annotation.PostConstruct;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 
 @Service
 public class LiveListener {
@@ -63,7 +64,7 @@ public class LiveListener {
     	
     	TextChannel channel = DiscordBot.INSTANCE.getJDA().getTextChannelById(notificationChannelId);
     	channel.sendMessage("**" + channelName + " is live!**").queue();
-        channel.sendMessageEmbeds(eb.build()).addActionRow(Button.link("https://twitch.tv/" + channelName, "Watch livestream")).queue();
+        channel.sendMessageEmbeds(eb.build()).addComponents(ActionRow.of(Button.link("https://twitch.tv/" + channelName, "Watch livestream"))).queue();
     }
     
 }

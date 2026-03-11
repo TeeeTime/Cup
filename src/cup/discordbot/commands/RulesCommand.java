@@ -9,7 +9,8 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 
 public class RulesCommand extends ListenerAdapter implements Command{
 
@@ -26,8 +27,8 @@ public class RulesCommand extends ListenerAdapter implements Command{
 			eb.addField("4", "Discord TOS", false);
 			eb.setTimestamp(Instant.now());
 			
-			event.getChannel().sendMessageEmbeds(eb.build()).addActionRow(
-					Button.success("rulesaccept", Emoji.fromUnicode("✅"))
+			event.getChannel().sendMessageEmbeds(eb.build()).addComponents(
+					ActionRow.of(Button.success("rulesaccept", Emoji.fromUnicode("✅")))
 					).queue();
 			
 			event.getMessage().delete().queue();

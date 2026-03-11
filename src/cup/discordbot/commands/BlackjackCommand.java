@@ -17,7 +17,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 
 public class BlackjackCommand extends ListenerAdapter implements Command {
 
@@ -93,10 +94,11 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		}
 		
 		if(blackjack.isPlaying()) {
-			event.getChannel().sendMessageEmbeds(getGameEmbed(blackjack, event.getAuthor()).build()).addActionRow(
-					Button.secondary("bj-h-" + event.getAuthor().getId(), "HIT"),
-					Button.secondary("bj-s-" + event.getAuthor().getId(), "STAND")
-				    ).complete();
+			event.getChannel().sendMessageEmbeds(getGameEmbed(blackjack, event.getAuthor()).build()).addComponents(
+					ActionRow.of(
+							Button.secondary("bj-h-" + event.getAuthor().getId(), "HIT"),
+							Button.secondary("bj-s-" + event.getAuthor().getId(), "STAND")
+					)).complete();
 		}else {
 			event.getChannel().sendMessageEmbeds(getGameEmbed(blackjack, event.getAuthor()).build()).queue();
 		}
@@ -152,10 +154,11 @@ public class BlackjackCommand extends ListenerAdapter implements Command {
 		}
 		
 		if(game.isPlaying()) {
-			event.getMessage().editMessageEmbeds(getGameEmbed(game, event.getUser()).build()).setActionRow(
-					Button.secondary("bj-h-" + event.getUser().getId(), "HIT"),
-					Button.secondary("bj-s-" + event.getUser().getId(), "STAND")
-				    ).complete();
+			event.getMessage().editMessageEmbeds(getGameEmbed(game, event.getUser()).build()).setComponents(
+					ActionRow.of(
+							Button.secondary("bj-h-" + event.getUser().getId(), "HIT"),
+							Button.secondary("bj-s-" + event.getUser().getId(), "STAND")
+					)).complete();
 		}else {
 			event.getMessage().editMessageEmbeds(getGameEmbed(game, event.getUser()).build()).queue();
 		}

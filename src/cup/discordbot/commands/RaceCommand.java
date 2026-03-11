@@ -17,7 +17,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 
 public class RaceCommand extends ListenerAdapter implements Command{
 
@@ -77,8 +78,8 @@ public class RaceCommand extends ListenerAdapter implements Command{
 		EmbedBuilder eb = getRaceEmbed(race);
 		eb.setFooter("You have " + race.getSecondsToJoin() + " seconds to enter the race until it starts! (" + race.size() + "/8)");
 		
-		Message message = event.getChannel().sendMessageEmbeds(eb.build()).addActionRow(
-				Button.success("race-" + event.getAuthor().getId(), "ENTER")
+		Message message = event.getChannel().sendMessageEmbeds(eb.build()).addComponents(
+				ActionRow.of(Button.success("race-" + event.getAuthor().getId(), "ENTER"))
 				).complete();
 		
 		Timer timer = new Timer();
