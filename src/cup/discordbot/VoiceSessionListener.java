@@ -7,6 +7,7 @@ import java.time.Instant;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -47,7 +48,7 @@ public class VoiceSessionListener extends ListenerAdapter {
 				eb.setDescription("**Duration:**\n`" + formatTime(VoiceSession.getVoiceSession(event.getChannelLeft().asVoiceChannel()).getTimer().getCurrentTimeInMillis()) + "`\n\n**Users:**\n" + userTimeReport);
 				
 				eb.setTimestamp(Instant.now());
-				sendSessionSummary(event.getGuild(), eb.build());
+				event.getChannelLeft().asGuildMessageChannel().sendMessageEmbeds(eb.build()).queue();
 				
 				VoiceSession.removeVoiceSession(event.getChannelLeft().asVoiceChannel());
 			}
@@ -74,7 +75,7 @@ public class VoiceSessionListener extends ListenerAdapter {
 					eb.setDescription("**Duration:**\n`" + formatTime(VoiceSession.getVoiceSession(event.getChannelLeft().asVoiceChannel()).getTimer().getCurrentTimeInMillis()) + "`\n\n**Users:**\n" + userTimeReport);
 					
 					eb.setTimestamp(Instant.now());
-					sendSessionSummary(event.getGuild(), eb.build());
+					event.getChannelLeft().asGuildMessageChannel().sendMessageEmbeds(eb.build()).queue();
 					
 					VoiceSession.removeVoiceSession(event.getChannelLeft().asVoiceChannel());
 				}
@@ -88,17 +89,6 @@ public class VoiceSessionListener extends ListenerAdapter {
 			
 		}
 		
-	}
-	
-	/** Sends the session summary to a guild text channel (voice channels cannot receive messages). */
-	private void sendSessionSummary(Guild guild, net.dv8tion.jda.api.entities.MessageEmbed embed) {
-		GuildMessageChannel channel = guild.getSystemChannel();
-		if (channel == null && !guild.getTextChannels().isEmpty()) {
-			channel = guild.getTextChannels().get(0);
-		}
-		if (channel != null) {
-			channel.sendMessageEmbeds(embed).queue();
-		}
 	}
 	
 	private String formatTime(long millis) {
