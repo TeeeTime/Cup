@@ -1,20 +1,36 @@
 package cup.discordbot.commands;
 
+import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
-import cup.music.PlayerManager;
+import dev.arbjerg.lavalink.client.Link;
+import dev.arbjerg.lavalink.client.LinkState;
+import dev.arbjerg.lavalink.client.player.TrackLoaded;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.selections.StringSelectMenu;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class RadioCommand implements Command{
+public class RadioCommand extends ListenerAdapter implements Command{
 
+	private static HashMap<String, String> stations = new HashMap<>();
+	
+	static {
+		stations.put("bbc_radio_one", "http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8");
+		stations.put("bbc_radio_one_dance", "http://as-hls-ww-live.akamaized.net/pool_62063831/live/ww/bbc_radio_one_dance/bbc_radio_one_dance.isml/bbc_radio_one_dance-audio%3d96000.norewind.m3u8");
+		stations.put("bbc_radio_two", "http://as-hls-ww-live.akamaized.net/pool_74208725/live/ww/bbc_radio_two/bbc_radio_two.isml/bbc_radio_two-audio%3d96000.norewind.m3u8");
+	}
+	
 	private static final String BBC_RADIO_1 = "http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8";
 	
 	@Override
@@ -22,39 +38,54 @@ public class RadioCommand implements Command{
 		
 		String[] args = event.getMessage().getContentDisplay().substring(1).trim().split(" ");
 		
-		PlayerManager playerManager = DiscordBot.INSTANCE.getPlayerManager();
-		
 		if(args.length == 1) {
-			if(playerManager.getPlayer(event.getGuild()) == null) {
-				if(event.getMember().getVoiceState().inAudioChannel()) {
-					playerManager.loadAndPlay(event.getGuild(), event.getMember().getVoiceState().getChannel().asVoiceChannel(), BBC_RADIO_1);
-					
-					EmbedBuilder eb = new EmbedBuilder();
-					eb.setColor(DiscordBot.EMBEDCOLOR);
-					eb.setDescription("📡 **Started streaming in `" + event.getMember().getVoiceState().getChannel().getName() + "`**\n\n"
-							+ "🔴 **Playing:** _`" + getCurrentTrack() + "`_");
-					
-					event.getChannel().sendMessageEmbeds(eb.build()).queue();
-					
-				}else {
-					event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.notInVoicechannelEmbed().build()).queue();
-					
-				}
-				
-			}else {
-				playerManager.stopAndClear(event.getGuild());
-				
-				EmbedBuilder eb = new EmbedBuilder();
+			if(!event.getMember().getVoiceState().inAudioChannel()) {
+				event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.notInVoicechannelEmbed().build()).queue();
+				return;
+			}
+			
+			Link existingLink = DiscordBot.INSTANCE.getLavalink().getLinkIfCached(event.getGuild().getIdLong());
+			
+			if (existingLink != null && existingLink.getState() == LinkState.CONNECTED) {
+			    existingLink.destroy().subscribe(); 
+			    
+			    event.getGuild().getAudioManager().closeAudioConnection();
+			    
+			    EmbedBuilder eb = new EmbedBuilder();
 				eb.setColor(DiscordBot.EMBEDCOLOR);
-				eb.setDescription("❌ **Stoped Streaming**");
+				eb.setDescription("❌ **Stoped streaming**");
 				
 				event.getChannel().sendMessageEmbeds(eb.build()).queue();
-				
+			    return;
 			}
+			
+			Link link = DiscordBot.INSTANCE.getLavalink().getOrCreateLink(event.getGuild().getIdLong());
+			
+			event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel().asVoiceChannel());
+
+			link.loadItem(BBC_RADIO_1).subscribe(item -> {
+				TrackLoaded trackLoaded = (TrackLoaded) item;
+		        
+		        link.createOrUpdatePlayer()
+		            .setTrack(trackLoaded.getTrack())
+		            .setVolume(20)
+		            .subscribe();
+			});
+			
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setColor(DiscordBot.EMBEDCOLOR);
+			eb.setDescription("📡 **Started streaming in `" + event.getMember().getVoiceState().getChannel().getName() + "`**\n\n"
+					+ "🔴 **Playing:** _`" + getCurrentTrack() + "`_");
+			
+			event.getChannel().sendMessageEmbeds(eb.build()).queue();
+			
+			return;
 			
 		}else if(args.length == 2) {
 			if(args[1].toLowerCase().equals("info") || args[1].toLowerCase().equals("i")) {
-				if(playerManager.getPlayer(event.getGuild()) != null) {
+				Link existingLink = DiscordBot.INSTANCE.getLavalink().getLinkIfCached(event.getGuild().getIdLong());
+				
+				if (existingLink != null && existingLink.getState() == LinkState.CONNECTED) {
 					
 					EmbedBuilder eb = new EmbedBuilder();
 					eb.setColor(DiscordBot.EMBEDCOLOR);
@@ -65,43 +96,65 @@ public class RadioCommand implements Command{
 					event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.notStreamingEmbed().build()).queue();
 					
 				}
+			}else if(args[1].toLowerCase().equals("set") || args[1].toLowerCase().equals("s")){
+				EmbedBuilder eb = new EmbedBuilder();
+				eb.setColor(DiscordBot.EMBEDCOLOR);
+				eb.setDescription("📻 **Select from the following stations:**");
+				
+				StringSelectMenu menu = StringSelectMenu.create("radio_station_select-" + event.getAuthor().getId())
+					    .setPlaceholder("Choose a radio station...")
+					    .addOption("BBC Radio 1", "BBC Radio 1", "Contemporary pop, dance, and rock")
+					    .addOption("BBC Radio 1 Dance", "BBC Radio 1 Dance", "Electronic, house, and dance music")
+					    .addOption("BBC Radio 2", "BBC Radio 2", "Adult contemporary, classic hits, and entertainment")
+					    .build();
+				
+				event.getChannel().sendMessageEmbeds(eb.build()).addComponents(ActionRow.of(menu)).queue();
+			
 			}else {
 				event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.usageEmbed(this).build()).queue();
 				return;
 			}
-			
-		}else if(args.length == 3) {
-			if(args[1].toLowerCase().equals("volume") || args[1].toLowerCase().equals("v")) {
-				int volume = 0;
-				
-				try {
-					volume = Integer.parseInt(args[2]);
-				} catch(NumberFormatException e) {
-					event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.usageEmbed(this).build()).queue();
-					return;
-				}
-				
-				if(playerManager.getPlayer(event.getGuild()) != null) {
-					playerManager.getPlayer(event.getGuild()).setVolume(volume);
-					
-					EmbedBuilder eb = new EmbedBuilder();
-					eb.setColor(DiscordBot.EMBEDCOLOR);
-					eb.setDescription("🔊 **Set volume to `" + volume + "`**");
-					
-					event.getChannel().sendMessageEmbeds(eb.build()).queue();
-				}else {
-					event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.notStreamingEmbed().build()).queue();
-				}
-			}else {
-				event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.usageEmbed(this).build()).queue();
-				return;
-			}
-			
 		}else {
 			event.getChannel().sendMessageEmbeds(ErrorEmbedBuilder.usageEmbed(this).build()).queue();
 			return;
 		}
-		
+	}
+	
+	@Override
+	public void onStringSelectInteraction(StringSelectInteractionEvent event) {
+	    if (event.getComponentId().startsWith("radio_station_select")) {
+	    	String ownerId = event.getComponentId().split("-")[1];
+	        
+	    	if(!event.getUser().getId().equals(ownerId)) {
+	    		event.deferEdit().queue(); 
+	    		return;
+	    	}
+	    	
+	        String selectedUrl = stations.get(event.getValues().get(0)); 
+	        
+	        Link link = DiscordBot.INSTANCE.getLavalink().getLinkIfCached(event.getGuild().getIdLong());
+			
+			if (link != null && link.getState() == LinkState.CONNECTED) {
+				link.loadItem(selectedUrl).subscribe(item -> {
+				    
+				    if (item instanceof TrackLoaded) {
+				        TrackLoaded trackLoaded = (TrackLoaded) item;
+				        
+				        link.createOrUpdatePlayer()
+				            .setTrack(trackLoaded.getTrack())
+				            .subscribe();
+				        
+				        event.deferEdit().queue(); 
+				    } else {
+				        event.editMessage("❌ Unexpected error loading the stream.").setComponents().queue();
+				    }
+				});
+				
+			}else {
+				event.editMessageEmbeds(ErrorEmbedBuilder.notStreamingEmbed().build()).setComponents().queue();
+			}
+	        
+	    }
 	}
 
 	@Override
@@ -119,6 +172,7 @@ public class RadioCommand implements Command{
 		return true;
 	}
 	
+	//TODO: Implement logic for different stations
 	private String getCurrentTrack() {
 	    String url = "https://rms.api.bbc.co.uk/v2/services/bbc_radio_one/segments/latest";
 	    
