@@ -25,6 +25,7 @@ public class RadioCommand extends ListenerAdapter implements Command{
 
 	private static HashMap<String, String> stations = new HashMap<>();
 	
+	//TODO: Add more stations, maybe move radio station registry to its own Object
 	static {
 		stations.put("bbc_radio_one", "http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8");
 		stations.put("bbc_radio_one_dance", "http://as-hls-ww-live.akamaized.net/pool_62063831/live/ww/bbc_radio_one_dance/bbc_radio_one_dance.isml/bbc_radio_one_dance-audio%3d96000.norewind.m3u8");
@@ -103,9 +104,9 @@ public class RadioCommand extends ListenerAdapter implements Command{
 				
 				StringSelectMenu menu = StringSelectMenu.create("radio_station_select-" + event.getAuthor().getId())
 					    .setPlaceholder("Choose a radio station...")
-					    .addOption("BBC Radio 1", "BBC Radio 1", "Contemporary pop, dance, and rock")
-					    .addOption("BBC Radio 1 Dance", "BBC Radio 1 Dance", "Electronic, house, and dance music")
-					    .addOption("BBC Radio 2", "BBC Radio 2", "Adult contemporary, classic hits, and entertainment")
+					    .addOption("BBC Radio 1", "bbc_radio_one", "Contemporary pop, dance, and rock")
+					    .addOption("BBC Radio 1 Dance", "bbc_radio_one_dance", "Electronic, house, and dance music")
+					    .addOption("BBC Radio 2", "bbc_radio_two", "Adult contemporary, classic hits, and entertainment")
 					    .build();
 				
 				event.getChannel().sendMessageEmbeds(eb.build()).addComponents(ActionRow.of(menu)).queue();
