@@ -37,7 +37,7 @@ public class LiveListener {
         
         TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
         
-        ITwitchClient twitch = clientBuilder.withClientId(twitchClientId).withClientSecret(twitchClientSecret).withEnableHelix(true).build();
+        ITwitchClient twitch = clientBuilder.withClientId(twitchClientId).withClientSecret(twitchClientSecret).withEnableHelix(true).withTimeout(15000).build();
         
         SimpleEventHandler eventHandler = twitch.getEventManager().getEventHandler(SimpleEventHandler.class);
         

@@ -7,17 +7,18 @@ import org.springframework.stereotype.Service;
 
 import cup.discordbot.commands.BlackjackCommand;
 import cup.discordbot.commands.RaceCommand;
+import cup.discordbot.commands.RadioCommand;
 import cup.discordbot.commands.RockPaperScissorsCommand;
 import cup.discordbot.commands.RulesCommand;
 import cup.games.BlackjackManager;
 import cup.games.RaceManager;
-import cup.music.PlayerManager;
+import dev.arbjerg.lavalink.client.LavalinkClient;
+import dev.arbjerg.lavalink.client.NodeOptions;
+import dev.arbjerg.lavalink.libraries.jda.JDAVoiceUpdateListener;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.audio.AudioModuleConfig;
-import net.dv8tion.jda.api.audio.dave.DaveSessionFactory;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -31,6 +32,9 @@ public class DiscordBot {
 	
 	@Value("${discord.bot.token}")
 	private String token;
+	
+	@Value("${discord.bot.id}")
+	private long id;
 	
 	@Value("${discord.bot.prefix}")
 	private String prefix;
@@ -47,7 +51,7 @@ public class DiscordBot {
 	
 	private BlackjackManager blackjackManager;
 	
-	private PlayerManager playerManager;
+	private LavalinkClient lavalink;
 	
 	public static final Color EMBEDCOLOR = Color.getHSBColor(46, 100, 47);
 	
@@ -57,20 +61,21 @@ public class DiscordBot {
 	
 	@PostConstruct
 	public void startBot() {
-		this.playerManager = new PlayerManager();
 		this.commandManager = new CommandManager();
 		this.raceManager = new RaceManager();
 		this.blackjackManager = new BlackjackManager();
 		
 		JDABuilder builder = JDABuilder.createDefault(token);
-		try {
-			Class<?> factoryClass = Class.forName("club.minnced.discord.jdave.interop.JDaveSessionFactory");
-			DaveSessionFactory factory = (DaveSessionFactory) factoryClass.getDeclaredConstructor().newInstance();
-			builder.setAudioModuleConfig(new AudioModuleConfig().withDaveSessionFactory(factory));
-		} catch (Throwable t) {
-			System.out.println("[DISCORD] Voice (DAVE) disabled: " + t.getMessage()
-					+ " — Radio/voice will not work until you run with Java 25+ (jdave requires Java 25).");
-		}
+		
+		LavalinkClient lavalink = new LavalinkClient(id);
+		
+		lavalink.addNode(new NodeOptions.Builder()
+		        .setName("LocalNode")
+		        .setServerUri("ws://localhost:2333")
+		        .setPassword("youshallnotpass")
+		        .build());
+		
+		this.lavalink = lavalink;
 		
 		jda = builder
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
@@ -89,7 +94,9 @@ public class DiscordBot {
 				.addEventListeners(new AIListener())
 				.addEventListeners(new VoiceSessionListener())
 				.addEventListeners(new GuildJoinListener())
+				.addEventListeners(new RadioCommand())
 				.setAutoReconnect(true)
+				.setVoiceDispatchInterceptor(new JDAVoiceUpdateListener(lavalink))
 				.build();
 		
 		jda.getPresence().setActivity(Activity.customStatus("Check out teaz.fun"));
@@ -132,8 +139,8 @@ public class DiscordBot {
 	public String getChatGPTToken() {
 		return chatGPTToken;
 	}
-
-	public PlayerManager getPlayerManager() {
-		return playerManager;
+	
+	public LavalinkClient getLavalink() {
+		return lavalink;
 	}
 }
