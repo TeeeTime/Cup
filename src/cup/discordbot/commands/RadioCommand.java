@@ -180,7 +180,7 @@ public class RadioCommand extends ListenerAdapter implements Command{
 
 	@Override
 	public String getUsage() {
-		return DiscordBot.INSTANCE.getPrefix() + "radio [volume 0-100]";
+		return DiscordBot.INSTANCE.getPrefix() + "radio [info | set]";
 	}
 
 	@Override
