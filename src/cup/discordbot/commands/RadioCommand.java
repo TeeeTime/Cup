@@ -8,8 +8,10 @@ import org.json.JSONObject;
 import cup.discordbot.Command;
 import cup.discordbot.DiscordBot;
 import cup.discordbot.ErrorEmbedBuilder;
+import cup.util.RadioStation;
 import dev.arbjerg.lavalink.client.Link;
 import dev.arbjerg.lavalink.client.LinkState;
+import dev.arbjerg.lavalink.client.player.Track;
 import dev.arbjerg.lavalink.client.player.TrackLoaded;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.components.actionrow.ActionRow;
@@ -23,16 +25,25 @@ import okhttp3.Response;
 
 public class RadioCommand extends ListenerAdapter implements Command{
 
-	private static HashMap<String, String> stations = new HashMap<>();
+	private static HashMap<String, RadioStation> stationsByLink = new HashMap<>();
+	private static HashMap<String, RadioStation> stationsByIdentifier = new HashMap<>();
 	
-	//TODO: Add more stations, maybe move radio station registry to its own Object
 	static {
-		stations.put("bbc_radio_one", "http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8");
-		stations.put("bbc_radio_one_dance", "http://as-hls-ww-live.akamaized.net/pool_62063831/live/ww/bbc_radio_one_dance/bbc_radio_one_dance.isml/bbc_radio_one_dance-audio%3d96000.norewind.m3u8");
-		stations.put("bbc_radio_two", "http://as-hls-ww-live.akamaized.net/pool_74208725/live/ww/bbc_radio_two/bbc_radio_two.isml/bbc_radio_two-audio%3d96000.norewind.m3u8");
+		// BBC Radio One
+		RadioStation bbcRadioOne = new RadioStation("bbc_radio_one", "BBC Radio One", "http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8");
+		stationsByLink.put(bbcRadioOne.getStreamLink(), bbcRadioOne);
+		stationsByIdentifier.put(bbcRadioOne.getStationIdentifier(), bbcRadioOne);
+		
+		// BBC Radio One Dance
+		RadioStation bbcRadioOneDance = new RadioStation("bbc_radio_one_dance", "BBC Radio One Dance", "http://as-hls-ww-live.akamaized.net/pool_62063831/live/ww/bbc_radio_one_dance/bbc_radio_one_dance.isml/bbc_radio_one_dance-audio%3d96000.norewind.m3u8");
+		stationsByLink.put(bbcRadioOneDance.getStreamLink(), bbcRadioOneDance);
+		stationsByIdentifier.put(bbcRadioOneDance.getStationIdentifier(), bbcRadioOneDance);
+		
+		// BBC Radio One Dance
+		RadioStation bbcRadioTwo = new RadioStation("bbc_radio_two", "BBC Radio Two", "http://as-hls-ww-live.akamaized.net/pool_74208725/live/ww/bbc_radio_two/bbc_radio_two.isml/bbc_radio_two-audio%3d96000.norewind.m3u8");
+		stationsByLink.put(bbcRadioTwo.getStreamLink(), bbcRadioTwo);
+		stationsByIdentifier.put(bbcRadioTwo.getStationIdentifier(), bbcRadioTwo);
 	}
-	
-	private static final String BBC_RADIO_1 = "http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8";
 	
 	@Override
 	public void execute(MessageReceivedEvent event) {
@@ -64,7 +75,7 @@ public class RadioCommand extends ListenerAdapter implements Command{
 			
 			event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel().asVoiceChannel());
 
-			link.loadItem(BBC_RADIO_1).subscribe(item -> {
+			link.loadItem(stationsByIdentifier.get("bbc_radio_one").getStreamLink()).subscribe(item -> {
 				TrackLoaded trackLoaded = (TrackLoaded) item;
 		        
 		        link.createOrUpdatePlayer()
@@ -73,10 +84,13 @@ public class RadioCommand extends ListenerAdapter implements Command{
 		            .subscribe();
 			});
 			
+			RadioStation bbcRadioOne = stationsByIdentifier.get("bbc_radio_one");
+			
 			EmbedBuilder eb = new EmbedBuilder();
 			eb.setColor(DiscordBot.EMBEDCOLOR);
-			eb.setDescription("📡 **Started streaming in `" + event.getMember().getVoiceState().getChannel().getName() + "`**\n\n"
-					+ "🔴 **Playing:** _`" + getCurrentTrack() + "`_");
+			eb.setDescription("📡 **Started streaming in `" + event.getMember().getVoiceState().getChannel().getName() + "`**\n\n" +
+					"🔴 **Playing:** _`" + bbcRadioOne.getStationName() + "`_\n" +
+					"_`" + getCurrentTrack(bbcRadioOne) + "`_");
 			
 			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 			
@@ -88,9 +102,15 @@ public class RadioCommand extends ListenerAdapter implements Command{
 				
 				if (existingLink != null && existingLink.getState() == LinkState.CONNECTED) {
 					
+					Track currentTrack = existingLink.getCachedPlayer().getTrack();
+					
+					RadioStation station = stationsByLink.get(currentTrack.getInfo().getUri());
+					
 					EmbedBuilder eb = new EmbedBuilder();
 					eb.setColor(DiscordBot.EMBEDCOLOR);
-					eb.setDescription("🔴 **Playing:** _`" + getCurrentTrack() + "`_");
+					eb.setDescription("📡 **Currently streaming in `" + event.getMember().getVoiceState().getChannel().getName() + "`**\n\n" +
+							"🔴 **Playing:** _`" + station.getStationName() + "`_\n" +
+							"_`" + getCurrentTrack(station) + "`_");
 					
 					event.getChannel().sendMessageEmbeds(eb.build()).queue();
 				}else {
@@ -131,12 +151,12 @@ public class RadioCommand extends ListenerAdapter implements Command{
 	    		return;
 	    	}
 	    	
-	        String selectedUrl = stations.get(event.getValues().get(0)); 
+	        RadioStation station = stationsByIdentifier.get(event.getValues().get(0)); 
 	        
 	        Link link = DiscordBot.INSTANCE.getLavalink().getLinkIfCached(event.getGuild().getIdLong());
 			
 			if (link != null && link.getState() == LinkState.CONNECTED) {
-				link.loadItem(selectedUrl).subscribe(item -> {
+				link.loadItem(station.getStreamLink()).subscribe(item -> {
 				    
 				    if (item instanceof TrackLoaded) {
 				        TrackLoaded trackLoaded = (TrackLoaded) item;
@@ -173,9 +193,8 @@ public class RadioCommand extends ListenerAdapter implements Command{
 		return true;
 	}
 	
-	//TODO: Implement logic for different stations
-	private String getCurrentTrack() {
-	    String url = "https://rms.api.bbc.co.uk/v2/services/bbc_radio_one/segments/latest";
+	private String getCurrentTrack(RadioStation station) {
+	    String url = "https://rms.api.bbc.co.uk/v2/services/" + station.getStationIdentifier() + "/segments/latest";
 	    
 	    OkHttpClient client = new OkHttpClient.Builder()
 	        .callTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
@@ -220,7 +239,7 @@ public class RadioCommand extends ListenerAdapter implements Command{
 	        e.printStackTrace();
 	    }
 	    
-	    return "BBC Radio 1 (Stream)";
+	    return station.getStationName() + "(Stream)";
 	}
 
 }
