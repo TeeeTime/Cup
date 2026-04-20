@@ -5,7 +5,7 @@
   
   <groupId>Cup</groupId>
   <artifactId>Cup</artifactId>
-  <version>1.9.2</version>
+  <version>1.9.3</version>
 
   <parent>
       <groupId>org.springframework.boot</groupId>
@@ -39,6 +39,11 @@
     	        <artifactId>commons-logging</artifactId>
     	    </exclusion>
     	</exclusions>
+	</dependency>
+	<dependency>
+    	<groupId>com.google.guava</groupId>
+    	<artifactId>failureaccess</artifactId>
+    	<version>1.0.2</version>
 	</dependency>
     <dependency>
     	<groupId>dev.arbjerg</groupId>
