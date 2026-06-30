@@ -9,3 +9,4 @@ bin
 application-dev.properties
 application-prod.properties
 launch.json
+.idea
