@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>Cup</groupId>
-  <artifactId>Cup</artifactId>
+  <groupId>Teaz-Nexus</groupId>
+  <artifactId>Teaz-Nexus</artifactId>
   <version>1.9.3</version>
 
   <parent>
