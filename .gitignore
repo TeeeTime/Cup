@@ -11,3 +11,5 @@ application-prod.properties
 launch.json
 nexus/.idea
 .idea
+node_modules
+lavalink/Lavalink.jar

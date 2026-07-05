@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'discordnord';
+  src: url('@/assets/fonts/discordnord-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'ggsans';
+  src: url('@/assets/fonts/ggsans-normal.ttf') format('truetype');
+}

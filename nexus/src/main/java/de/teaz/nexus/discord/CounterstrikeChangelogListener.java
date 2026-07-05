@@ -1,0 +1,32 @@
+package main.java.de.teaz.nexus.discord;
+
+import main.java.de.teaz.nexus.ai.ChatGPT;
+import main.java.de.teaz.nexus.util.CounterstrikeBlog;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+public class CounterstrikeChangelogListener extends ListenerAdapter{
+	
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if(!event.getChannel().getName().equals("update")) return;
+		
+		if(event.getMessage().getContentRaw().contains("Counter-Strike 2 Update")) {
+			String rawMessage = event.getMessage().getContentRaw();
+			String link = rawMessage.substring(rawMessage.indexOf("("), rawMessage.indexOf(")"));
+			
+			CounterstrikeBlog blog = new CounterstrikeBlog();
+			String changelog = blog.extractChangelog(link);
+			TextChannel textChannel = event.getGuild().getTextChannelsByName("counter-strike",true).get(0);
+			
+			ChatGPT chatGPT = new ChatGPT(DiscordBot.INSTANCE.getChatGPTToken());
+			
+			textChannel.sendMessage(chatGPT.getTextResponse("You are part of a friend group that plays CS2. You don't use hashtags. You are very casual and very funny and sarcastic. You sometimes use emojis with discord formating, if they amplify your message. Do not disclose that you are an ai, pretend to be just another person on a small discord server. Write a discord message. Make a funny and very sarcastic comment on multiple aspects.", "This is the newest changelog:\n" + changelog)).setSuppressEmbeds(true).queue();
+		}
+		
+		
+		
+		
+	}
+
+}

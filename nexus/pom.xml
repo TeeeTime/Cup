@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>Teaz-Nexus</groupId>
-  <artifactId>Teaz-Nexus</artifactId>
+  <groupId>de.teaz</groupId>
+  <artifactId>nexus</artifactId>
   <version>1.9.3</version>
 
   <parent>
@@ -116,15 +116,6 @@
   </dependencies>
 
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    
-    <resources>
-        <resource>
-            <directory>resources</directory>
-            <filtering>true</filtering>
-        </resource>
-    </resources>
-    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -141,18 +132,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <configuration>
-            <nonFilteredFileExtensions>
-                <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
-                <nonFilteredFileExtension>otf</nonFilteredFileExtension>
-                <nonFilteredFileExtension>woff</nonFilteredFileExtension>
-                <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
-                <nonFilteredFileExtension>eot</nonFilteredFileExtension>
-                <nonFilteredFileExtension>p12</nonFilteredFileExtension> <nonFilteredFileExtension>png</nonFilteredFileExtension>
-                <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
-                <nonFilteredFileExtension>ico</nonFilteredFileExtension>
-            </nonFilteredFileExtensions>
-        </configuration>
       </plugin>
     </plugins>
   </build>

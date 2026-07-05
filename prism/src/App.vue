@@ -1,7 +1,13 @@
 <script setup></script>
 
 <template>
-  <h1>TEST</h1>
+  <router-view />
 </template>
 
-<style scoped></style>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+</style>

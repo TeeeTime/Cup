@@ -1,0 +1,13 @@
+${AnsiColor.CYAN}
+ _____                     __
+/__   \___  __ _ ____   /\ \ \_____  ___   _ ___
+  / /\/ _ \/ _` |_  /  /  \/ / _ \ \/ / | | / __|
+ / / |  __/ (_| |/ /  / /\  /  __/>  <| |_| \__ \
+ \/   \___|\__,_/___| \_\ \/ \___/_/\_\\__,_|___/
+${AnsiColor.DEFAULT}
+:: Teaz Nexus Backend ::
+
+${AnsiColor.YELLOW}Environment :${AnsiColor.DEFAULT} ${spring.profiles.active:default}
+${AnsiColor.YELLOW}App Version :${AnsiColor.DEFAULT} ${info.app.version}
+${AnsiColor.YELLOW}Springboot  :${AnsiColor.DEFAULT} ${spring-boot.version}
+${AnsiColor.YELLOW}Java        :${AnsiColor.DEFAULT} ${java.version}
