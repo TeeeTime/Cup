@@ -1,13 +1,13 @@
-package main.java.de.teaz.nexus.economy.economy;
+package de.teaz.nexus.economy;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.de.teaz.nexus.database.LiteSQL;
-import main.java.de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.database.LiteSQL;
+import de.teaz.nexus.discord.DiscordBot;
 
-import main.java.de.teaz.nexus.economy.LeaderboardEntry;
+import de.teaz.nexus.economy.LeaderboardEntry;
 import net.dv8tion.jda.api.entities.User;
 
 public class CoinManager {
@@ -68,7 +68,7 @@ public class CoinManager {
 	}
 	
 	public static List<LeaderboardEntry> getLeaderboard() {
-		List<main.java.de.teaz.nexus.economy.economy.LeaderboardEntry> leaderboard = new ArrayList<>();
+		List<LeaderboardEntry> leaderboard = new ArrayList<>();
 		
 		try {
 			ResultSet results = LiteSQL.onQuery("SELECT userid, balance FROM coins ORDER BY balance desc LIMIT 10");
@@ -79,7 +79,7 @@ public class CoinManager {
 				User user = DiscordBot.INSTANCE.getJDA().retrieveUserById(Long.parseLong(results.getString("userid"))).complete();
 				int balance = results.getInt("balance");
 				
-				leaderboard.add(new main.java.de.teaz.nexus.economy.economy.LeaderboardEntry(rank, user.getName(), balance, user.getAvatarUrl()));
+				leaderboard.add(new LeaderboardEntry(rank, user.getName(), balance, user.getAvatarUrl()));
 				
 				rank++;
 			}	

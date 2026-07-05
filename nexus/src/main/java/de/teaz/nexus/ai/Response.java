@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.ai;
+package de.teaz.nexus.ai;
 
 import java.util.ArrayList;
 import java.util.List;

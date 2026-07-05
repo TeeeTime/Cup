@@ -1,11 +1,11 @@
-package main.java.de.teaz.nexus.economy.economy;
+package de.teaz.nexus.economy;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-import main.java.de.teaz.nexus.database.LiteSQL;
+import de.teaz.nexus.database.LiteSQL;
 
 public class DailyManager {
 	

@@ -1,12 +1,12 @@
-package main.java.de.teaz.nexus.discord.commands;
+package de.teaz.nexus.discord.commands;
 
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import main.java.de.teaz.nexus.database.LiteSQL;
-import main.java.de.teaz.nexus.discord.Command;
-import main.java.de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.database.LiteSQL;
+import de.teaz.nexus.discord.Command;
+import de.teaz.nexus.discord.DiscordBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

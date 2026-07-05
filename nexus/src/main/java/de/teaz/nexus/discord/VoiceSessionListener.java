@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.discord;
+package de.teaz.nexus.discord;
 
 import java.awt.Color;
 import java.time.Duration;

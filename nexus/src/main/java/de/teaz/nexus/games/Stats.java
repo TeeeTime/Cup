@@ -1,8 +1,8 @@
-package main.java.de.teaz.nexus.games;
+package de.teaz.nexus.games;
 
 import java.sql.ResultSet;
 
-import main.java.de.teaz.nexus.database.LiteSQL;
+import de.teaz.nexus.database.LiteSQL;
 import net.dv8tion.jda.api.entities.User;
 
 public class Stats {

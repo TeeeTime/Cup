@@ -1,14 +1,14 @@
-package main.java.de.teaz.nexus.discord.commands;
+package de.teaz.nexus.discord.commands;
 
 import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import main.java.de.teaz.nexus.discord.Command;
-import main.java.de.teaz.nexus.discord.DiscordBot;
-import main.java.de.teaz.nexus.discord.ErrorEmbedBuilder;
-import main.java.de.teaz.nexus.util.RadioStation;
+import de.teaz.nexus.discord.Command;
+import de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.discord.ErrorEmbedBuilder;
+import de.teaz.nexus.util.RadioStation;
 import dev.arbjerg.lavalink.client.Link;
 import dev.arbjerg.lavalink.client.LinkState;
 import dev.arbjerg.lavalink.client.player.Track;

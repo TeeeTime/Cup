@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.database;
+package de.teaz.nexus.database;
 
 public class SQLManager {
 	

@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.discord;
+package de.teaz.nexus.discord;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;

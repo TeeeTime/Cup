@@ -1,17 +1,17 @@
-package main.java.de.teaz.nexus.discord;
+package de.teaz.nexus.discord;
 
 import java.awt.Color;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import main.java.de.teaz.nexus.discord.commands.BlackjackCommand;
-import main.java.de.teaz.nexus.discord.commands.RaceCommand;
-import main.java.de.teaz.nexus.discord.commands.RadioCommand;
-import main.java.de.teaz.nexus.discord.commands.RockPaperScissorsCommand;
-import main.java.de.teaz.nexus.discord.commands.RulesCommand;
-import main.java.de.teaz.nexus.games.BlackjackManager;
-import main.java.de.teaz.nexus.games.RaceManager;
+import de.teaz.nexus.discord.commands.BlackjackCommand;
+import de.teaz.nexus.discord.commands.RaceCommand;
+import de.teaz.nexus.discord.commands.RadioCommand;
+import de.teaz.nexus.discord.commands.RockPaperScissorsCommand;
+import de.teaz.nexus.discord.commands.RulesCommand;
+import de.teaz.nexus.games.BlackjackManager;
+import de.teaz.nexus.games.RaceManager;
 import dev.arbjerg.lavalink.client.LavalinkClient;
 import dev.arbjerg.lavalink.client.NodeOptions;
 import dev.arbjerg.lavalink.libraries.jda.JDAVoiceUpdateListener;

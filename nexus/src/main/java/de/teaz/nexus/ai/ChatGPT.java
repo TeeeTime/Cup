@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.ai;
+package de.teaz.nexus.ai;
 
 import java.io.IOException;
 import java.net.URI;
@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import main.java.de.teaz.nexus.util.Mapbox;
+import de.teaz.nexus.util.Mapbox;
 
 public class ChatGPT {
     private final String apiKey;

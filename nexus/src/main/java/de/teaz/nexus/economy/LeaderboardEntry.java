@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.economy.economy;
+package de.teaz.nexus.economy;
 
 public class LeaderboardEntry {
 	

@@ -1,7 +1,7 @@
-package main.java.de.teaz.nexus.discord;
+package de.teaz.nexus.discord;
 
-import main.java.de.teaz.nexus.ai.ChatGPT;
-import main.java.de.teaz.nexus.util.CounterstrikeBlog;
+import de.teaz.nexus.ai.ChatGPT;
+import de.teaz.nexus.util.CounterstrikeBlog;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

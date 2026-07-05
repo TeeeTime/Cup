@@ -1,18 +1,17 @@
-package main.java.de.teaz.nexus.website.controllers;
+package de.teaz.nexus.website.controllers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import main.java.de.teaz.nexus.economy.LeaderboardEntry;
+import de.teaz.nexus.economy.LeaderboardEntry;
+import de.teaz.nexus.website.service.EconomyService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import main.java.de.teaz.nexus.website.service.EconomyService;
 
 @Controller
 public class WebController {

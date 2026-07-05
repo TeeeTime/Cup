@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.website.config;
+package de.teaz.nexus.website.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

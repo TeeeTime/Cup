@@ -1,8 +1,8 @@
-package main.java.de.teaz.nexus.discord;
+package de.teaz.nexus.discord;
 
 import java.util.HashMap;
 
-import main.java.de.teaz.nexus.discord.commands.*;
+import de.teaz.nexus.discord.commands.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandManager {

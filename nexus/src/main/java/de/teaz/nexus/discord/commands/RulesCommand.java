@@ -1,9 +1,9 @@
-package main.java.de.teaz.nexus.discord.commands;
+package de.teaz.nexus.discord.commands;
 
 import java.time.Instant;
 
-import main.java.de.teaz.nexus.discord.Command;
-import main.java.de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.discord.Command;
+import de.teaz.nexus.discord.DiscordBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

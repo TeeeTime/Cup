@@ -3,9 +3,8 @@ package de.teaz.nexus;
 import org.apache.catalina.webresources.TomcatURLStreamHandlerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
-import main.java.de.teaz.nexus.util.CustomEmoji;
+import de.teaz.nexus.util.CustomEmoji;
 
 @SpringBootApplication
 public class WebsiteApplication {

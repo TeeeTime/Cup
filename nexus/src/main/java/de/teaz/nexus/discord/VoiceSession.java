@@ -1,10 +1,10 @@
-package main.java.de.teaz.nexus.discord;
+package de.teaz.nexus.discord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import main.java.de.teaz.nexus.util.Timer;
+import de.teaz.nexus.util.Timer;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 

@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.games;
+package de.teaz.nexus.games;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

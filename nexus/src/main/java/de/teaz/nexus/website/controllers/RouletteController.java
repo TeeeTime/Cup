@@ -1,6 +1,6 @@
-package main.java.de.teaz.nexus.website.controllers;
+package de.teaz.nexus.website.controllers;
 
-import main.java.de.teaz.nexus.website.service.EconomyService;
+import de.teaz.nexus.website.service.EconomyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;

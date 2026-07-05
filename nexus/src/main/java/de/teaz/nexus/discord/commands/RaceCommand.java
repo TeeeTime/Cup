@@ -1,16 +1,16 @@
-package main.java.de.teaz.nexus.discord.commands;
+package de.teaz.nexus.discord.commands;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import main.java.de.teaz.nexus.ai.ChatGPT;
-import main.java.de.teaz.nexus.discord.Command;
-import main.java.de.teaz.nexus.discord.DiscordBot;
-import main.java.de.teaz.nexus.discord.ErrorEmbedBuilder;
-import main.java.de.teaz.nexus.economy.CoinManager;
-import main.java.de.teaz.nexus.games.Race;
-import main.java.de.teaz.nexus.games.Stats;
+import de.teaz.nexus.ai.ChatGPT;
+import de.teaz.nexus.discord.Command;
+import de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.discord.ErrorEmbedBuilder;
+import de.teaz.nexus.economy.CoinManager;
+import de.teaz.nexus.games.Race;
+import de.teaz.nexus.games.Stats;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;

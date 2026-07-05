@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.util;
+package de.teaz.nexus.util;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.games;
+package de.teaz.nexus.games;
 
 public enum GameState {
 	PLAYING,

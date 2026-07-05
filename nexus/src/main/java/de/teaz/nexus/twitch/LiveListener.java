@@ -1,4 +1,4 @@
-package main.java.de.teaz.nexus.twitch;
+package de.teaz.nexus.twitch;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import com.github.twitch4j.ITwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.events.ChannelGoLiveEvent;
 
-import main.java.de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.discord.DiscordBot;
 
 import jakarta.annotation.PostConstruct;
 

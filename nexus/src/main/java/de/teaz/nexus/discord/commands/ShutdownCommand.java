@@ -1,10 +1,10 @@
-package main.java.de.teaz.nexus.discord.commands;
+package de.teaz.nexus.discord.commands;
 
 import java.util.function.Consumer;
 
-import main.java.de.teaz.nexus.database.LiteSQL;
-import main.java.de.teaz.nexus.discord.Command;
-import main.java.de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.database.LiteSQL;
+import de.teaz.nexus.discord.Command;
+import de.teaz.nexus.discord.DiscordBot;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.RestAction;

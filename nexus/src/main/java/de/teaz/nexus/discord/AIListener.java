@@ -1,11 +1,11 @@
-package main.java.de.teaz.nexus.discord;
+package de.teaz.nexus.discord;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import main.java.de.teaz.nexus.ai.ChatGPT;
-import main.java.de.teaz.nexus.ai.Response;
+import de.teaz.nexus.ai.ChatGPT;
+import de.teaz.nexus.ai.Response;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.FileUpload;
