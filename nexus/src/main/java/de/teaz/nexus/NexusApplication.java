@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import de.teaz.nexus.util.CustomEmoji;
 
 @SpringBootApplication
-public class WebsiteApplication {
+public class NexusApplication {
 
 	public static void main(String[] args) {
         
@@ -16,6 +16,6 @@ public class WebsiteApplication {
 
         TomcatURLStreamHandlerFactory.disable();
         
-        SpringApplication.run(WebsiteApplication.class, args);
+        SpringApplication.run(NexusApplication.class, args);
 	}
 }

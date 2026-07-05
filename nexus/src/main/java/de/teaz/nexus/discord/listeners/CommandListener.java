@@ -1,5 +1,6 @@
-package de.teaz.nexus.discord;
+package de.teaz.nexus.discord.listeners;
 
+import de.teaz.nexus.discord.DiscordBot;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

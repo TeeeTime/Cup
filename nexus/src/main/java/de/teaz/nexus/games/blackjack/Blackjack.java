@@ -1,4 +1,4 @@
-package de.teaz.nexus.games;
+package de.teaz.nexus.games.blackjack;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,14 +14,14 @@ public class Blackjack {
 	
 	private ArrayList<Card> playerCards;
 	
-	private GameState gameState;
+	private BlackjackGameState blackjackGameState;
 	
 	int bet;
 	
 	public Blackjack(int bet) {
 		this.bet = bet;
 		
-		gameState = GameState.PLAYING;
+		blackjackGameState = BlackjackGameState.PLAYING;
 		
 		cardQueue = getQueue(shuffleDeck(generateDeck()));
 		dealerCards = new ArrayList<Card>();
@@ -55,8 +55,8 @@ public class Blackjack {
 		return getCardValue(playerCards);
 	}
 	
-	public GameState getGameState() {
-		return gameState;
+	public BlackjackGameState getGameState() {
+		return blackjackGameState;
 	}
 	
 	public int getBet() {
@@ -64,21 +64,21 @@ public class Blackjack {
 	}
 	
 	public void hit() {
-		gameState = GameState.PLAYING;
+		blackjackGameState = BlackjackGameState.PLAYING;
 		playerCards.add(cardQueue.poll());
 		
 		updateGameState();
 	}
 	
 	public void stand() {
-		gameState = GameState.PLAYING;
+		blackjackGameState = BlackjackGameState.PLAYING;
 		dealerCards.get(1).setHidden(false);
 		
 		while(getDealerValue() < 17) {
 			dealerCards.add(cardQueue.poll());
 		}
 		
-		gameState = GameState.END;
+		blackjackGameState = BlackjackGameState.END;
 		
 		updateGameState();
 	}
@@ -126,7 +126,7 @@ public class Blackjack {
 	}
 	
 	public boolean isPlaying() {
-		if(gameState == GameState.PLAYING) {
+		if(blackjackGameState == BlackjackGameState.PLAYING) {
 			return true;
 		}else {
 			return false;
@@ -134,46 +134,46 @@ public class Blackjack {
 	}
 	
 	public void updateGameState() {
-		if(playerCards.size() == 2 && dealerCards.size() == 2 && gameState != GameState.END) {
+		if(playerCards.size() == 2 && dealerCards.size() == 2 && blackjackGameState != BlackjackGameState.END) {
 			if(getDealerValue() == 21) {
 				System.out.println("DEALER START BJ");
 				dealerCards.get(1).setHidden(false);
 				if(getPlayerValue() == 21) {
-					gameState = GameState.TIE;
+					blackjackGameState = BlackjackGameState.TIE;
 					System.out.println("START TIE");
 					dealerCards.get(1).setHidden(false);
 				}else {
-					gameState = GameState.DEALERWIN;
+					blackjackGameState = BlackjackGameState.DEALERWIN;
 					System.out.println("DEALER START WIN");
 					dealerCards.get(1).setHidden(false);
 				}
 			}else if(getPlayerValue() == 21 && getDealerValue() != 21) {
-				gameState = GameState.INSTANTBLACKJACK;
+				blackjackGameState = BlackjackGameState.INSTANTBLACKJACK;
 				System.out.println("PLAYER START BJ WIN");
 				dealerCards.get(1).setHidden(false);
 			}
 			
-		}else if(gameState == GameState.PLAYING) {
+		}else if(blackjackGameState == BlackjackGameState.PLAYING) {
 			if(getPlayerValue() == 21) {
-				gameState = GameState.PLAYERWIN;
+				blackjackGameState = BlackjackGameState.PLAYERWIN;
 				dealerCards.get(1).setHidden(false);
 			}else if(getPlayerValue() > 21) {
-				gameState = GameState.DEALERWIN;
+				blackjackGameState = BlackjackGameState.DEALERWIN;
 				dealerCards.get(1).setHidden(false);
 			}
 			
-		}else if(gameState == GameState.END) {
+		}else if(blackjackGameState == BlackjackGameState.END) {
 			if(getDealerValue() > 21) {
-				gameState = GameState.PLAYERWIN;
+				blackjackGameState = BlackjackGameState.PLAYERWIN;
 				dealerCards.get(1).setHidden(false);
 			}else if(getDealerValue() > getPlayerValue()) {
-				gameState = GameState.DEALERWIN;
+				blackjackGameState = BlackjackGameState.DEALERWIN;
 				dealerCards.get(1).setHidden(false);
 			}else if(getDealerValue() == getPlayerValue()) {
-				gameState = GameState.TIE;
+				blackjackGameState = BlackjackGameState.TIE;
 				dealerCards.get(1).setHidden(false);
 			}else {
-				gameState = GameState.PLAYERWIN;
+				blackjackGameState = BlackjackGameState.PLAYERWIN;
 				dealerCards.get(1).setHidden(false);
 			}
 		}

@@ -1,4 +1,4 @@
-package de.teaz.nexus.discord;
+package de.teaz.nexus.discord.listeners;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,7 @@ import java.net.URL;
 
 import de.teaz.nexus.ai.ChatGPT;
 import de.teaz.nexus.ai.Response;
+import de.teaz.nexus.discord.DiscordBot;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.FileUpload;

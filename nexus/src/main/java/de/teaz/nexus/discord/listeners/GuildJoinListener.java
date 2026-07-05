@@ -1,5 +1,6 @@
-package de.teaz.nexus.discord;
+package de.teaz.nexus.discord.listeners;
 
+import de.teaz.nexus.discord.DiscordBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

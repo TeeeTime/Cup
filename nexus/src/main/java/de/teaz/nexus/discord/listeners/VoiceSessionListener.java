@@ -1,9 +1,11 @@
-package de.teaz.nexus.discord;
+package de.teaz.nexus.discord.listeners;
 
 import java.awt.Color;
 import java.time.Duration;
 import java.time.Instant;
 
+import de.teaz.nexus.discord.DiscordBot;
+import de.teaz.nexus.discord.VoiceSession;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;

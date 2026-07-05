@@ -1,6 +1,7 @@
-package de.teaz.nexus.discord;
+package de.teaz.nexus.discord.listeners;
 
 import de.teaz.nexus.ai.ChatGPT;
+import de.teaz.nexus.discord.DiscordBot;
 import de.teaz.nexus.util.CounterstrikeBlog;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
