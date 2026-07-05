@@ -2,6 +2,7 @@ package de.teaz.nexus.discord;
 
 import java.awt.Color;
 
+import de.teaz.nexus.discord.listeners.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,8 @@ import de.teaz.nexus.discord.commands.RaceCommand;
 import de.teaz.nexus.discord.commands.RadioCommand;
 import de.teaz.nexus.discord.commands.RockPaperScissorsCommand;
 import de.teaz.nexus.discord.commands.RulesCommand;
-import de.teaz.nexus.games.BlackjackManager;
-import de.teaz.nexus.games.RaceManager;
+import de.teaz.nexus.games.blackjack.BlackjackManager;
+import de.teaz.nexus.games.race.RaceManager;
 import dev.arbjerg.lavalink.client.LavalinkClient;
 import dev.arbjerg.lavalink.client.NodeOptions;
 import dev.arbjerg.lavalink.libraries.jda.JDAVoiceUpdateListener;

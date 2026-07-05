@@ -1,4 +1,4 @@
-package de.teaz.nexus.games;
+package de.teaz.nexus.games.blackjack;
 
 public class Card {
 	

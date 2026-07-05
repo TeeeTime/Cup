@@ -9,7 +9,7 @@ import de.teaz.nexus.discord.Command;
 import de.teaz.nexus.discord.DiscordBot;
 import de.teaz.nexus.discord.ErrorEmbedBuilder;
 import de.teaz.nexus.economy.CoinManager;
-import de.teaz.nexus.games.Race;
+import de.teaz.nexus.games.race.Race;
 import de.teaz.nexus.games.Stats;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
