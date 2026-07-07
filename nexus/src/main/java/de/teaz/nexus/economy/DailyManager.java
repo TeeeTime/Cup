@@ -6,7 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import de.teaz.nexus.database.LiteSQL;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class DailyManager {
 	
 	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");

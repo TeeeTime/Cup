@@ -2,6 +2,24 @@
 import Card from '@components/Card.vue'
 import BreathingBackground from '@components/BreathingBackground.vue'
 import '@/assets/css/fonts.css'
+import { ref, onMounted } from 'vue'
+import { getUserBalance } from '../services/userService'
+
+const coinBalance = ref('...')
+
+const fetchBalance = async () => {
+  try {
+    const data = await getUserBalance('359013020057206786')
+    coinBalance.value = data + '🪙'
+  } catch (error) {
+    coinBalance.value = 'Error'
+    console.error("Failed to load balance on the Home view.")
+  }
+}
+
+onMounted(() => {
+  fetchBalance()
+})
 </script>
 
 <template>
@@ -12,9 +30,8 @@ import '@/assets/css/fonts.css'
     </header>
 
     <main class="card-grid">
-      <Card title="Welcome Bonus">
-        <p>This is my test text inside the card! The slot mechanism is working perfectly.</p>
-        <button class="test-btn">Claim Now</button>
+      <Card title="Balance">
+        <p class="balance"><strong>{{ coinBalance }}</strong></p>
       </Card>
 
       <Card title="Static Stats" :noHover="true">
@@ -50,14 +67,9 @@ import '@/assets/css/fonts.css'
   gap: 25px;
 }
 
-.test-btn {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #4ade80;
-  border: none;
-  border-radius: 8px;
-  color: #1e1f23;
+.balance {
+  font-family: 'ggsans', sans-serif;
+  font-size: 4rem;
   font-weight: bold;
-  cursor: pointer;
 }
 </style>

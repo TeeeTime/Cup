@@ -9,7 +9,9 @@ import de.teaz.nexus.discord.DiscordBot;
 
 import de.teaz.nexus.economy.LeaderboardEntry;
 import net.dv8tion.jda.api.entities.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CoinManager {
 	
 	public static int getCoins(String userId) {

@@ -3,13 +3,23 @@ package de.teaz.nexus.website.service;
 import de.teaz.nexus.economy.CoinManager;
 import de.teaz.nexus.economy.DailyManager;
 import de.teaz.nexus.economy.LeaderboardEntry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class EconomyService {
-	
+
+    private final CoinManager coinManager;
+    private final DailyManager dailyManager;
+
+    @Autowired
+    public EconomyService(CoinManager coinManager, DailyManager dailyManager) {
+        this.coinManager = coinManager;
+        this.dailyManager = dailyManager;
+    }
+
 	public int getBalance(String discordId) {
         return CoinManager.getCoins(discordId);
 	}
