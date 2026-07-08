@@ -1,6 +1,8 @@
 package de.teaz.nexus;
 
+import de.teaz.nexus.auth.service.JwtService;
 import org.apache.catalina.webresources.TomcatURLStreamHandlerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

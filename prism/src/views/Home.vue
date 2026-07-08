@@ -1,20 +1,31 @@
 <script setup>
 import Card from '@components/Card.vue'
 import BreathingBackground from '@components/BreathingBackground.vue'
+import ProfileDropdown from '@components/ProfileDropdown.vue'
+import Button from '@components/Button.vue'
 import '@/assets/css/fonts.css'
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 import { getUserBalance } from '../services/userService'
 
+const router = useRouter()
+const authStore = useAuthStore()
 const coinBalance = ref('...')
 
 const fetchBalance = async () => {
   try {
-    const data = await getUserBalance('359013020057206786')
+    const data = await getUserBalance(authStore.userId)
     coinBalance.value = data + '🪙'
   } catch (error) {
     coinBalance.value = 'Error'
     console.error("Failed to load balance on the Home view.")
   }
+}
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/login')
 }
 
 onMounted(() => {
@@ -25,9 +36,11 @@ onMounted(() => {
 <template>
   <BreathingBackground />
   <div class="home-layout">
-    <header class="page-header">
-      <h1>teaz.fun</h1>
-    </header>
+    <nav class="top-nav">
+      <h1 class="brand-logo">teaz.fun</h1>
+
+      <ProfileDropdown :username="authStore.username" :avatarUrl="authStore.avatarUrl"/>
+    </nav>
 
     <main class="card-grid">
       <Card title="Balance">
@@ -55,10 +68,18 @@ onMounted(() => {
   color: white; /* Ensures text is visible against your dark background */
 }
 
-.page-header {
-  font-family: 'discordnord', sans-serif;
-  margin-top: -30px;
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -20px;
   margin-bottom: 30px;
+}
+
+.brand-logo {
+  font-family: 'discordnord', sans-serif;
+  font-size: 2.5rem;
+  margin: 0;
 }
 
 .card-grid {
