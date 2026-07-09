@@ -64,11 +64,11 @@ onMounted(async () => {
           </svg>
           <span>Login with Discord</span>
         </BaseButton>
-        <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </div>
 
       <div v-else>
-        <h2>Authenticating with Nexus...</h2>
+        <h2 class="authenticating">Authenticating with Nexus...</h2>
       </div>
 
     </Card>
@@ -84,7 +84,6 @@ onMounted(async () => {
   min-height: 100vh;
 }
 
-/* Restricts the width of the card specifically for the login layout */
 .login-card {
   width: 100%;
   max-width: 450px;
@@ -116,5 +115,15 @@ onMounted(async () => {
 .discord-icon {
   width: 24px;
   height: 24px;
+}
+
+.error {
+  font-family: 'ggsans', sans-serif;
+  color: red;
+}
+
+.authenticating {
+  font-family: 'ggsans', sans-serif;
+  color: white;
 }
 </style>
