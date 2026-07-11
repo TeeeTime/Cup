@@ -21,7 +21,7 @@ export const apiFetch = async (url, options = {}) => {
   const response = await fetch(url, config)
 
   if (response.status === 401 || response.status === 403) {
-    console.warn("Session expired or invalid token. Forcing logout.")
+    console.warn('Session expired or invalid token. Forcing logout.')
 
     authStore.logout()
 

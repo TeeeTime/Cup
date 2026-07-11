@@ -10,15 +10,15 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: Home,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/login',
       name: 'login',
       component: Login,
-      meta: { requiresAuth: false }
-    }
-  ]
+      meta: { requiresAuth: false },
+    },
+  ],
 })
 
 router.beforeEach((to, from) => {

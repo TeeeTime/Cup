@@ -5,7 +5,7 @@ export const getUserBalance = async (userId) => {
     const token = localStorage.getItem('jwt_token')
 
     const response = await apiFetch(`http://localhost:8080/api/users/${userId}/balance`, {
-      method: 'GET'
+      method: 'GET',
     })
 
     if (!response.ok) {
@@ -13,9 +13,8 @@ export const getUserBalance = async (userId) => {
     }
 
     return await response.json()
-
   } catch (error) {
-    console.error("UserService Error:", error)
+    console.error('UserService Error:', error)
     throw error
   }
 }

@@ -2,12 +2,15 @@
 import Card from '@components/Card.vue'
 import BreathingBackground from '@components/BreathingBackground.vue'
 import ProfileDropdown from '@components/ProfileDropdown.vue'
-import Button from '@components/Button.vue'
+import DailyRewardCard from '@components/home/DailyRewardCard.vue'
+import LeaderboardCard from '@components/home/LeaderboardCard.vue'
 import '@/assets/css/fonts.css'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { getUserBalance } from '../services/userService'
+import BalanceCard from '@components/home/BalanceCard.vue'
+import GameSelectorCard from '@components/home/GameSelectorCard.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -19,7 +22,7 @@ const fetchBalance = async () => {
     coinBalance.value = data + '🪙'
   } catch (error) {
     coinBalance.value = 'Error'
-    console.error("Failed to load balance on the Home view.")
+    console.error('Failed to load balance on the Home view.')
   }
 }
 
@@ -39,25 +42,17 @@ onMounted(() => {
     <nav class="top-nav">
       <h1 class="brand-logo">teaz.fun</h1>
 
-      <ProfileDropdown :username="authStore.username" :avatarUrl="authStore.avatarUrl"/>
+      <ProfileDropdown :username="authStore.username" :avatarUrl="authStore.avatarUrl" />
     </nav>
 
     <main class="card-grid">
-      <Card title="Balance">
-        <p class="balance"><strong>{{ coinBalance }}</strong></p>
-      </Card>
+      <BalanceCard class="layout-balance" />
 
-      <Card title="Static Stats" :noHover="true">
-        <p>This card will not float up when you hover over it.</p>
-      </Card>
+      <DailyRewardCard class="layout-daily" />
 
-      <Card>
-        <h2>Big Header inside the Slot</h2>
-        <p>
-          Because there is no title prop provided, the h3 tag in the Card component completely
-          vanishes thanks to your v-if statement.
-        </p>
-      </Card>
+      <LeaderboardCard class="layout-leaderboard" />
+
+      <GameSelectorCard class="layout-games" />
     </main>
   </div>
 </template>
@@ -65,7 +60,7 @@ onMounted(() => {
 <style scoped>
 .home-layout {
   padding: 40px;
-  color: white; /* Ensures text is visible against your dark background */
+  color: white;
 }
 
 .top-nav {
@@ -84,13 +79,43 @@ onMounted(() => {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
   gap: 25px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.balance {
-  font-family: 'ggsans', sans-serif;
-  font-size: 4rem;
-  font-weight: bold;
+.layout-balance {
+  grid-column: 1 / 2;
+}
+
+.layout-daily {
+  grid-column: 2 / 3;
+}
+
+.layout-leaderboard {
+  grid-column: 3 / 4;
+  grid-row: 1 / span 2;
+}
+
+.layout-games {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+}
+
+@media (max-width: 1100px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .layout-balance,
+  .layout-daily,
+  .layout-leaderboard,
+  .layout-games {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
 }
 </style>

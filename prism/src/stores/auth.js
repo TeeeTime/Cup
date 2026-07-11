@@ -5,7 +5,9 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('jwt_token') || null)
   const userId = ref(localStorage.getItem('discord_id') || null)
   const username = ref(localStorage.getItem('discord_username') || 'User')
-  const avatarUrl = ref(localStorage.getItem('discord_avatar') || 'https://cdn.discordapp.com/embed/avatars/0.png')
+  const avatarUrl = ref(
+    localStorage.getItem('discord_avatar') || 'https://cdn.discordapp.com/embed/avatars/0.png',
+  )
 
   const isLoggedIn = ref(!!token.value)
 
