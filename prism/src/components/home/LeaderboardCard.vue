@@ -40,6 +40,30 @@ const leaderboard = ref([
     balance: 1050,
     avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
   },
+  {
+    rank: 7,
+    name: 'PlayerSix',
+    balance: 1000,
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+  },
+  {
+    rank: 8,
+    name: 'PlayerSix',
+    balance: 900,
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+  },
+  {
+    rank: 9,
+    name: 'PlayerSix',
+    balance: 870,
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+  },
+  {
+    rank: 10,
+    name: 'PlayerSix',
+    balance: 700,
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+  },
 ])
 </script>
 
@@ -69,16 +93,18 @@ const leaderboard = ref([
 .leaderboard-card {
   display: flex;
   flex-direction: column;
-  max-height: 600px; /* Limits the card's total height */
+  max-height: 600px;
 }
 
 .leaderboard-list {
-  max-height: 400px; /* Enables the scrolling threshold[cite: 5] */
+  max-height: 400px;
   overflow-y: auto;
   padding-right: 5px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #4f545c transparent;
 }
 
-/* Custom scrollbar styling to match the dark theme */
 .leaderboard-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -90,16 +116,20 @@ const leaderboard = ref([
   border-radius: 3px;
 }
 
+.leaderboard-list::-webkit-scrollbar-thumb:hover {
+  background-color: #72767d;
+}
+
 .lb-item {
   display: flex;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #2b2d31; /* Subtle divider lines[cite: 5] */
+  border-bottom: 1px solid #2b2d31;
   gap: 10px;
 }
 
 .lb-item:last-child {
-  border-bottom: none; /* Removes the line on the final item[cite: 5] */
+  border-bottom: none;
 }
 
 .lb-rank {

@@ -24,7 +24,7 @@ const handleClaim = () => {
   <Card title="Daily Reward" class="daily-card">
     <div class="streak-header">
       <div class="streak-count">
-        <span class="fire-icon" :class="{ 'is-active': dailyReady }">🔥</span>
+        <span class="fire-icon" :class="{ 'is-active': !dailyReady }">🔥</span>
         <span class="count-text">
           <span>{{ currentStreak }}</span> Day Streak
         </span>
