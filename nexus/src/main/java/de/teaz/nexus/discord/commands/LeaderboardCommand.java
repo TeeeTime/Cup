@@ -5,8 +5,8 @@ import java.util.List;
 import de.teaz.nexus.discord.Command;
 import de.teaz.nexus.discord.DiscordBot;
 import de.teaz.nexus.discord.ErrorEmbedBuilder;
+import de.teaz.nexus.dto.LeaderboardEntry;
 import de.teaz.nexus.economy.CoinManager;
-import de.teaz.nexus.economy.LeaderboardEntry;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -27,7 +27,7 @@ public class LeaderboardCommand implements Command {
 		List<LeaderboardEntry> users = CoinManager.getLeaderboard();
 		
 		for(int i = 0; i < users.size(); i++) {
-			output += "**`" + users.get(i).getRank() + ".`** `" + users.get(i).getName() + "` (" + users.get(i).getBalance() + " :coin:)\n";
+			output += "**`" + users.get(i).rank() + ".`** `" + users.get(i).name() + "` (" + users.get(i).balance() + " :coin:)\n";
 		}
 		
 		EmbedBuilder eb = new EmbedBuilder();

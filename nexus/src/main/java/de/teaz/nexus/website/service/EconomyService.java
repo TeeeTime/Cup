@@ -1,8 +1,9 @@
 package de.teaz.nexus.website.service;
 
+import de.teaz.nexus.dto.LeaderboardEntry;
 import de.teaz.nexus.economy.CoinManager;
 import de.teaz.nexus.economy.DailyManager;
-import de.teaz.nexus.economy.LeaderboardEntry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

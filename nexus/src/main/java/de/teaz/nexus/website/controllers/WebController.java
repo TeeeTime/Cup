@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import de.teaz.nexus.economy.LeaderboardEntry;
+import de.teaz.nexus.dto.LeaderboardEntry;
 import de.teaz.nexus.website.service.EconomyService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;

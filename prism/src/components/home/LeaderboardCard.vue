@@ -1,70 +1,23 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Card from '@components/Card.vue'
+import {getLeaderboard} from "@/services/leaderboardService.js";
 
-// Mock data (fetching to be implemented)
-const leaderboard = ref([
-  {
-    rank: 1,
-    name: 'PlayerOne',
-    balance: 990080,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/1.png',
-  },
-  {
-    rank: 2,
-    name: 'PlayerTwo',
-    balance: 540200,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/2.png',
-  },
-  {
-    rank: 3,
-    name: 'PlayerThree',
-    balance: 12050,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/3.png',
-  },
-  {
-    rank: 4,
-    name: 'PlayerFour',
-    balance: 8400,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/4.png',
-  },
-  {
-    rank: 5,
-    name: 'PlayerFive',
-    balance: 2100,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/5.png',
-  },
-  {
-    rank: 6,
-    name: 'PlayerSix',
-    balance: 1050,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/3.png',
-  },
-  {
-    rank: 7,
-    name: 'PlayerSix',
-    balance: 1000,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/4.png',
-  },
-  {
-    rank: 8,
-    name: 'PlayerSix',
-    balance: 900,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/3.png',
-  },
-  {
-    rank: 9,
-    name: 'PlayerSix',
-    balance: 870,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/2.png',
-  },
-  {
-    rank: 10,
-    name: 'PlayerSix',
-    balance: 700,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/1.png',
-  },
-])
+const leaderboard = ref([])
+
+const fetchLeaderboard = async () => {
+  try {
+    const data = await getLeaderboard()
+    leaderboard.value = data
+  } catch (error) {
+    data.value = 'Error'
+    console.error('Failed to load leaderboard on the LeaderboardCard.')
+  }
+}
+
+onMounted(() => {
+  fetchLeaderboard()
+})
 </script>
 
 <template>

@@ -13,7 +13,7 @@ const fetchBalance = async () => {
     balanceValue.value = data
   } catch (error) {
     balanceValue.value = 'Error'
-    console.error('Failed to load balance on the Balance card.')
+    console.error('Failed to load balance on the BalanceCard.')
   }
 }
 
