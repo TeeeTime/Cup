@@ -17,7 +17,6 @@ import jakarta.annotation.PreDestroy;
 public class LiteSQL {
 	
 	private static Connection connection;
-	private static Statement statement;
 	
 	@PostConstruct
 	public static void connect() {
@@ -33,9 +32,6 @@ public class LiteSQL {
 			connection = DriverManager.getConnection(url);
 			
 			System.out.println("[LiteSQL] Connected to Database");
-			
-			statement = connection.createStatement();
-			
 		}catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -56,12 +52,14 @@ public class LiteSQL {
 	}
 	
 	public static int onUpdate(String sql) throws Exception{
-		
-		return statement.executeUpdate(sql);
+		try(Statement statement = connection.createStatement()) {
+            return statement.executeUpdate(sql);
+        }
 	}
 	
 	public static ResultSet onQuery(String sql) throws Exception{
 
+        Statement statement = connection.createStatement();
 		return statement.executeQuery(sql);
 	}
 }

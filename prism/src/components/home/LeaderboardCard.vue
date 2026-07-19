@@ -38,31 +38,31 @@ const leaderboard = ref([
     rank: 6,
     name: 'PlayerSix',
     balance: 1050,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/3.png',
   },
   {
     rank: 7,
     name: 'PlayerSix',
     balance: 1000,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/4.png',
   },
   {
     rank: 8,
     name: 'PlayerSix',
     balance: 900,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/3.png',
   },
   {
     rank: 9,
     name: 'PlayerSix',
     balance: 870,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/2.png',
   },
   {
     rank: 10,
     name: 'PlayerSix',
     balance: 700,
-    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/0.png',
+    avatarUrl: 'https://cdn.discordapp.com/embed/avatars/1.png',
   },
 ])
 </script>
@@ -81,7 +81,6 @@ const leaderboard = ref([
 
         <div class="lb-info">
           <span class="lb-name">{{ player.name }}</span>
-          <!-- JavaScript native number formatting -->
           <span class="lb-score">{{ player.balance.toLocaleString() }}🪙</span>
         </div>
       </div>
