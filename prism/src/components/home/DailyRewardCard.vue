@@ -1,32 +1,64 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Card from '@components/Card.vue'
 import Button from '@components/Button.vue'
 import ProgressBar from '@components/ProgressBar.vue'
+import { getDailyData, claimDailyBonus } from '@/services/dailyRewardService.js'
+import { useAuthStore } from '@/stores/auth.js'
 
-// Mock data (fetching to be implemented)
-const currentStreak = ref(3)
+const authStore = useAuthStore()
+
+const emit = defineEmits(['claimed'])
+
+const streak = ref(0)
 const streakGoal = ref(7)
-const dailyReady = ref(true)
-const dailyTimeLeft = ref('00h 00m')
+const isReady = ref(false)
+const cooldownTimeLeft = ref('Loading...')
+const isClaiming = ref(false)
 
-// Mock claim (claim call to be implemented)
-const handleClaim = () => {
-  if (!dailyReady.value) return
-
-  dailyReady.value = false
-  currentStreak.value += 1
-  dailyTimeLeft.value = '23h 59m'
+const applyDailyData = (data) => {
+  streak.value = data.streak
+  streakGoal.value = data.streakGoal
+  isReady.value = data.ready
+  cooldownTimeLeft.value = data.cooldownTimeLeft
 }
+
+const fetchDailyRewardData = async () => {
+  try {
+    const data = await getDailyData(authStore.userId)
+    applyDailyData(data)
+  } catch (error) {
+    console.error('Failed to load data on the DailyRewardCard.')
+  }
+}
+
+const handleClaim = async () => {
+  if (isClaiming.value || !isReady.value) return
+
+  isClaiming.value = true
+  try {
+    const data = await claimDailyBonus()
+    applyDailyData(data)
+    emit('claimed')
+  } catch (error) {
+    console.error('Failed to claim daily bonus.')
+  } finally {
+    isClaiming.value = false
+  }
+}
+
+onMounted(() => {
+  fetchDailyRewardData()
+})
 </script>
 
 <template>
   <Card title="Daily Reward" class="daily-card">
     <div class="streak-header">
       <div class="streak-count">
-        <span class="fire-icon" :class="{ 'is-active': !dailyReady }">🔥</span>
+        <span class="fire-icon" :class="{ 'is-active': !isReady }">🔥</span>
         <span class="count-text">
-          <span>{{ currentStreak }}</span> Day Streak
+          <span>{{ streak }}</span> Day Streak
         </span>
       </div>
       <span class="streak-goal"
@@ -35,16 +67,16 @@ const handleClaim = () => {
     </div>
 
     <div class="progress-wrapper">
-      <ProgressBar :current="currentStreak" :max="streakGoal" />
+      <ProgressBar :current="streak" :max="streakGoal" />
     </div>
 
     <div class="action-area">
-      <Button v-if="dailyReady" color="primary" class="full-width-btn" @click="handleClaim">
-        Claim Bonus
+      <Button v-if="isReady" color="primary" class="full-width-btn" :disabled="isClaiming" @click="handleClaim">
+        {{ isClaiming ? 'Claiming...' : 'Claim Bonus' }}
       </Button>
 
       <Button v-else color="default" class="full-width-btn disabled-btn" disabled>
-        Next in: {{ dailyTimeLeft }}
+        Next in: {{ cooldownTimeLeft }}
       </Button>
     </div>
   </Card>

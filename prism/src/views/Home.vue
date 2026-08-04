@@ -1,39 +1,20 @@
 <script setup>
-import Card from '@components/Card.vue'
+import { ref } from 'vue'
 import BreathingBackground from '@components/BreathingBackground.vue'
 import ProfileDropdown from '@components/ProfileDropdown.vue'
 import DailyRewardCard from '@components/home/DailyRewardCard.vue'
 import LeaderboardCard from '@components/home/LeaderboardCard.vue'
 import '@/assets/css/fonts.css'
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import { getUserBalance } from '../services/userService'
 import BalanceCard from '@components/home/BalanceCard.vue'
 import GameSelectorCard from '@components/home/GameSelectorCard.vue'
 
-const router = useRouter()
 const authStore = useAuthStore()
-const coinBalance = ref('...')
+const balanceCardRef = ref(null)
 
-const fetchBalance = async () => {
-  try {
-    const data = await getUserBalance(authStore.userId)
-    coinBalance.value = data + '🪙'
-  } catch (error) {
-    coinBalance.value = 'Error'
-    console.error('Failed to load balance on the Home view.')
-  }
+const handleDailyRewardClaimed = () => {
+  balanceCardRef.value?.fetchBalance()
 }
-
-const handleLogout = () => {
-  authStore.logout()
-  router.push('/login')
-}
-
-onMounted(() => {
-  fetchBalance()
-})
 </script>
 
 <template>
@@ -46,9 +27,9 @@ onMounted(() => {
     </nav>
 
     <main class="card-grid">
-      <BalanceCard class="layout-balance" />
+      <BalanceCard ref="balanceCardRef" class="layout-balance" />
 
-      <DailyRewardCard class="layout-daily" />
+      <DailyRewardCard class="layout-daily" @claimed="handleDailyRewardClaimed" />
 
       <LeaderboardCard class="layout-leaderboard" />
 

@@ -23,18 +23,18 @@ onMounted(() => {
 <template>
   <Card title="🏆 Leaderboard" class="leaderboard-card">
     <div class="leaderboard-list">
-      <div v-if="leaderboard.length === 0" class="empty-state">No players found yet.</div>
+      <div v-if="leaderboard.length === 0" class="empty-state">No users found yet.</div>
 
-      <div v-else v-for="player in leaderboard" :key="player.rank" class="lb-item">
-        <span class="lb-rank" :style="player.rank === 1 ? { color: 'gold' } : {}">
-          #{{ player.rank }}
+      <div v-else v-for="user in leaderboard" :key="user.rank" class="lb-item">
+        <span class="lb-rank" :style="user.rank === 1 ? { color: 'gold' } : {}">
+          #{{ user.rank }}
         </span>
 
-        <img :src="player.avatarUrl" class="lb-avatar" alt="Avatar" />
+        <img :src="user.avatarUrl" class="lb-avatar" alt="Avatar" />
 
         <div class="lb-info">
-          <span class="lb-name">{{ player.name }}</span>
-          <span class="lb-score">{{ player.balance.toLocaleString() }}🪙</span>
+          <span class="lb-name">{{ user.name }}</span>
+          <span class="lb-score">{{ user.balance.toLocaleString() }}🪙</span>
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@ package de.teaz.nexus.economy;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -66,6 +68,19 @@ public class DailyManager {
 		
 		return 0;
 	}
+
+    public static String getCooldownTimeLeft(String userId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime midnight = LocalDate.now().atTime(LocalTime.MAX);
+
+        long secondsUntilMidnight = java.time.Duration.between(now, midnight).getSeconds();
+        long hours = secondsUntilMidnight / 3600;
+        long minutes = (secondsUntilMidnight % 3600) / 60;
+
+        String timeLeft = hours + "h " + minutes + "m";
+
+        return timeLeft;
+    }
 	
 	private static String getLastDate(String userId) {
 		try {

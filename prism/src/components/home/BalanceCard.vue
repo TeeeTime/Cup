@@ -17,6 +17,10 @@ const fetchBalance = async () => {
   }
 }
 
+defineExpose({
+  fetchBalance
+})
+
 onMounted(() => {
   fetchBalance()
 })
