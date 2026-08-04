@@ -22,6 +22,7 @@ defineProps({
 
 <style scoped>
 .card {
+  font-family: 'ggsans', sans-serif;
   background: rgba(30, 31, 35, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -41,7 +42,6 @@ defineProps({
 
 .card-title {
   color: #f2f3f5;
-  font-family: 'ggsans', sans-serif;
   font-size: 1.1rem;
   margin-top: 0;
   margin-bottom: 15px;

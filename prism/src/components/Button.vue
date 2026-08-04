@@ -6,15 +6,18 @@ const props = defineProps({
   color: {
     type: String,
     default: 'default',
-  }
+  },
 })
 
 const colorClass = computed(() => {
   switch (props.color) {
-    case 'primary': return 'btn-primary'
-    case 'danger': return 'btn-danger'
+    case 'primary':
+      return 'btn-primary'
+    case 'danger':
+      return 'btn-danger'
     case 'default':
-    default: return 'btn-default'
+    default:
+      return 'btn-default'
   }
 })
 </script>
@@ -35,7 +38,9 @@ const colorClass = computed(() => {
   padding: 10px 25px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,10 +56,10 @@ const colorClass = computed(() => {
 
 /* Default (Dark Grey from your basic button) */
 .btn-default {
-  background-color: #4E5058;
+  background-color: #4e5058;
 }
 .btn-default:hover {
-  background-color: #6D6F78;
+  background-color: #6d6f78;
 }
 .btn-default:active {
   background-color: #3b3d42;
@@ -62,10 +67,10 @@ const colorClass = computed(() => {
 
 /* Primary (Discord Blurple from your .btn-login) */
 .btn-primary {
-  background-color: #5865F2;
+  background-color: #5865f2;
 }
 .btn-primary:hover {
-  background-color: #4752C4;
+  background-color: #4752c4;
 }
 .btn-primary:active {
   background-color: #3c45a5;
