@@ -11,7 +11,7 @@ const fetchBalance = async () => {
   try {
     const data = await getUserBalance(authStore.userId)
     balanceValue.value = data
-  } catch (error) {
+  } catch {
     balanceValue.value = 'Error'
     console.error('Failed to load balance on the BalanceCard.')
   }

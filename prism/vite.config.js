@@ -18,7 +18,7 @@ const startupBannerPlugin = () => ({
 
         console.log(`\x1b[33m:: Prism Frontend ::`);
       } catch (e) {
-
+        console.error('Error reading banner.txt:', e);
       }
     });
   }

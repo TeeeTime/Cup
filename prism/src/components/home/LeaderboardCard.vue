@@ -9,8 +9,8 @@ const fetchLeaderboard = async () => {
   try {
     const data = await getLeaderboard()
     leaderboard.value = data
-  } catch (error) {
-    data.value = 'Error'
+  } catch {
+    leaderboard.value = []
     console.error('Failed to load leaderboard on the LeaderboardCard.')
   }
 }

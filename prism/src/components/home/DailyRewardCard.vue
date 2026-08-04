@@ -27,7 +27,7 @@ const fetchDailyRewardData = async () => {
   try {
     const data = await getDailyData(authStore.userId)
     applyDailyData(data)
-  } catch (error) {
+  } catch {
     console.error('Failed to load data on the DailyRewardCard.')
   }
 }
@@ -40,7 +40,7 @@ const handleClaim = async () => {
     const data = await claimDailyBonus()
     applyDailyData(data)
     emit('claimed')
-  } catch (error) {
+  } catch {
     console.error('Failed to claim daily bonus.')
   } finally {
     isClaiming.value = false
