@@ -20,7 +20,7 @@ export const getDailyData = async (userId) => {
 export const claimDailyBonus = async () => {
   try {
     const response = await apiFetch('http://localhost:8080/api/daily/claim', {
-      method: 'GET',
+      method: 'POST',
     })
 
     if (!response.ok) {

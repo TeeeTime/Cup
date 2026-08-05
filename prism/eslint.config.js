@@ -29,7 +29,7 @@ export default defineConfig([
       'vue/multi-word-component-names': [
         'error',
         {
-          ignores: ['Button', 'Card', 'Home', 'Login', 'NotFound'],
+          ignores: ['Button', 'Card', 'Home', 'Login', 'NotFound', 'Roulette'],
         },
       ],
     },

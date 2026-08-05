@@ -20,6 +20,12 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
     {
+      path: '/games/roulette',
+      name: 'roulette',
+      component: () => import('../views/Roulette.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFound,
