@@ -25,7 +25,7 @@ public class DailyController {
         return ResponseEntity.ok(economyService.getDailyStatus(userId));
     }
 
-    @GetMapping("/claim")
+    @PostMapping("/claim")
     public ResponseEntity<DailyRewardStatus> claimDailyReward(Authentication authentication) {
         String userId = authentication.getName();
 
